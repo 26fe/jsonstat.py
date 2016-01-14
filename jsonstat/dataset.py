@@ -201,7 +201,11 @@ class JsonStatDataSet:
         for i in range(len(vec_pos)):
             dname = self.__dimension_ids[i]
             d = self.__dimensions[dname]
-            vec_idx[i] = d.pos2label(vec_pos[i])
+
+            lbl = d.pos2label(vec_pos[i])
+            if lbl is None:
+                lbl = d.pos2idx(vec_pos[i])
+            vec_idx[i] = lbl
         return vec_idx
 
     def all_pos(self, **dims):
@@ -245,11 +249,10 @@ class JsonStatDataSet:
             value = self.value_from_vec_pos(vec_pos)
             # print "{} - {} -> {}".format(vec_pos, vec_idx, value)
 
-
-    #
-    # content could be "label" or "id"
-    #
     def to_table(self, content="label"):
+        """Trasforms a dataset into a table
+        content could be "label" or "id"
+        """
         table = []
         header = []
 

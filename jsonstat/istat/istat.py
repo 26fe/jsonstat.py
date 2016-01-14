@@ -10,20 +10,22 @@ import jsonstat
 from jsonstat.istat.istat_helper import IstatHelper
 from jsonstat.istat.istat_area import IstatArea
 
-#
-# Represent root of all dataseries
-#
 class Istat:
+    """
+    Represent root of all dataseries
+    """
 
     def __init__(self, cache_dir="istat_cached",lang=1):
         self.__istat_helper = IstatHelper(cache_dir, lang)
         self.__id2area = None
         self.__name2area = None
 
-    #
-    # get a IstatArea by name or id
-    #
     def area(self, spec):
+        """
+        get a IstatArea by name or id
+        :param spec:
+        :return:
+        """
         if self.__id2area is None:
             self.__download_areas()
         if type(spec) is str:

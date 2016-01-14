@@ -10,6 +10,9 @@ from jsonstat.exceptions import JsonStatMalformedJson
 
 
 class JsonStatDimension:
+    """
+    Represents a JsonStatDimension. It is contained into a Dataset
+    """
     def __init__(self, name, size, pos, role):
         self.__valid = False
 
@@ -28,6 +31,11 @@ class JsonStatDimension:
         self.__from_index_to_label = {}
 
     def from_string(self, json_string):
+        """
+        Parse a json string
+        :param json_string:
+        :return:
+        """
         json_data = json.loads(json_string)
         self.from_json(json_data)
 
@@ -128,18 +136,21 @@ class JsonStatDimension:
     def role(self):
         return self.__role
 
-    #
-    # from index to position
-    #
     def idx2pos(self, idx):
+        """from index to position
+
+        :param idx:
+        :return:
+        """
         if not self.__valid:
             raise JsonStatException("dimension not initialized")
         return self.__from_index_to_pos[idx]
 
-    #
-    # from position (integer) to index
-    #
     def pos2idx(self, pos):
+        """from position (integer) to index
+        :param pos:
+        :return:
+        """
         return self.__from_pos_to_index[pos]
 
     def pos2label(self, pos):
@@ -147,10 +158,10 @@ class JsonStatDimension:
 
     def get_index(self):
         return list(self.__from_index_to_pos.keys())
-    #
-    # print some info about dimension
-    #
+
     def info(self):
+        """print some info on standard output about dimension
+        """
         print "index"
         f = "{:>5} {:>6} {:>6}"
         print f.format('pos', 'idx', 'label')
