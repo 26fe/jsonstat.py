@@ -1,0 +1,27 @@
+{
+    "label" : "three dimensions",
+    "value" : [
+        111, 112, 113, 114,
+        120, 122, 123, 124,
+        131, 132, 133, 134,
+        211, 212, 213, 214,
+        221, 222, 223, 224,
+        231, 232, 233, 234
+    ],
+    "dimension" : {
+        "id" : ["one", "two", "three"],
+        "size" : [2, 3, 4],
+        "one" : {
+            "label" : "first dimension",
+            "category" : { "index" : { "one_1" : 0, "one_2" : 1} }
+        },
+        "two" : {
+            "label" : "second dimension",
+            "category" : { "index" : { "two_1": 0, "two_2" : 1, "two_3" : 2 } }
+        },
+        "three" : {
+            "label" : "third dimension",
+            "category" : { "index" : { "three_1": 0, "three_2" : 1, "three_3" : 2, "three_4": 3 } }
+        }
+    }
+}

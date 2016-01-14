@@ -1,0 +1,51 @@
+{
+  "label": "Unemployment rate in the OECD countries",
+  "source": "Economic Outlook No 92 ",
+  "updated": "2012-11-27",
+  "value": [
+    11, 12, 13, 14,
+    21, 22, 23, 24,
+    31, 32, 33, 34
+  ],
+  "dimension": {
+    "id": [
+      "area", "year"
+    ],
+    "size": [
+      4, 3
+    ],
+    "role": {
+      "time": ["year"
+      ],
+      "geo": ["area"
+      ]
+    },
+    "area": {
+      "label": "OECD countries, EU15 and total",
+      "category": {
+        "index": {
+          "AU": 0,
+          "AT": 1,
+          "BE": 2,
+          "IT": 3
+        },
+        "label": {
+          "AU": "Australia",
+          "AT": "Austria",
+          "BE": "Belgium",
+          "IT": "Italy"
+        }
+      }
+    },
+    "year": {
+      "label": "2003-2014",
+      "category": {
+        "index": {
+          "2012": 0,
+          "2013": 1,
+          "2014": 2
+        }
+      }
+    }
+  }
+}
