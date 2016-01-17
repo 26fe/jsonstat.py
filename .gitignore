@@ -55,4 +55,9 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# jsonstat stuff
 /.idea/
+/tmp/
+*.DS_Store
+/MANIFEST

@@ -2,6 +2,10 @@
 jsonstat.py
 =======
 
+.. image:: https://travis-ci.org/26fe/jsonstat.py.svg?branch=master
+    :target: https://travis-ci.org/26fe/jsonstat.py
+
+
 **jsonstat** is a python library for reading **JSON-stat** [1]_ format  data
 The JSON-stat format is a simple JSON format for data dissemination. 
 JSON-stat format is used by eurostat and istat and other istitutions
