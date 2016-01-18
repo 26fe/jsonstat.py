@@ -1,10 +1,8 @@
-#
+# This file is part of jsonstat.py
+
 # stdlib
-#
 import json
-#
 # jsonstat
-#
 from jsonstat.exceptions import JsonStatException
 from jsonstat.exceptions import JsonStatMalformedJson
 

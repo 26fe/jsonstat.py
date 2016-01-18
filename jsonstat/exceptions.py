@@ -1,6 +1,7 @@
-#
+# This file is part of jsonstat.py
 # jsonstat
-#
+
+
 class JsonStatException(Exception):
     # def __init__(self, message, errors):
     #     # Call the base class constructor with the parameters it needs

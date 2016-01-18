@@ -1,9 +1,11 @@
 from jsonstat.version import __version__
-from exceptions import JsonStatException
-from exceptions import JsonStatMalformedJson
-from dimension import JsonStatDimension
-from dataset import JsonStatDataSet
-from collection import JsonStatCollection
+
+from jsonstat.exceptions import JsonStatException
+from jsonstat.exceptions import JsonStatMalformedJson
+
+from jsonstat.dimension import JsonStatDimension
+from jsonstat.dataset import JsonStatDataSet
 from jsonstat.collection import JsonStatCollection
-from utilities import download
-from utilities import Downloader
+
+from jsonstat.utilities import download
+from jsonstat.utilities import Downloader

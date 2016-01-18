@@ -1,13 +1,11 @@
-#
+# This file is part of jsonstat.py
+
 # stdlib
-#
 import json
 import urllib2
-
-#
 # jsonstat
-#
 from jsonstat.dataset import JsonStatDataSet
+
 
 class JsonStatCollection:
     def __init__(self):
@@ -16,21 +14,9 @@ class JsonStatCollection:
         self.__pos2dataset = None
 
     def dataset(self, spec):
-        """This function does something.
-
-        Parameters
-        ----------
-        var1 : array_like
-            This is a type.
-        var2 : int
-            This is another var.
-        Long_variable_name : {'hi', 'ho'}, optional
-            Choices in brackets, default first when optional.
-
-        Returns
-        -------
-        describe : type
-            Explanation
+        """returns a dataset beloging to the collection
+        :param spec:
+        :return:
         """
         if type(spec) is str:
             return self.__name2dataset[spec]

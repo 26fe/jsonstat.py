@@ -1,21 +1,20 @@
-#
+# This file is part of jsonstat.py
+
 # stdlib
-#
 import json
-#
 # packages
-#
 import numpy as np
 import pandas as pd
-#
 # jsonstat
-#
 from jsonstat.dimension import JsonStatDimension
 from jsonstat.exceptions import JsonStatException
 from jsonstat.exceptions import JsonStatMalformedJson
 
 
 class JsonStatDataSet:
+    """
+    Represents a Dataset
+    """
     def __init__(self, dataset_name=None):
         self.__valid = False
         self.__json_data = None
@@ -274,17 +273,23 @@ class JsonStatDataSet:
             table.append(row)
         return table
 
-    # extract a bidimensional table
-    #      col ->
-    # row
-    #
-    # extract_bidimensional("year", "country")
-    # generate the following dataframe:
-    # year  |  country
-    # 2010  |  1
-    # 2011  |  2
-    # 2012  |  3
     def to_data_frame(self, index, **dims):
+        """
+        extract a bidimensional table
+              col ->
+         row
+
+        extract_bidimensional("year", "country")
+        generate the following dataframe:
+        year  |  country
+        2010  |  1
+        2011  |  2
+        2012  |  3
+
+        :param index:
+        :param dims:
+        :return:
+        """
 
         index_pos = self.__dimensions[index].pos()
         columns = []

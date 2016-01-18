@@ -1,6 +1,5 @@
-#
+# This file is part of jsonstat.py
 # stdlib
-#
 import os.path
 import urllib2
 
@@ -20,6 +19,9 @@ import urllib2
 #     # everything is fine
 
 class Downloader:
+    """
+    Helper class to download json stat file
+    """
     def __init__(self, dir="."):
         self.__dir = dir
 
@@ -33,32 +35,42 @@ class Downloader:
         html = self.__read_cached_page(filename)
         return html
 
-    #
-    # check if pathname exists
-    #
     def __is_cached(self, pathname):
+        """
+        check if pathname exists
+        :param pathname:
+        :return:
+        """
         return os.path.exists(pathname)
 
-    #
-    # write content to pathname
-    #
     def __write_page_from_cache(self, pathname, content):
+        """
+        write content to pathname
+        :param pathname:
+        :param content:
+        :return:
+        """
         f = open(pathname, 'w')
         f.write(content)
         f.close()
 
-    #
-    # read content from pathname
-    #
     def __read_cached_page(self, pathname):
+        """
+        read content from pathname
+        :param pathname:
+        :return:
+        """
         f = open(pathname, 'r')
         content = f.read()
         f.close()
         return content
 
 
-#
-# download a url in pathname
-#
 def download(url, pathname):
+    """
+    download a url in pathname
+    :param url:
+    :param pathname:
+    :return:
+    """
     return Downloader(os.path.dirname(pathname)).download(url, os.path.basename(pathname))
