@@ -1,26 +1,15 @@
 # This file is part of jsonstat.py
+
 # stdlib
+from __future__ import print_function
 import os.path
-import urllib2
-
-
-# from urllib2 import Request, urlopen, URLError
-# req = Request(someurl)
-# try:
-#     response = urlopen(req)
-# except URLError as e:
-#     if hasattr(e, 'reason'):
-#         print 'We failed to reach a server.'
-#         print 'Reason: ', e.reason
-#     elif hasattr(e, 'code'):
-#         print 'The server couldn\'t fulfill the request.'
-#         print 'Error code: ', e.code
-# else:
-#     # everything is fine
+# packages
+import requests
 
 class Downloader:
     """
-    Helper class to download json stat file
+    Helper class to download json stat file.
+    It has a very simple cache mechanism
     """
     def __init__(self, dir="."):
         self.__dir = dir
@@ -30,7 +19,7 @@ class Downloader:
         filename = os.path.join(self.__dir, filename)
 
         if not self.__is_cached(filename):
-            html = urllib2.urlopen(url).read()
+            html = requests.get(url).text
             self.__write_page_from_cache(filename, html)
         html = self.__read_cached_page(filename)
         return html
@@ -60,7 +49,7 @@ class Downloader:
         :param pathname:
         :return:
         """
-        f = open(pathname, 'r')
+        f = open(pathname, 'rb')
         content = f.read()
         f.close()
         return content
