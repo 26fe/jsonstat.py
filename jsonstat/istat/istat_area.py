@@ -1,6 +1,8 @@
+# This file is part of jsonstat.py
 #
 # jsonstat
 #
+from __future__ import print_function
 from jsonstat.istat.istat_dataset import IstatDataset
 from jsonstat.istat.istat_exception import IstatException
 
@@ -23,8 +25,8 @@ class IstatArea:
     # print some info about the area
     #
     def info(self):
-        m = "{}:{}".format(self.__area['Id'], self.__area['Desc'])
-        print m
+        msg = "{}:{}".format(self.__area['Id'], self.__area['Desc'])
+        print(msg)
 
     #
     # get a IstatDataset by name
@@ -55,5 +57,5 @@ class IstatArea:
                 self.__cod2dataset[dataset['Cod']] = IstatDataset(self.__istat_helper, dataset)
         else:
             msg = "cannot retrieve info for area {}".format(self.__area)
-            raise IstatException(m)
+            raise IstatException(msg)
 

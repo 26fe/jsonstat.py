@@ -1,8 +1,8 @@
 # This file is part of jsonstat.py
 
 # stdlib
+from __future__ import print_function
 import json
-import urllib2
 # jsonstat
 from jsonstat.dataset import JsonStatDataSet
 
@@ -26,7 +26,7 @@ class JsonStatCollection:
 
     def info(self):
         for i in self.__name2dataset.values():
-            print "dataset: '{}'".format(i.name())
+            print("dataset: '{}'".format(i.name()))
 
     def from_file(self, filename):
         with open(filename) as f:

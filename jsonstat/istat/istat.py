@@ -1,11 +1,9 @@
-#
-# stdlib
-#
-import os
+# This file is part of jsonstat.py
 
-#
+# stdlib
+from __future__ import print_function
+import os
 # jsonstat
-#
 import jsonstat
 from jsonstat.istat.istat_helper import IstatHelper
 from jsonstat.istat.istat_area import IstatArea

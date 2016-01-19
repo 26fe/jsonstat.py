@@ -1,11 +1,10 @@
-#
+# This file is part of jsonstat.py
+
 # stdlib
-#
+from __future__ import print_function
 import unittest
 import os
-#
 # jsonstat
-#
 import jsonstat
 from jsonstat.collection import JsonStatCollection
 

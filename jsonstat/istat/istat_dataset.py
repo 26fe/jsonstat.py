@@ -1,6 +1,8 @@
+# This file is part of jsonstat.py
 #
 # jsonstat
 #
+from __future__ import print_function
 from jsonstat.istat.istat_dimension import IstatDimension
 from jsonstat.istat.istat_exception import IstatException
 
@@ -20,13 +22,13 @@ class IstatDataset:
         return self.__dataset['Cod']
 
     def info(self):
-        m = "{}:{}".format(self.__dataset['Cod'], self.__dataset['Desc'])
-        print m
+        msg = "{}:{}".format(self.__dataset['Cod'], self.__dataset['Desc'])
+        print(msg)
 
     def info_dimensions(self):
         i = 0
         for d in self.__pos2dim:
-            print "pos: {}".format(i)
+            print("pos: {}".format(i))
             d.info()
             i += 1
 

@@ -1,6 +1,8 @@
 # This file is part of jsonstat.py
 
 # stdlib
+from __future__ import print_function
+from functools import reduce
 import json
 # packages
 import numpy as np
@@ -143,26 +145,27 @@ class JsonStatDataSet:
         return self.__dimensions[dim]
 
     def info_dimensions(self):
-        print "dimensions:"
+        print("dimensions:")
         for i in range(len(self.__dimension_ids)):
             dname = self.__dimension_ids[i]
             d = self.__dimensions[dname]
-            print "dim id/name: '{}' size: '{}' role: '{}'".format(d.name(), d.size(), d.role())
+            msg = "dim id/name: '{}' size: '{}' role: '{}'".format(d.name(), d.size(), d.role())
+            print(msg)
 
     def info(self):
         if self.__name is not None:
-            print "name:   '{}'".format(self.__name)
+            print("name:   '{}'".format(self.__name))
 
         if self.__title is not None:
-            print "title:  '{}'".format(self.__title)
+            print("title:  '{}'".format(self.__title))
 
         if self.__label is not None:
-            print "label:  '{}'".format(self.__label)
+            print("label:  '{}'".format(self.__label))
 
         if self.__source is not None:
-            print "source: '{}'".format(self.__label, self.__source)
+            print("source: '{}'".format(self.__label, self.__source))
 
-        print ""
+        print("")
         self.info_dimensions()
 
     def value(self, **dims):

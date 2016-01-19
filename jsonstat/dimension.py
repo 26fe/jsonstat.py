@@ -1,6 +1,7 @@
 # This file is part of jsonstat.py
 
 # stdlib
+from __future__ import print_function
 import json
 # jsonstat
 from jsonstat.exceptions import JsonStatException
@@ -160,10 +161,10 @@ class JsonStatDimension:
     def info(self):
         """print some info on standard output about dimension
         """
-        print "index"
+        print("index")
         f = "{:>5} {:>6} {:>6}"
-        print f.format('pos', 'idx', 'label')
+        print(f.format('pos', 'idx', 'label'))
         for p in range(len(self.__from_pos_to_index)):
             idx = self.__from_pos_to_index[p]
             lbl = self.__from_pos_to_label[p]
-            print f.format(p, idx, lbl)
+            print(f.format(p, idx, lbl))

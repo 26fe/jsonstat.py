@@ -1,6 +1,10 @@
-#
+# This file is part of jsonstat.py
+
+# stdlib
+from __future__ import print_function
 # jsonstat
-#
+
+
 class IstatDimension:
     def __init__(self, name, json_data):
         # print json_data
@@ -22,7 +26,7 @@ class IstatDimension:
         pass
 
     def info(self):
-        print self.__name
+        print(self.__name)
         # print self.json_data
         for i in self.__cod2desc.items():
-            print "  {}:{}".format(i[0], i[1])
+            print("  {}:{}".format(i[0], i[1]))

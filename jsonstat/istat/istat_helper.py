@@ -1,11 +1,11 @@
-#
+# This file is part of jsonstat.py
+
 # statlib
-#
+from __future__ import print_function
 import os
 import json
-import urllib2
-from StringIO import StringIO
-
+# from io import StringIO
+from io import BytesIO
 #
 # packages
 #
@@ -34,8 +34,8 @@ class IstatHelper:
     def help(self):
         uri = 'http://apistat.istat.it/?q=help&lang={}'.format(self.lang)
         html = urllib2.urlopen(uri).read()
-        print uri
-        print html
+        print(uri)
+        print(html)
 
     # q=getarea
     # La funzione restituisce le aree tematiche di I.Stat supporta i seguenti parametri:
@@ -69,7 +69,7 @@ class IstatHelper:
 
         json_data = json.loads(json_string)
         if show:
-            print "----------------------------------------------"
+            print("----------------------------------------------")
             # print uri
             # print html
             print(json.dumps(json_data, sort_keys=True, indent=4))
@@ -89,7 +89,7 @@ class IstatHelper:
             json_string = self.dwl.download(uri,filename)
 
             # extract order using ijson
-            parser = ijson.parse(StringIO(json_string))
+            parser = ijson.parse(BytesIO(json_string))
             name2pos = {}
             i = 0
             for prefix, event, value in parser:
@@ -103,8 +103,8 @@ class IstatHelper:
             from collections import OrderedDict
             json_data = json.loads(json_string, object_pairs_hook=OrderedDict)
             if show:
-                print "----------------------------------------------"
-                print json_data
+                print("----------------------------------------------")
+                print(json_data)
             return (name2pos, json_data)
         except ValueError:
             return None
@@ -138,13 +138,13 @@ class IstatHelper:
             json_string = self.dwl.download(uri, filename)
             json_data = json.loads(json_string)
             if show:
-                print "----------------------------------------------"
+                print("----------------------------------------------")
                 # print uri
                 # print page
                 print(json.dumps(json_data, indent=4))
         except ValueError as e:
-            print e
-            print uri
+            print(e)
+            print(uri)
 
     # q=gettableterr
     # La funzione restituisce la tavola dati.
@@ -196,12 +196,12 @@ class IstatHelper:
             json_string = self.dwl.download(uri, filename)
             json_data = json.loads(json_string)
             if show:
-                print uri
-                print json_string
+                print(uri)
+                print(json_string)
                 print(json.dumps(json_data, indent=4))
             return json_data
         except ValueError as e:
-            print e
+            print(e)
         return None
 
 
@@ -241,9 +241,10 @@ class IstatHelper:
         json_data = self.dim(dataset['Cod'], show=False)
         if json_data is not None:
             # if len(json_data) <= 3:
-            print u"dataset: '{}' '{}' dim: {}".format(dataset['Cod'], dataset['Desc'], len(json_data))
+            msg = u"dataset: '{}' '{}' dim: {}".format(dataset['Cod'], dataset['Desc'], len(json_data))
+            print(msg)
         else:
-            print "cannot retrieve info for dataset: {}".format(dataset)
+            print("cannot retrieve info for dataset: {}".format(dataset))
 
     #
     # ex di area: {u'Desc': u'Censimento popolazione e abitazioni 2011', u'Id': u'3', u'Cod': u'CEN'}
@@ -251,13 +252,14 @@ class IstatHelper:
     def list_dataset_dim(self, area):
         json_data = self.dslist(area['Id'], show=False)
         if json_data is not None:
-            print "-------------------------"
-            print u"area: {} '{}' nr. dataset {}".format(area['Id'], area['Desc'], len(json_data))
+            print("-------------------------")
+            msg = u"area: {} '{}' nr. dataset {}".format(area['Id'], area['Desc'], len(json_data))
+            print(msg)
             for dataset in json_data:
                 self.list_dim(dataset)
         else:
-            print "--------------"
-            print "cannot retrieve info for area {}".format(area)
+            print("--------------")
+            print("cannot retrieve info for area {}".format(area))
 
     def list_area_dataset_dim(self):
         json_data = self.area(show=False)
