@@ -63,7 +63,7 @@ setup(
       ],
 
       install_requires=[
-          'pandas', 'ijson'
+          'pandas', 'ijson', 'requests'
       ],
       )
 
