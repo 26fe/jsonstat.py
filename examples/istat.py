@@ -1,4 +1,7 @@
+# -*- coding: utf-8 -*-
+
 # stdlib
+from __future__ import print_function
 import os
 # jsonstat
 import jsonstat
@@ -12,17 +15,17 @@ if __name__ == "__main__":
 
     i = jsonstat.istat.Istat(cache_dir, 1)
     for a in i.areas():
-        print a.info()
+        print(a.info())
 
     aname = 'Prices'
-    print "--- list dataset in area {}".format(aname)
+    print("--- list dataset in area {}".format(aname))
     a = i.area(aname)
 
     for ds in a.datasets():
-        print u"{}({}):{}".format(ds.cod(), ds.nrdim(), ds.name())
+        print(u"{}({}):{}".format(ds.cod(), ds.nrdim(), ds.name()))
 
     dname = 'DCSP_IPAB'
-    print "--- list dimesions for dataset {}".format(dname)
+    print("--- list dimesions for dataset {}".format(dname))
     ds = a.dataset(dname)
     ds.info_dimensions()
     json_data = ds.getvalues("1,18,0,0,0")

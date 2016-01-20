@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 # This file is part of jsonstat.py
 
-# statlib
+# stdlib
 from __future__ import print_function
+from __future__ import unicode_literals
 import os
+import sys
 import json
-# from io import StringIO
-from io import BytesIO
-#
+from io import StringIO
+# from io import BytesIO
+
 # packages
-#
 import ijson
 
 
@@ -47,7 +48,7 @@ class IstatHelper:
         uri = 'http://apistat.istat.it/?q=getarea&lang={}'.format(self.lang)
         filename ="istat-area-{}.json".format(self.__lang2str())
         json_string = self.dwl.download(uri,filename)
-        json_data = json.loads(json_string.decode("utf-8"))
+        json_data = json.loads(json_string)
         if show:
             # print "----------------------------------------------"
             # print uri
@@ -68,7 +69,7 @@ class IstatHelper:
         filename = "istat-area-{}-{}.json".format(area, self.__lang2str())
         json_string = self.dwl.download(uri, filename)
 
-        json_data = json.loads(json_string.decode("utf-8"))
+        json_data = json.loads(json_string)
         if show:
             print("----------------------------------------------")
             # print uri
@@ -90,7 +91,11 @@ class IstatHelper:
             json_string = self.dwl.download(uri,filename)
 
             # extract order using ijson
-            parser = ijson.parse(BytesIO(json_string))
+
+            if sys.version_info < (3,):
+                json_string = unicode(json_string, "utf-8")
+
+            parser = ijson.parse(StringIO(json_string))
             name2pos = {}
             i = 0
             for prefix, event, value in parser:
@@ -102,7 +107,7 @@ class IstatHelper:
 
             # it is possible preserve order using object_pairs_hook
             from collections import OrderedDict
-            json_data = json.loads(json_string.decode("utf-8"), object_pairs_hook=OrderedDict)
+            json_data = json.loads(json_string, object_pairs_hook=OrderedDict)
             if show:
                 print("----------------------------------------------")
                 print(json_data)

@@ -1,4 +1,8 @@
+# -*- coding: utf-8 -*-
+# This file is part of jsonstat.py
+
 # stdlib
+from __future__ import print_function
 import os
 # jsonstat
 import jsonstat

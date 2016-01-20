@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 # This file is part of jsonstat.py
 
 # stdlib
 from __future__ import print_function
 import json
+
 # jsonstat
 from jsonstat.dataset import JsonStatDataSet
 
@@ -32,11 +34,6 @@ class JsonStatCollection:
         with open(filename) as f:
             json_string = f.read()
             self.from_string(json_string)
-
-    def from_url(self, url):
-        self.__url = url
-        json_string = urllib2.urlopen(self.__url).read()
-        self.from_string(json_string)
 
     def from_string(self, json_string):
         json_data = json.loads(json_string)

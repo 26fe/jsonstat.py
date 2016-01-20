@@ -190,12 +190,19 @@ class JsonStatDimension:
         return list(self.__from_pos_to_index)
 
     def info(self):
-        """print some info on standard output about dimension
+        """
+        print some info on standard output about this dimension
         """
         print("index")
         f = "{:>5} {:>6} {:>6}"
         print(f.format('pos', 'idx', 'label'))
         for p in range(len(self.__from_pos_to_index)):
             idx = self.__from_pos_to_index[p]
+            if idx is None:
+                idx = ""
+
             lbl = self.__from_pos_to_label[p]
+            if lbl is None:
+                lbl = ""
+
             print(f.format(p, idx, lbl))
