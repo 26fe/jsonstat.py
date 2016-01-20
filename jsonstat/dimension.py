@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 # This file is part of jsonstat.py
 
 # stdlib
 from __future__ import print_function
 import json
+
 # jsonstat
 from jsonstat.exceptions import JsonStatException
 from jsonstat.exceptions import JsonStatMalformedJson
@@ -10,9 +12,18 @@ from jsonstat.exceptions import JsonStatMalformedJson
 
 class JsonStatDimension:
     """
-    Represents a JsonStatDimension. It is contained into a Dataset
+    Represents a JsonStatDimension. It is contained into a Dataset.
     """
     def __init__(self, name, size, pos, role):
+        """
+        initialize a dimension
+        :param name: name of dimension
+        :param size: size of dimension (nr of values)
+        :param pos: position of dimension into the dataset
+        :param role: of dimension
+        :return:
+        """
+
         self.__valid = False
 
         self.__name = name
@@ -30,20 +41,21 @@ class JsonStatDimension:
         self.__from_index_to_label = {}
 
     def from_string(self, json_string):
-        """
-        Parse a json string
+        """Parse a json string
         :param json_string:
-        :return:
         """
         json_data = json.loads(json_string)
         self.from_json(json_data)
 
     def from_json(self, json_data):
+        """Parse a json structure
+        :param json_data:
+        :return:
+        """
         if 'label' in json_data:
             self.__label = json_data['label']
-        #
+
         # parse category
-        #
         if "category" not in json_data:
             msg = "dimension '{}': missing category key".format(self.__name)
             raise JsonStatMalformedJson(msg)
@@ -103,9 +115,12 @@ class JsonStatDimension:
                 self.__from_index_to_pos[cat] = idx
                 self.__from_pos_to_index[idx] = cat
 
-    # parse label structure
-    # "category" : {"label" : { "CA" : "Canada" }}
     def __parse_json_label(self, json_data_category):
+        """parse label structure
+            "category" : {"label" : { "CA" : "Canada" }}
+        :param json_data_category:
+        :return:
+        """
         for i in json_data_category['label'].items():
             idx = i[0]
             lbl = i[1]
@@ -118,9 +133,17 @@ class JsonStatDimension:
             self.__from_label_to_index[lbl] = idx
 
     def name(self):
+        """
+
+        :return:
+        """
         return self.__name
 
     def label(self):
+        """
+
+        :return:
+        """
         return self.__label
 
     def size(self):
@@ -153,10 +176,18 @@ class JsonStatDimension:
         return self.__from_pos_to_index[pos]
 
     def pos2label(self, pos):
+        """from the position get the label
+        :param pos: integer
+        :return: the label
+        """
         return self.__from_pos_to_label[pos]
 
     def get_index(self):
-        return list(self.__from_index_to_pos.keys())
+        """
+        get the index
+        :return: a list of value
+        """
+        return list(self.__from_pos_to_index)
 
     def info(self):
         """print some info on standard output about dimension

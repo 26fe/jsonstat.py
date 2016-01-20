@@ -1,20 +1,34 @@
+# -*- coding: utf-8 -*-
 # This file is part of jsonstat.py
 
 # stdlib
 from __future__ import print_function
 import os.path
+
 # packages
 import requests
 
+
 class Downloader:
     """
-    Helper class to download json stat file.
+    Helper class to download json stat files.
     It has a very simple cache mechanism
     """
-    def __init__(self, dir="."):
-        self.__dir = dir
+    def __init__(self, cache_dir="."):
+        """
+        initialize downloader
+        :param cache_dir: directory where to store downloaded files
+        """
+        self.__dir = cache_dir
 
     def download(self, url, filename):
+        """
+        Download url from internet. Store the downloaded content into <cache_dir>/file.
+        If <cache_dir>/file exists, it returns content from disk
+        :param url: page to be donwloaded
+        :param filename: filename where to store the content of url
+        :return: the content of url
+        """
 
         filename = os.path.join(self.__dir, filename)
 
@@ -39,7 +53,7 @@ class Downloader:
         :param content:
         :return:
         """
-        f = open(pathname, 'w')
+        f = open(pathname, 'wb')
         f.write(content)
         f.close()
 
@@ -60,6 +74,6 @@ def download(url, pathname):
     download a url in pathname
     :param url:
     :param pathname:
-    :return:
+    :return: the content of url
     """
     return Downloader(os.path.dirname(pathname)).download(url, os.path.basename(pathname))

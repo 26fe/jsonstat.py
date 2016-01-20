@@ -1,7 +1,7 @@
-# This file is part of jsonstat.py
-#
+# -*- coding: utf-8 -*-
+#  This file is part of jsonstat.py
+
 # jsonstat
-#
 from __future__ import print_function
 from jsonstat.istat.istat_dimension import IstatDimension
 from jsonstat.istat.istat_exception import IstatException

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # This file is part of jsonstat.py
 
 # statlib
@@ -46,7 +47,7 @@ class IstatHelper:
         uri = 'http://apistat.istat.it/?q=getarea&lang={}'.format(self.lang)
         filename ="istat-area-{}.json".format(self.__lang2str())
         json_string = self.dwl.download(uri,filename)
-        json_data = json.loads(json_string)
+        json_data = json.loads(json_string.decode("utf-8"))
         if show:
             # print "----------------------------------------------"
             # print uri
@@ -67,7 +68,7 @@ class IstatHelper:
         filename = "istat-area-{}-{}.json".format(area, self.__lang2str())
         json_string = self.dwl.download(uri, filename)
 
-        json_data = json.loads(json_string)
+        json_data = json.loads(json_string.decode("utf-8"))
         if show:
             print("----------------------------------------------")
             # print uri
@@ -101,7 +102,7 @@ class IstatHelper:
 
             # it is possible preserve order using object_pairs_hook
             from collections import OrderedDict
-            json_data = json.loads(json_string, object_pairs_hook=OrderedDict)
+            json_data = json.loads(json_string.decode("utf-8"), object_pairs_hook=OrderedDict)
             if show:
                 print("----------------------------------------------")
                 print(json_data)
