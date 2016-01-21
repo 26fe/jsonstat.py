@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 # This file is part of jsonstat.py
 
+# download from internet a jsonstat file version 1.0
+# print some info about downloaded file
+
 # stdlib
 from __future__ import print_function
 import os
+
 # jsonstat
 import jsonstat
 
@@ -11,7 +15,7 @@ import jsonstat
 uri = 'http://json-stat.org/samples/oecd-canada.json'
 json_filename = "oecd-canada.json"
 
-JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
+JSONSTAT_HOME = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 out_dir = os.path.join(JSONSTAT_HOME, "tmp", "examples")
 
 def test(uri, json_filename):
@@ -41,14 +45,6 @@ def test(uri, json_filename):
     print(df)
 
     table = oecd.to_table()
-
-    # csv_pathname=os.path.join(out_dir, "oecd-canada-out.csv")
-    # with open(csv_pathname) as f:
-    #     i = 0
-    #     for i, line in enumerate(f):
-    #         cols = line.strip().split(',')
-    #         print(table[i])
-    #         print(cols)
 
 if __name__ == "__main__":
     test(uri, json_filename)
