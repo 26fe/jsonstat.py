@@ -5,18 +5,13 @@ from __future__ import print_function
 import unittest
 import os
 
-#
 # jsonstat
-#
 import jsonstat
 
 
 class TestDataSet(unittest.TestCase):
     def setUp(self):
-
-
         self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures", "dataset")
-
 
         self.json_missing_value = '''
         {
@@ -153,28 +148,13 @@ class TestDataSet(unittest.TestCase):
         ]
         self.assertEquals(result, expected)
 
-    def test_extract_year_IT(self):
+    def test_to_data_frame_year_IT(self):
         dataset = jsonstat.JsonStatDataSet()
         dataset.from_file(os.path.join(self.fixture_dir, "json_dataset_unemployment.json"))
         df = dataset.to_data_frame("year", area="IT")
 
         # print df
         self.assertEquals(df['IT']['2014'], 34)
-
-    def test_to_table(self):
-        dataset = jsonstat.JsonStatDataSet()
-        dataset.from_file(os.path.join(self.fixture_dir, "json_dataset_unemployment.json"))
-        table = dataset.to_table()
-
-        # table len is the size of dataset + 1 for headers
-        self.assertEqual(len(dataset) + 1, len(table))
-
-        header_expected = [u'OECD countries, EU15 and total', u'2003-2014', 'value']
-        self.assertEqual(header_expected, table[0])
-        first_row_expected = [u'Australia', u'2012', 11]
-        self.assertEquals(first_row_expected, table[1])
-        second_row_expected = [u'Austria', u'2012', 12]
-        self.assertEqual(second_row_expected, table[2])
 
     # def test_extract_year_all_country(self):
     #     dataset = jsonstat.JsonStatSingleDataSet("canada")
