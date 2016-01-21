@@ -146,6 +146,9 @@ class JsonStatDataSet:
         return self.__dimensions[dim]
 
     def info_dimensions(self):
+        """
+        print on stdout same info on dimensions
+        """
         print("dimensions:")
         for i in range(len(self.__dimension_ids)):
             dname = self.__dimension_ids[i]
@@ -154,6 +157,9 @@ class JsonStatDataSet:
             print(msg)
 
     def info(self):
+        """
+        print on stdout some info about this dataset
+        """
         if self.__name is not None:
             print("name:   '{}'".format(self.__name))
 
@@ -170,6 +176,11 @@ class JsonStatDataSet:
         self.info_dimensions()
 
     def value(self, **dims):
+        """
+        get a value
+        :param dims:
+        :return: value (typically a number)
+        """
         if not self.__valid:
             raise JsonStatException('dataset not initialized')
 
@@ -253,7 +264,8 @@ class JsonStatDataSet:
             # print "{} - {} -> {}".format(vec_pos, vec_idx, value)
 
     def to_table(self, content="label"):
-        """Trasforms a dataset into a table
+        """
+        Transforms a dataset into a table
         content could be "label" or "id"
         """
         table = []
@@ -265,7 +277,7 @@ class JsonStatDataSet:
         else:
             header = list(self.__dimension_ids)
 
-        header.append("value")
+        header.append("Value")
         table.append(header)
         for vec_pos in self.all_pos():
             value = self.value_from_vec_pos(vec_pos)
