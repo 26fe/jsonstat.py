@@ -158,8 +158,9 @@ class JsonStatDataSet:
 
     def info(self):
         """
-        print on stdout some info about this dataset
+        print ome info about this dataset on stdout
         """
+
         if self.__name is not None:
             print("name:   '{}'".format(self.__name))
 
