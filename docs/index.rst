@@ -1,6 +1,6 @@
 .. jsonstat documentation master file
 
-Welcome to jsonstat's documentation!
+jsonstat.py documentation!
 ====================================
 
 Contents:
@@ -8,18 +8,13 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-.. automodule:: jsonstat
+   tutorial
+   notebook/oecd-canada-jsonstat_v1
+   code
 
-.. autoclass:: JsonStatCollection
-    :members:
+.. include:: ../README.rst
 
-.. autoclass:: JsonStatDimension
-    :members:
 
-.. automodule:: jsonstat.istat
-
-.. autoclass:: Istat
-    :members:
 
 
 Indices and tables
