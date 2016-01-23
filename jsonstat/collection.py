@@ -4,6 +4,7 @@
 # stdlib
 from __future__ import print_function
 from __future__ import unicode_literals
+import sys
 import json
 
 # jsonstat
@@ -28,7 +29,11 @@ class JsonStatCollection:
                     - an integer (for jsonstat v2)
         :return:
         """
-        if type(spec) is str or type(spec) is unicode:
+        # for python3 str == unicode
+        if type(spec) is str:
+            return self.__name2dataset[spec]
+        # python2 has also unicode string type and native string 'str' type
+        elif sys.version_info < (3,) and type(spec) is unicode:
             return self.__name2dataset[spec]
         elif type(spec) is int:
             return self.__pos2dataset[spec]
