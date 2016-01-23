@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 #  This file is part of jsonstat.py
 
-# jsonstat
+# stdlib
 from __future__ import print_function
+from __future__ import unicode_literals
+
+# jsonstat
 from jsonstat.istat.istat_dimension import IstatDimension
 from jsonstat.istat.istat_exception import IstatException
 
@@ -21,9 +24,12 @@ class IstatDataset:
     def cod(self):
         return self.__dataset['Cod']
 
+    def __str__(self):
+        out = "{}:{}".format(self.__dataset['Cod'], self.__dataset['Desc'])
+        return out
+
     def info(self):
-        msg = "{}:{}".format(self.__dataset['Cod'], self.__dataset['Desc'])
-        print(msg)
+        print(self)
 
     def info_dimensions(self):
         i = 0
@@ -46,7 +52,6 @@ class IstatDataset:
         if self.__name2pos is None:
             self.__download_dimensions()
         return self.__name2dim.values()
-
 
     def getvalues(self, dim):
         # dim = "1,6,9,0,0"

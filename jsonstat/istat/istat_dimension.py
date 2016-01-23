@@ -2,8 +2,9 @@
 
 # stdlib
 from __future__ import print_function
-# jsonstat
+from __future__ import unicode_literals
 
+# jsonstat
 
 class IstatDimension:
     def __init__(self, name, json_data):
@@ -25,8 +26,12 @@ class IstatDimension:
     def desc2cod(self, str):
         pass
 
-    def info(self):
-        print(self.__name)
+    def __str__(self):
+        out = self.__name
         # print self.json_data
         for i in self.__cod2desc.items():
-            print("  {}:{}".format(i[0], i[1]))
+            out += "  {}:{}".format(i[0], i[1])
+        return out
+
+    def info(self):
+        print(self)

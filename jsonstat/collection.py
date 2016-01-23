@@ -3,6 +3,7 @@
 
 # stdlib
 from __future__ import print_function
+from __future__ import unicode_literals
 import json
 
 # jsonstat
@@ -27,18 +28,23 @@ class JsonStatCollection:
                     - an integer (for jsonstat v2)
         :return:
         """
-        if type(spec) is str:
+        if type(spec) is str or type(spec) is unicode:
             return self.__name2dataset[spec]
         elif type(spec) is int:
             return self.__pos2dataset[spec]
         raise ValueError()
 
+    def __str__(self):
+        out = ""
+        for i in self.__name2dataset.values():
+            out += "dataset: '{}'\n".format(i.name())
+        return out
+
     def info(self):
         """
         print some info about this collection
         """
-        for i in self.__name2dataset.values():
-            print("dataset: '{}'".format(i.name()))
+        print(self)
 
     def from_file(self, filename):
         """
@@ -83,11 +89,12 @@ class JsonStatCollection:
         #         # print "{}: {}".format(i, value)
         #         name2pos[value] = i
         #         i += 1
-
         for ds in json_data.items():
             dataset_name = ds[0]
+            dataset_json = ds[1]
+
             dataset = JsonStatDataSet(dataset_name)
-            dataset.from_json(ds[1])
+            dataset.from_json(dataset_json)
             self.__name2dataset[dataset_name] = dataset
 
     def __from_json_v2(self, json_data):

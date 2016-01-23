@@ -3,6 +3,7 @@
 
 # stdlib
 from __future__ import print_function
+from __future__ import unicode_literals
 import unittest
 
 # jsonstat
@@ -126,6 +127,28 @@ class TestDimension(unittest.TestCase):
         expected = ['2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014']
         result = dim.get_index()
         self.assertEquals(expected, result)
+
+    def test_info(self):
+        dim = jsonstat.JsonStatDimension("year", 12, 0, None)
+        dim.from_string(self.json_str_only_index)
+        expected = (
+            "index\n"
+            "  pos    idx  label\n"
+            "    0   2003       \n"
+            "    1   2004       \n"
+            "    2   2005       \n"
+            "    3   2006       \n"
+            "    4   2007       \n"
+            "    5   2008       \n"
+            "    6   2009       \n"
+            "    7   2010       \n"
+            "    8   2011       \n"
+            "    9   2012       \n"
+            "   10   2013       \n"
+            "   11   2014       \n"
+        )
+        self.maxDiff = None
+        self.assertEquals(expected, dim.__str__())
 
     def test_exception_mismatch_index_and_label(self):
         dim = jsonstat.JsonStatDimension("year", 4, 0, None)

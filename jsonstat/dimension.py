@@ -3,6 +3,7 @@
 
 # stdlib
 from __future__ import print_function
+from __future__ import unicode_literals
 import json
 
 # jsonstat
@@ -189,13 +190,10 @@ class JsonStatDimension:
         """
         return list(self.__from_pos_to_index)
 
-    def info(self):
-        """
-        print some info on standard output about this dimension
-        """
-        print("index")
-        f = "{:>5} {:>6} {:>6}"
-        print(f.format('pos', 'idx', 'label'))
+    def __str__(self):
+        out = "index\n"
+        f = "{:>5} {:>6} {:>6}\n"
+        out += f.format('pos', 'idx', 'label')
         for p in range(len(self.__from_pos_to_index)):
             idx = self.__from_pos_to_index[p]
             if idx is None:
@@ -205,4 +203,11 @@ class JsonStatDimension:
             if lbl is None:
                 lbl = ""
 
-            print(f.format(p, idx, lbl))
+            out += f.format(p, idx, lbl)
+        return out
+
+    def info(self):
+        """
+        print some info on standard output about this dimension
+        """
+        print(self)

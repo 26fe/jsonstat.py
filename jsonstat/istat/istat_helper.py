@@ -252,10 +252,12 @@ class IstatHelper:
         else:
             print("cannot retrieve info for dataset: {}".format(dataset))
 
-    #
-    # ex di area: {u'Desc': u'Censimento popolazione e abitazioni 2011', u'Id': u'3', u'Cod': u'CEN'}
-    #
     def list_dataset_dim(self, area):
+        """
+        ex di area: {'Desc': 'Censimento popolazione e abitazioni 2011', 'Id': '3', 'Cod': 'CEN'}
+        :param area:
+        :return:
+        """
         json_data = self.dslist(area['Id'], show=False)
         if json_data is not None:
             print("-------------------------")
@@ -271,8 +273,6 @@ class IstatHelper:
         json_data = self.area(show=False)
         for area in json_data:
             self.list_dataset_dim(area)
-
-
 
 
 if __name__ == "__main__":

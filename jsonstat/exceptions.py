@@ -1,4 +1,9 @@
 # This file is part of jsonstat.py
+
+# stdlib
+from __future__ import print_function
+from __future__ import unicode_literals
+
 # jsonstat
 
 

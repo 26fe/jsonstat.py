@@ -2,6 +2,7 @@
 
 # stdlib
 from __future__ import print_function
+from __future__ import unicode_literals
 import unittest
 import os
 
@@ -96,7 +97,20 @@ class TestDataSet(unittest.TestCase):
         with self.assertRaises(KeyError):
             dataset.dimension("not existent dim")
 
+    def test_info(self):
+        dataset = jsonstat.JsonStatDataSet("canada")
+        dataset.from_file(os.path.join(self.fixture_dir, "json_dataset_unemployment.json"))
 
+        expected =(
+            "name:   'canada'\n"
+            "label:  'Unemployment rate in the OECD countries'\n"
+            "source: 'Unemployment rate in the OECD countries'\n"
+            "\n"
+            "dimensions:\n"
+            "dim id/name: 'area' size: '4' role: 'geo'\n"
+            "dim id/name: 'year' size: '3' role: 'time'\n"
+        )
+        self.assertEquals(expected, dataset.__str__())
 
     def test_value(self):
         dataset = jsonstat.JsonStatDataSet("canada")

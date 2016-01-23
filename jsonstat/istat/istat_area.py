@@ -1,10 +1,13 @@
 # This file is part of jsonstat.py
-#
-# jsonstat
-#
+
+# stdlib
 from __future__ import print_function
+from __future__ import unicode_literals
+
+# jsonstat
 from jsonstat.istat.istat_dataset import IstatDataset
 from jsonstat.istat.istat_exception import IstatException
+
 
 #
 # Represent a Area. An Area contains dataset
@@ -15,35 +18,42 @@ class IstatArea:
         self.__area = area
         self.__cod2dataset = None
 
-    #
-    # name of the area
-    #
     def name(self):
+        """
+        name of the area
+        :return:
+        """
         return self.__area['Desc']
 
-    #
-    # print some info about the area
-    #
-    def info(self):
-        msg = "{}:{}".format(self.__area['Id'], self.__area['Desc'])
-        print(msg)
+    def __str__(self):
+        out = "{}:{}".format(self.__area['Id'], self.__area['Desc'])
+        return out
 
-    #
-    # get a IstatDataset by name
-    #
+    def info(self):
+        """
+        print some info about the area
+        :return:
+        """
+        print(self)
+
     def dataset(self, name):
+        """
+        get a IstatDataset by name
+        :param name:
+        :return:
+        """
         if self.__cod2dataset is None:
             self.__download_datasets()
         return self.__cod2dataset[name]
 
-    #
-    # Return a list of datasets
-    #
     def datasets(self):
+        """
+        Return a list of datasets
+        :return:
+        """
         if self.__cod2dataset is None:
             self.__download_datasets()
         return self.__cod2dataset.values()
-
 
     def __download_datasets(self):
         self.__cod2dataset = {}

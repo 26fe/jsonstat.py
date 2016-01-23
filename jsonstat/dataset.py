@@ -3,11 +3,14 @@
 
 # stdlib
 from __future__ import print_function
+from __future__ import unicode_literals
 from functools import reduce
 import json
+
 # packages
 import numpy as np
 import pandas as pd
+
 # jsonstat
 from jsonstat.dimension import JsonStatDimension
 from jsonstat.exceptions import JsonStatException
@@ -145,36 +148,44 @@ class JsonStatDataSet:
     def dimension(self, dim):
         return self.__dimensions[dim]
 
+    def __str__dimensions(self):
+        out = "dimensions:\n"
+        for i in range(len(self.__dimension_ids)):
+            dname = self.__dimension_ids[i]
+            d = self.__dimensions[dname]
+            out += "dim id/name: '{}' size: '{}' role: '{}'\n".format(d.name(), d.size(), d.role())
+        return out
+
     def info_dimensions(self):
         """
         print on stdout same info on dimensions
         """
-        print("dimensions:")
-        for i in range(len(self.__dimension_ids)):
-            dname = self.__dimension_ids[i]
-            d = self.__dimensions[dname]
-            msg = "dim id/name: '{}' size: '{}' role: '{}'".format(d.name(), d.size(), d.role())
-            print(msg)
+        print(self.__str__dimensions())
+
+    def __str__(self):
+        out = ""
+        if self.__name is not None:
+            out += "name:   '{}'\n".format(self.__name)
+
+        if self.__title is not None:
+            out += "title:  '{}'\n".format(self.__title)
+
+        if self.__label is not None:
+            out += "label:  '{}'\n".format(self.__label)
+
+        if self.__source is not None:
+            out += "source: '{}'\n".format(self.__label, self.__source)
+
+        out += "\n"
+        out += self.__str__dimensions()
+        # self.info_dimensions()
+        return out
 
     def info(self):
         """
         print ome info about this dataset on stdout
         """
-
-        if self.__name is not None:
-            print("name:   '{}'".format(self.__name))
-
-        if self.__title is not None:
-            print("title:  '{}'".format(self.__title))
-
-        if self.__label is not None:
-            print("label:  '{}'".format(self.__label))
-
-        if self.__source is not None:
-            print("source: '{}'".format(self.__label, self.__source))
-
-        print("")
-        self.info_dimensions()
+        print(self)
 
     def value(self, **dims):
         """

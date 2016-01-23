@@ -2,11 +2,14 @@
 
 # stdlib
 from __future__ import print_function
+from __future__ import unicode_literals
 import os
+
 # jsonstat
 import jsonstat
 from jsonstat.istat.istat_helper import IstatHelper
 from jsonstat.istat.istat_area import IstatArea
+
 
 class Istat:
     """
