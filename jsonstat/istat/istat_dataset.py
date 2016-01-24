@@ -59,22 +59,23 @@ class IstatDataset:
         return json_data
 
     def __download_dimensions(self):
-        (mame2pos, json_data) = self.__istat_helper.dim(self.__dataset['Cod'], show=False)
+        json_data = self.__istat_helper.dim(self.__dataset['Cod'], show=False)
         if json_data is None:
             msg = "cannot retrieve info for dataset: {}".format(self.__dataset)
             raise IstatException(msg)
 
 
-        # print u"dataset: '{}' '{}' dim: {}".format(self.dataset['Cod'], self.dataset['Desc'], len(json_data))
         self.__name2dim = {}
-        for item in json_data.items():
+        self.__pos2dim = len(json_data) * [None]
+        for pos, item in enumerate(json_data.items()):
             name = item[0]
             json_dimension = item[1]
             self.__name2dim[name] = IstatDimension(name, json_dimension)
-
-        self.__name2pos = mame2pos
-        self.__pos2dim = len(mame2pos) * [None]
-        for item in mame2pos.items():
-            pos = item[1]
-            name = item[0]
             self.__pos2dim[pos] = self.__name2dim[name]
+
+        # self.__name2pos = mame2pos
+        # self.__pos2dim = len(mame2pos) * [None]
+        # for item in mame2pos.items():
+        #     pos = item[1]
+        #     name = item[0]
+        #     self.__pos2dim[pos] = self.__name2dim[name]
