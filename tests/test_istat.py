@@ -8,9 +8,7 @@ import os
 import unittest
 
 # jsonstat
-import jsonstat
 import jsonstat.istat as istat
-
 
 class TestIstat(unittest.TestCase):
     def setUp(self):
