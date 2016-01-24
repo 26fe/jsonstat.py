@@ -49,12 +49,20 @@ class TestCollection(unittest.TestCase):
 	    }
         """
 
-    def test_str(self):
+    def test_one_dataset_to_str(self):
         collection = jsonstat.JsonStatCollection()
         collection.from_string(self.json_string_v1_one_dataset)
         out = StringIO()
         print(collection.__str__(), file=out, end="")
-        expected = "dataset: 'oecd'\n"
+        expected = "0: dataset 'oecd'\n"
+        self.assertEquals(expected, out.getvalue())
+
+    def test_two_datasets_to_str(self):
+        collection = jsonstat.JsonStatCollection()
+        collection.from_string(self.json_string_v1_two_datasets)
+        out = StringIO()
+        print(collection.__str__(), file=out, end="")
+        expected = "0: dataset 'oecd'\n1: dataset 'canada'\n"
         self.assertEquals(expected, out.getvalue())
 
     def test_parse_v1_from_string(self):

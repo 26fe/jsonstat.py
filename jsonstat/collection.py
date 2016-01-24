@@ -4,6 +4,7 @@
 # stdlib
 from __future__ import print_function
 from __future__ import unicode_literals
+from collections import OrderedDict
 import sys
 import json
 
@@ -19,7 +20,7 @@ class JsonStatCollection:
     def __init__(self):
         self.__url = None
         self.__name2dataset = {}
-        self.__pos2dataset = None
+        self.__pos2dataset = []
 
     def dataset(self, spec):
         """
@@ -27,8 +28,13 @@ class JsonStatCollection:
         :param spec: can be:
                     - the name of collection (string) for jsonstat v1
                     - an integer (for jsonstat v2)
-        :return:
+        :return: a dataset
         """
+
+        # In Python2, str == bytes.
+        # In Python3, str means unicode (bytes remains unchanged),
+        #             while unicode is not defined anymore
+
         # for python3 str == unicode
         if type(spec) is str:
             return self.__name2dataset[spec]
@@ -41,8 +47,8 @@ class JsonStatCollection:
 
     def __str__(self):
         out = ""
-        for i in self.__name2dataset.values():
-            out += "dataset: '{}'\n".format(i.name())
+        for i, dataset in enumerate(self.__pos2dataset):
+            out += "{}: dataset '{}'\n".format(i, dataset.name())
         return out
 
     def info(self):
@@ -53,7 +59,7 @@ class JsonStatCollection:
 
     def from_file(self, filename):
         """
-        initialize this collection from file
+        initialize this collection from a file
         :param filename: name containing a jsonstat
         """
         with open(filename) as f:
@@ -63,15 +69,15 @@ class JsonStatCollection:
     def from_string(self, json_string):
         """
         initialize this collection from a string
-        :param json_string:
+        :param json_string: string containing a json
         """
-        json_data = json.loads(json_string)
+        json_data = json.loads(json_string, object_pairs_hook=OrderedDict)
         self.from_json(json_data)
 
     def from_json(self, json_data):
         """
         initialize this collection from a json structure
-        :param json_data:
+        :param json_data: data structure (dictionary) representing a json
         """
 
         if "version" in json_data:
@@ -85,15 +91,6 @@ class JsonStatCollection:
         parse a jsonstat version 1
         :param json_data: json structure
         """
-        #         parser = ijson.parse(StringIO(json_string))
-        # name2pos = {}
-        # i = 0
-        # for prefix, event, value in parser:
-        #     # print prefix,event,value
-        #     if prefix == '' and event =='map_key':
-        #         # print "{}: {}".format(i, value)
-        #         name2pos[value] = i
-        #         i += 1
         for ds in json_data.items():
             dataset_name = ds[0]
             dataset_json = ds[1]
@@ -101,6 +98,7 @@ class JsonStatCollection:
             dataset = JsonStatDataSet(dataset_name)
             dataset.from_json(dataset_json)
             self.__name2dataset[dataset_name] = dataset
+            self.__pos2dataset.append(dataset)
 
     def __from_json_v2(self, json_data):
         """
