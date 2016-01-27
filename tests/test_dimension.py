@@ -152,13 +152,24 @@ class TestDimension(unittest.TestCase):
         self.maxDiff = None
         self.assertEquals(expected, dim.__str__())
 
+    def test_info_with_label(self):
+        dim = jsonstat.JsonStatDimension("concept", 1, 0, None)
+        dim.from_string(self.json_str_size_one)
+        expected = (
+            "index\n"
+            "  pos    idx  label\n"
+            "    0     CA Canada\n"
+        )
+        self.maxDiff = None
+        self.assertEquals(expected, dim.__str__())
+
     def test_exception_mismatch_index_and_label(self):
         dim = jsonstat.JsonStatDimension("year", 4, 0, None)
         with self.assertRaises(jsonstat.JsonStatMalformedJson) as cm:
             dim.from_string(self.json_str_label_and_index)
 
         e = cm.exception
-        expected = "dimension 'year': mismatch between indexes 4 and labels 5"
+        expected = "dimension 'year': label 'Canada' is associated with index 'CA' that not exists!"
         self.assertEquals(e.value, expected)
 
 if __name__ == '__main__':

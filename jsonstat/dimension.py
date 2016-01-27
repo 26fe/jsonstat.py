@@ -24,7 +24,6 @@ class JsonStatDimension:
         :param size: size of dimension (nr of values)
         :param pos: position of dimension into the dataset
         :param role: of dimension
-        :return:
         """
 
         self.__valid = False
@@ -35,13 +34,14 @@ class JsonStatDimension:
         self.__pos = pos
         self.__label = None
 
-        # preallocate a list of length self.size with default value None
-        self.__from_pos_to_index = self.__size * [None]
-        self.__from_pos_to_label = self.__size * [None]
+        # if indexes are not present in json __pos2index will be None
+        # if labels  are not present in json __pos2label will be None
+        self.__pos2index = None
+        self.__pos2label = None
 
-        self.__from_index_to_pos = {}
-        self.__from_label_to_index = {}
-        self.__from_index_to_label = {}
+        self.__index2pos = {}
+        self.__label2index = {}
+        self.__index2label = {}
 
     def from_string(self, json_string):
         """Parse a json string
@@ -67,33 +67,46 @@ class JsonStatDimension:
 
         if 'index' in json_data_category:
             self.__parse_json_index(json_data_category)
-            # msg = "missing 'index' key in dimension '{}'".format(self.name)
-            # raise JsonStatMalformedJson(msg)
 
         if 'label' in json_data_category:
             self.__parse_json_label(json_data_category)
 
-        # check if from_index_to_pos is empty
-        # MAYBE from_index_to_pos is empty only on dimension of size 1
-        if len(self.__from_index_to_pos) == 0:
-            pos = 0
-            for idx in self.__from_label_to_index.values():
-                self.__from_index_to_pos[idx] = pos
-                self.__from_pos_to_index[pos] = idx
-                pos += 1
-
-        if len(self.__from_index_to_pos) > 0 and len(self.__from_label_to_index) > 0:
-            if len(self.__from_index_to_pos) != len(self.__from_label_to_index):
-                msg = "dimension '{}': mismatch between indexes {} and labels {}"
-                msg = msg.format(self.__name, len(self.__from_index_to_pos), len(self.__from_label_to_index))
-                raise JsonStatMalformedJson(msg)
-
-        if self.__size != len(self.__from_index_to_pos):
-            msg = "dimension '{}': malformed json: number of category {} not match with size {}"
-            msg = msg.format(self.__name, len(self.__from_index_to_pos), self.__size)
+        if self.__pos2label is None and self.__pos2index is None:
+            msg = "dimension '{}': one of keys 'label' or 'category' must be presents"
             raise JsonStatMalformedJson(msg)
 
-        if any(v is None for v in self.__from_pos_to_index):
+        # check if from_index_to_pos is empty
+        # MAYBE from_index_to_pos is empty only on dimension of size 1
+        # if len(self.__index2pos) == 0:
+        #     pos = 0
+        #     for idx in self.__label2index.values():
+        #         self.__index2pos[idx] = pos
+        #         self.__pos2index[pos] = idx
+        #         pos += 1
+
+        # if only labels are present into the json
+        # initialize structures for manage indexes
+        if self.__pos2index is None:
+            # preallocate a list of length self.size with default value None
+            self.__pos2index = self.__size * [None]
+            for pos, lbl in enumerate(self.__pos2label):
+                idx = self.__label2index[lbl]
+                self.__pos2index[pos] = idx
+                self.__index2pos[idx] = pos
+                self.__index2label[idx] = lbl
+
+        if len(self.__index2pos) > 0 and len(self.__label2index) > 0:
+            if len(self.__index2pos) != len(self.__label2index):
+                msg = "dimension '{}': mismatch between indexes {} and labels {}"
+                msg = msg.format(self.__name, len(self.__index2pos), len(self.__label2index))
+                raise JsonStatMalformedJson(msg)
+
+        if self.__size != len(self.__index2pos):
+            msg = "dimension '{}': malformed json: number of indexes {} not match with size {}"
+            msg = msg.format(self.__name, len(self.__index2pos), self.__size)
+            raise JsonStatMalformedJson(msg)
+
+        if any(v is None for v in self.__pos2index):
             msg = 'hole in index'
             raise JsonStatMalformedJson(msg)
 
@@ -101,109 +114,137 @@ class JsonStatDimension:
 
         # parse json index structure
 
-    # "category" : { "index" : { "2003" : 0, "2004" : 1, "2005" : 2, "2006" : 3 }
-    def __parse_json_index(self, json_data_category):
-        if type(json_data_category['index']) is list:
-            for i in json_data_category['index']:
-                pass
-                # print i
-        else:
-            for i in json_data_category['index'].items():
-                # print i
-                cat = i[0]
-                idx = i[1]
-                if idx >= self.__size:
-                    msg = "index {} for dimension '{}' is greater than size {}".format(idx, self.__name, self.__size)
-                    raise JsonStatException(msg)
-                self.__from_index_to_pos[cat] = idx
-                self.__from_pos_to_index[idx] = cat
-
-    def __parse_json_label(self, json_data_category):
-        """parse label structure
-            "category" : {"label" : { "CA" : "Canada" }}
-        :param json_data_category:
-        :return:
+    def __parse_json_index(self, json_data):
         """
-        for i in json_data_category['label'].items():
-            idx = i[0]
-            lbl = i[1]
+        parse index json structure
+        for ex. the json strcuture could be
+        "category" : { "index" : { "2003" : 0, "2004" : 1, "2005" : 2, "2006" : 3 }
+        :param json_data:
+        """
 
-            pos = self.__from_index_to_pos.get(idx)
-            if pos is not None:
-                self.__from_pos_to_label[pos] = lbl
+        # preallocate a list of length self.size with default value None
+        self.__pos2index = self.__size * [None]
+        if type(json_data['index']) is list:
+            for pos, idx in enumerate(json_data['index']):
+                self.__parse_json_index_helper(idx, pos)
+        else:
+            for item in json_data['index'].items():
+                idx = item[0]
+                pos = item[1]
+                self.__parse_json_index_helper(idx, pos)
 
-            self.__from_index_to_label[idx] = lbl
-            self.__from_label_to_index[lbl] = idx
+    def __parse_json_index_helper(self, idx, pos):
+        if pos >= self.__size:
+            msg = "index {} for dimension '{}' is greater than size {}".format(pos, self.__name, self.__size)
+            raise JsonStatException(msg)
+        self.__index2pos[idx] = pos
+        self.__pos2index[pos] = idx
+
+    def __parse_json_label(self, json_data):
+        """
+        parse label structure
+            "category" : {"label" : { "CA" : "Canada" }}
+        :param json_data: json structure to parse
+        """
+
+        # preallocate __pos2label
+        self.__pos2label = self.__size * [None]
+        for i, item in enumerate(json_data['label'].items()):
+            idx = item[0]
+            lbl = item[1]
+
+            if self.__pos2index is None:
+                # if index are not defined in json, give an order to the label
+                self.__pos2label[i] = lbl
+            else:
+                pos = self.__index2pos.get(idx)
+                if pos is None:
+                    msg = "dimension '{}': label '{}' is associated with index '{}' that not exists!".format(self.__name, lbl, idx)
+                    raise JsonStatMalformedJson(msg)
+                self.__pos2label[pos] = lbl
+
+            self.__index2label[idx] = lbl
+            self.__label2index[lbl] = idx
 
     def name(self):
         """
-
-        :return:
+        name of dimension
         """
         return self.__name
 
     def label(self):
         """
-
-        :return:
+        label of this dimenion
         """
         return self.__label
 
     def size(self):
+        """
+        size of this dimension
+        """
         return self.__size
 
     def __len__(self):
+        """
+        len of this dimesion (the same of the size)
+        """
         return self.__size
 
     def pos(self):
+        """
+        position of this dimension respect to the dataset which dimension belongs to
+        """
         return self.__pos
 
     def role(self):
         return self.__role
 
     def idx2pos(self, idx):
-        """from index to position
+        """
+        from index to position
 
         :param idx:
         :return:
         """
         if not self.__valid:
             raise JsonStatException("dimension not initialized")
-        return self.__from_index_to_pos[idx]
+        return self.__index2pos[idx]
 
     def pos2idx(self, pos):
-        """from position (integer) to index
+        """
+        from position (integer) to index
         :param pos:
         :return:
         """
-        return self.__from_pos_to_index[pos]
+        return self.__pos2index[pos]
 
     def pos2label(self, pos):
-        """from the position get the label
-        :param pos: integer
-        :return: the label
         """
-        return self.__from_pos_to_label[pos]
+        get the label associaate with the position
+        :param pos: integer
+        :return: the label or None if the label not exists at position pos
+        """
+        if self.__pos2label is None:
+            return None
+        else:
+            return self.__pos2label[pos]
 
     def get_index(self):
         """
         get the index
         :return: a list of value
         """
-        return list(self.__from_pos_to_index)
+        return list(self.__pos2index)
 
     def __str__(self):
         out = "index\n"
         f = "{:>5} {:>6} {:>6}\n"
         out += f.format('pos', 'idx', 'label')
-        for p in range(len(self.__from_pos_to_index)):
-            idx = self.__from_pos_to_index[p]
-            if idx is None:
-                idx = ""
-
-            lbl = self.__from_pos_to_label[p]
-            if lbl is None:
-                lbl = ""
+        for p in range(len(self.__pos2index)):
+            idx = self.__pos2index[p]
+            lbl = self.pos2label(p)
+            if idx is None: idx = ""
+            if lbl is None: lbl = ""
 
             out += f.format(p, idx, lbl)
         return out

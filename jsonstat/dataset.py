@@ -24,6 +24,10 @@ class JsonStatDataSet:
     Represents a Dataset
     """
     def __init__(self, dataset_name=None):
+        """
+        Initialize a empty dataset. If we are parsing jsonstat version 1, the dataset has a name.
+        :param dataset_name: dataset name (jsonstat v.1)
+        """
         self.__valid = False
         self.__json_data = None
 
@@ -39,21 +43,34 @@ class JsonStatDataSet:
         self.__value = None
 
     def from_file(self, filename):
+        """
+        read a jsonstat from a file and parse it to inizialize this (empty) dataset
+        :param filename: path of the file.
+        """
         with open(filename) as f:
             json_string = f.read()
             self.from_string(json_string)
 
     def from_string(self, json_string):
+        """
+        parse a string to inizialize this (empty) dataset
+        :param json_string:
+        """
+
         json_data = json.loads(json_string)
         self.from_json(json_data)
 
     def from_json(self, json_data, version=1):
-        if version==2:
+        if version == 2:
             self.__from_json_v2(json_data)
         else:
             self.__from_json_v1(json_data)
 
     def __from_json_v1(self, json_data):
+        """
+        parse jsonstat format version 1
+        :param json_data: json structure
+        """
 
         self.__json_data = json_data
 
@@ -99,6 +116,10 @@ class JsonStatDataSet:
         self.__valid = True
 
     def __from_json_v2(self, json_data):
+        """
+        parse jsonstat format version 1
+        :param json_data: json structure
+        """
         pass
 
     def __parse_dimensions(self, json_data_dimension):
@@ -147,8 +168,13 @@ class JsonStatDataSet:
     def dimensions(self):
         return self.__dimensions.values()
 
-    def dimension(self, dim):
-        return self.__dimensions[dim]
+    def dimension(self, spec):
+        """
+        get a dimension by spec
+        :param spec: name of the dimension
+        :return: a JsonStatDimension
+        """
+        return self.__dimensions[spec]
 
     def __str__dimensions(self):
         out = "dimensions:\n"

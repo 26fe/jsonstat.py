@@ -83,6 +83,15 @@ class TestCollection(unittest.TestCase):
         self.assertIsNotNone(collection.dataset('oecd'))
         self.assertIsNotNone(collection.dataset('canada'))
 
+        oecd = collection.dataset("oecd")
+        dim = oecd.dimension("concept")
+        expected = (
+            "index\n"
+            "  pos    idx  label\n"
+            "    0    UNR unemployment rate\n"
+        )
+        self.assertEquals(expected, dim.__str__())
+
     def test_parse_v2_from_file(self):
         filename = os.path.join(self.fixture_dir, "oecd-canada-col.json")
         collection = jsonstat.JsonStatCollection()
