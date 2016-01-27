@@ -10,6 +10,7 @@ Contents:
 
    tutorial
    notebook/oecd-canada-jsonstat_v1
+   notebook/istat_notebook
    code
 
 .. include:: ../README.rst
