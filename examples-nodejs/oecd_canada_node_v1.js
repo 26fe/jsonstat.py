@@ -1,4 +1,7 @@
-// This file is part of jsonstat.py
+// -*- coding: utf-8 -*-
+// This file is part of https://github.com/26fe/jsonstat.py
+// Copyright (C) 2016 gf <gf@26fe.com>
+// See LICENSE file
 
 // this nodejs script create a cvs file and store it to
 // the fixture file
