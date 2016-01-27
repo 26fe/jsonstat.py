@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-# This file is part of jsonstat.py
+# This file is part of https://github.com/26fe/jsonstat.py
+# Copyright (C) 2016 gf <gf@26fe.com>
+# See LICENSE file
 
 # download from internet a jsonstat file version 1.0
 # print some info about downloaded file
