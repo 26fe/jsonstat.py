@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-# This file is part of jsonstat.py
+# This file is part of https://github.com/26fe/jsonstat.py
+# Copyright (C) 2016 gf <gf@26fe.com>
+# See LICENSE file
 
 # stdlib
 from __future__ import print_function
@@ -9,6 +11,7 @@ import unittest
 
 # jsonstat
 import jsonstat.istat as istat
+
 
 class TestIstat(unittest.TestCase):
     def setUp(self):
