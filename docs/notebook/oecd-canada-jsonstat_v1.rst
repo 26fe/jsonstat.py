@@ -1,18 +1,21 @@
 
-Using jsonstat.py
------------------
+Example using jsonstat.py python library
+----------------------------------------
 
 This Jupyter notebook is to show the python library
 `jsonstat.py <http://github.com/26fe/jsonstat.py>`__ in action. The
-oecd-canada.json is used in the following examples.
+oecd-canada.json is used in the following examples. This example show
+how to explore the jsonstat data `file
+oecd-canada <http://json-stat.org/samples/oecd-canada.json>`__
 
 .. code:: python
 
+    from __future__ import print_function
     import os
     import pandas as ps
     import jsonstat
 
-Download or use the jsonstat file on disk
+Download or use the jsonstat file cached on disk
 
 .. code:: python
 
@@ -44,14 +47,15 @@ Initialize JsonStatCollection from the file and print some info.
 
 .. parsed-literal::
 
-    dataset: 'canada'
-    dataset: 'oecd'
+    0: dataset 'oecd'
+    1: dataset 'canada'
+    
 
 
 .. code:: python
 
     oecd = collection.dataset('oecd')
-    print "*** dataset '{} info".format(oecd.name())
+    print("*** dataset '{} info".format(oecd.name()))
     oecd.info()
 
 
@@ -66,22 +70,22 @@ Initialize JsonStatCollection from the file and print some info.
     dim id/name: 'concept' size: '1' role: 'metric'
     dim id/name: 'area' size: '36' role: 'geo'
     dim id/name: 'year' size: '12' role: 'time'
+    
 
 
 .. code:: python
 
     for d in oecd.dimensions():
-        print "\n*** info for dimensions '{}'".format(d.name())
+        print("*** info for dimensions '{}'".format(d.name()))
         d.info()
 
 
 .. parsed-literal::
 
-    
     *** info for dimensions 'concept'
     index
       pos    idx  label
-        0    UNR       
+        0    UNR unemployment rate
     
     *** info for dimensions 'year'
     index
@@ -138,18 +142,21 @@ Initialize JsonStatCollection from the file and print some info.
        33     US United States
        34   EU15 Euro area (15 countries)
        35   OECD  total
+    
 
+
+Value for oecd(area:IT,year:2012)
 
 .. code:: python
 
-    "*** value oecd(area:IT,year:2012): {}".format(oecd.value(area='IT', year='2012'))
+    oecd.value(area='IT', year='2012')
 
 
 
 
 .. parsed-literal::
 
-    '*** value oecd(area:IT,year:2012): 8.264570818'
+    8.264570818
 
 
 
@@ -187,11 +194,11 @@ Initialize JsonStatCollection from the file and print some info.
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x107d87e90>
+    <matplotlib.axes._subplots.AxesSubplot at 0x107e08750>
 
 
 
 
-.. image:: output_10_1.png
+.. image:: output_11_1.png
 
 
