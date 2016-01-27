@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-#  This file is part of jsonstat.py
+# This file is part of https://github.com/26fe/jsonstat.py
+# Copyright (C) 2016 gf <gf@26fe.com>
+# See LICENSE file
 
 # stdlib
 from __future__ import print_function
@@ -25,7 +27,7 @@ class IstatDataset:
         return self.__dataset['Cod']
 
     def __str__(self):
-        out = "{}:{}".format(self.__dataset['Cod'], self.__dataset['Desc'])
+        out = "{}({}):{}".format(self.cod(), self.nrdim(), self.name())
         return out
 
     def info(self):
@@ -63,7 +65,6 @@ class IstatDataset:
         if json_data is None:
             msg = "cannot retrieve info for dataset: {}".format(self.__dataset)
             raise IstatException(msg)
-
 
         self.__name2dim = {}
         self.__pos2dim = len(json_data) * [None]
