@@ -14,16 +14,31 @@ from jsonstat.istat.istat_exception import IstatException
 
 class IstatDataset:
     def __init__(self, istat_helper, dataset):
+        """
+        Initialize this istat dataset. Dataset is child of Istat.
+        This class must be only instanziated by Istat classes that belongs to
+        :param istat_helper: used to download dataset
+        :param dataset: it is the structure from which takes parameters
+        """
         self.__istat_helper = istat_helper
         self.__dataset = dataset
+
         self.__name2pos = None
         self.__pos2dim = None
         self.__name2dim = None
 
     def name(self):
+        """
+        the name of this dataset
+        :return:
+        """
         return self.__dataset['Desc']
 
     def cod(self):
+        """
+        return the code of this dataset
+        :return: code
+        """
         return self.__dataset['Cod']
 
     def __str__(self):
@@ -34,11 +49,11 @@ class IstatDataset:
         print(self)
 
     def info_dimensions(self):
-        i = 0
-        for d in self.__pos2dim:
-            print("pos: {}".format(i))
-            d.info()
-            i += 1
+        """
+        print info about dimensions of this dataset
+        """
+        for i, dim in enumerate(self.__pos2dim):
+            print("dim {} {}".format(i, dim.__str__()))
 
     def nrdim(self):
         if self.__name2pos is None:
@@ -56,11 +71,19 @@ class IstatDataset:
         return self.__name2dim.values()
 
     def getvalues(self, dim):
-        # dim = "1,6,9,0,0"
+        """
+        get values by dimensions
+        :param dim: it is a string for ex. "1,6,9,0,0"
+        :return: json structure representing dataset
+        """
+        # TODO: returning a JsonStatCollection
         json_data = self.__istat_helper.datajson(self.__dataset['Cod'], dim, show=False)
         return json_data
 
     def __download_dimensions(self):
+        """
+        download information about dimensions from the istat
+        """
         json_data = self.__istat_helper.dim(self.__dataset['Cod'], show=False)
         if json_data is None:
             msg = "cannot retrieve info for dataset: {}".format(self.__dataset)
@@ -69,7 +92,7 @@ class IstatDataset:
         self.__name2dim = {}
         self.__pos2dim = len(json_data) * [None]
         for pos, item in enumerate(json_data.items()):
-            name = item[0]
+            name = item[0].strip()
             json_dimension = item[1]
             self.__name2dim[name] = IstatDimension(name, json_dimension)
             self.__pos2dim[pos] = self.__name2dim[name]
