@@ -9,12 +9,15 @@ jsonstat.py
     :target: http://jsonstatpy.readthedocs.org/en/latest/?badge=latest
     :alt: Documentation Status
 
+.. image:: https://badge.fury.io/py/jsonstat.py.png
+    :target: https://badge.fury.io/py/jsonstat.py
+
 Library for reading **JSON-stat** [1]_ format  data
 The JSON-stat format is a JSON format for publishing dataset.
 JSON-stat format is used by eurostat and Istat (Italian National Institute of Statistics)
 and other institutions to publish statistical data.
 
-***jsonstat.py*** contains an useful classes to explore istat api.
+**jsonstat.py** contains an useful classes to explore istat api.
 
 **jsonstat.py** library tries to mimic as much is possible the javascript library
 and to be helpful in exploring dataset using ipython notebook.
