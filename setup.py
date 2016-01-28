@@ -5,7 +5,7 @@ from setuptools import setup
 
 # version_file = open(os.path.join(mypackage_root_dir, 'VERSION'))
 # version = version_file.read().strip()
-
+execfile('jsonstat/version.py')
 
 # if sys.version_info >= (3,2):
 #     install_requires = ["threadpool >= 1.2.7"]
@@ -14,19 +14,15 @@ from setuptools import setup
 #
 # setup(..., install_requires=install_requires)
 
-execfile('jsonstat/version.py')
-# __version__ = "0.1.1"
-
 # from https://pythonhosted.org/an_example_pypi_project/setuptools.html
 # Utility function to read the README file.
 # Used for the long_description.
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
-
 setup(
         name="jsonstat.py",
-        description=("jsonstat.py  is a python library for reading **JSON-stat** format data."),
+        description=("Library for reading JSON-stat format data."),
         long_description=read('README.rst'),
         keywords="jsonstat json statistics",
 
@@ -52,7 +48,7 @@ setup(
         license='LGPL',
         # packages= setup.find_packages(exclude=['examples', 'docs', 'tests*', 'tmp']),
         packages=[
-            'jsonstat',
+            'jsonstat', 'jsonstat.istat'
         ],
 
         install_requires=[
