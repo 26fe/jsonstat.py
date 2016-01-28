@@ -15,7 +15,6 @@ import sys
 
 # packages
 import requests
-import ijson
 
 # jsonstat
 import jsonstat
