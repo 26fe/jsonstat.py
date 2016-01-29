@@ -61,3 +61,6 @@ target/
 /tmp/
 *.DS_Store
 /MANIFEST
+/.settings/
+/.project
+/.pydevproject
