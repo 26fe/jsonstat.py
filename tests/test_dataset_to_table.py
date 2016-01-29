@@ -35,12 +35,14 @@ class TestDataSetToTable(unittest.TestCase):
 
     @unittest.skip("working on it")
     def test_to_table_output(self):
+        # convert collection to table
         collection = jsonstat.JsonStatCollection()
         json_pathname = os.path.join(self.fixture_dir, "collection", "oecd-canada.json")
         collection.from_file(json_pathname)
         oecd = collection.dataset('oecd')
         table = oecd.to_table()
 
+        # read generate table by jsonstat js module
         to_table_pathname = os.path.join(self.fixture_dir, "output_from_nodejs", "oecd-canada-to_table.csv")
 
         import csv
@@ -48,8 +50,18 @@ class TestDataSetToTable(unittest.TestCase):
             cvs_reader = csv.reader(csvfile)
             for i, row in enumerate(cvs_reader):
                 print(table[i])
+                try:
+                    row[3] = float(row[3])
+                except ValueError:
+                    pass
                 print(row)
-                self.assertEquals(table[i], row, "line number {}".format(i))
+
+                self.assertEquals(table[i][0], row[0])
+                self.assertEquals(table[i][1], row[1])
+                self.assertEquals(table[i][2], row[2])
+                self.assertEquals(table[i][3], row[3])
+
+                self.assertEquals(table[i], row, "table and cvs don't match at line number {}".format(i))
 
 
 if __name__ == '__main__':

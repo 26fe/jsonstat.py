@@ -207,7 +207,9 @@ class JsonStatDimension:
         :return:
         """
         if not self.__valid:
-            raise JsonStatException("dimension not initialized")
+            raise JsonStatException("dimension {} is not initialized".format(self.__name))
+        if idx not in self.__index2pos:
+            raise JsonStatException("dimension {} do not have index {}".format(self.__name, idx))
         return self.__index2pos[idx]
 
     def pos2idx(self, pos):

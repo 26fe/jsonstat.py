@@ -108,7 +108,7 @@ class TestDataSet(unittest.TestCase):
             "name:   'canada'\n"
             "label:  'Unemployment rate in the OECD countries'\n"
             "source: 'Unemployment rate in the OECD countries'\n"
-            "\n"
+            "size: 12\n"
             "dimensions:\n"
             "dim id/name: 'area' size: '4' role: 'geo'\n"
             "dim id/name: 'year' size: '3' role: 'time'\n"

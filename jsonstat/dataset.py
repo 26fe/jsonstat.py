@@ -160,6 +160,10 @@ class JsonStatDataSet:
             dimension.from_json(json_data_dimension[dname])
 
     def name(self):
+        """
+        Returns the name of the dataset
+        """
+
         return self.__name
 
     def __len__(self):
@@ -204,6 +208,7 @@ class JsonStatDataSet:
         if self.__source is not None:
             out += "source: '{}'\n".format(self.__label, self.__source)
 
+        out += "size: {}".format(len(self))
         out += "\n"
         out += self.__str__dimensions()
         # self.info_dimensions()
