@@ -19,17 +19,18 @@ class TestIstat(unittest.TestCase):
 
     def test_istat_italian(self):
         i = istat.Istat(self.fixture_dir, lang=0)
-        n = i.area(26).name()
+        n = i.area(26).desc()
         self.assertEqual("Lavoro", n)
 
         d = i.area(26).dataset('DCCV_INATTIVMENS').name()
         self.assertEqual(u'Inattivi - dati mensili', d)
 
-        # name = i.area(26).datasets('DCCV_INATTIVMENS').dimensions(0).name()
+        dname = i.area(26).dataset('DCCV_INATTIVMENS').dimension(0).name()
+        self.assertEquals("Territorio", dname)
 
     def test_istat_english(self):
         i = istat.Istat(self.fixture_dir, lang=1)
-        n = i.area(26).name()
+        n = i.area(26).desc()
         self.assertEqual("Labour", n)
 
         d = i.area(26).dataset('DCCV_INATTIVMENS').name()
@@ -37,7 +38,14 @@ class TestIstat(unittest.TestCase):
 
         dim = i.area(26).dataset('DCCV_INATTIVMENS').dimension(0)
         self.assertEqual('Territory', dim.name())
+        
+        dname = i.area(26).dataset('DCCV_INATTIVMENS').dimension(0).name()
+        self.assertEquals("Territory", dname)
 
+    def test_areas(self):
+        i = istat.Istat(self.fixture_dir, lang=1)
+        istat_area = i.area(3)
+        self.assertEquals("CEN", istat_area.cod())
 
 if __name__ == '__main__':
     unittest.main()

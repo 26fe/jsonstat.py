@@ -61,7 +61,7 @@ class IstatHelper:
             print(dump)
         return json_data
 
-    def dslist(self,area, show=True):
+    def dslist(self, area, show=True):
         """
         Returns a list of datasets contained into the area
         It perform the api calls http://apistat.istat.it/?q=getdslist&area=15&lang=1
@@ -74,8 +74,8 @@ class IstatHelper:
         # es:http://apistat.istat.it/?q=getdslist&area=15&lang=1
 
         :param area: code of the area
-        :param show:
-        :return: json structute
+        :param show: if true show some info on stdout
+        :return: json structure
         """
         uri = 'http://apistat.istat.it/?q=getdslist&area={}&lang={}'.format(area,self.lang)
         filename = "istat-area-{}-{}.json".format(area, self.__lang2str())
