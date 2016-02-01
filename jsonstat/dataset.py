@@ -46,25 +46,36 @@ class JsonStatDataSet:
         """
         read a jsonstat from a file and parse it to inizialize this (empty) dataset
         :param filename: path of the file.
+        :return itself to chain call
         """
         with open(filename) as f:
             json_string = f.read()
             self.from_string(json_string)
+        return self
 
     def from_string(self, json_string):
         """
         parse a string to inizialize this (empty) dataset
         :param json_string:
+        :return itself to chain call
         """
 
         json_data = json.loads(json_string)
         self.from_json(json_data)
+        return self
 
     def from_json(self, json_data, version=1):
+        """
+
+        :param json_data:
+        :param version:
+        :return itself to chain call
+        """
         if version == 2:
             self.__from_json_v2(json_data)
         else:
             self.__from_json_v1(json_data)
+        return self
 
     def __from_json_v1(self, json_data):
         """
@@ -214,6 +225,13 @@ class JsonStatDataSet:
         # self.info_dimensions()
         return out
 
+    def __repr__(self):
+        """
+        used by ipython to make a better representation
+        """
+        return self.__str__()
+
+
     def info(self):
         """
         print ome info about this dataset on stdout
@@ -312,6 +330,7 @@ class JsonStatDataSet:
         """
         Transforms a dataset into a table
         content could be "label" or "id"
+        table len is the size of dataset + 1 for headers
         """
         table = []
         header = []

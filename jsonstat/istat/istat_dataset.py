@@ -45,6 +45,12 @@ class IstatDataset:
         out = "{}({}):{}".format(self.cod(), self.nrdim(), self.name())
         return out
 
+    def __repr__(self):
+        """
+        used by ipython to make a better representation
+        """
+        return self.__str__()
+
     def info(self):
         print(self)
 

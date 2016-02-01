@@ -44,16 +44,19 @@ class JsonStatDimension:
         self.__index2label = {}
 
     def from_string(self, json_string):
-        """Parse a json string
+        """
+        Parse a json string
         :param json_string:
+        :return itself to chain call
         """
         json_data = json.loads(json_string)
         self.from_json(json_data)
+        return self
 
     def from_json(self, json_data):
         """Parse a json structure
         :param json_data:
-        :return:
+        :return itself to chain call
         """
         if 'label' in json_data:
             self.__label = json_data['label']
@@ -111,8 +114,7 @@ class JsonStatDimension:
             raise JsonStatMalformedJson(msg)
 
         self.__valid = True
-
-        # parse json index structure
+        return self
 
     def __parse_json_index(self, json_data):
         """
@@ -250,6 +252,12 @@ class JsonStatDimension:
 
             out += f.format(p, idx, lbl)
         return out
+
+    def __repr__(self):
+        """
+        used by ipython to make a better representation
+        """
+        return self.__str__()
 
     def info(self):
         """

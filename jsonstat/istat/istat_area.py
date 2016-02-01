@@ -46,6 +46,12 @@ class IstatArea:
         out = "{}:{}".format(self.__cod, self.__desc)
         return out
 
+    def __repr__(self):
+        """
+        used by ipython to make a better representation
+        """
+        return self.__str__()
+
     def info(self):
         """
         print some info about the area

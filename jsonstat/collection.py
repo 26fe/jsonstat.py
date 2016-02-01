@@ -53,6 +53,12 @@ class JsonStatCollection:
             out += "{}: dataset '{}'\n".format(i, dataset.name())
         return out
 
+    def __repr__(self):
+        """
+        used by ipython to make a better representation
+        """
+        return self.__str__()
+
     def info(self):
         """
         print some info about this collection
@@ -63,23 +69,28 @@ class JsonStatCollection:
         """
         initialize this collection from a file
         :param filename: name containing a jsonstat
+        :return itself to chain call
         """
         with open(filename) as f:
             json_string = f.read()
             self.from_string(json_string)
+        return self
 
     def from_string(self, json_string):
         """
         initialize this collection from a string
         :param json_string: string containing a json
+        :return itself to chain call
         """
         json_data = json.loads(json_string, object_pairs_hook=OrderedDict)
         self.from_json(json_data)
+        return self
 
     def from_json(self, json_data):
         """
         initialize this collection from a json structure
         :param json_data: data structure (dictionary) representing a json
+        :return itself to chain call
         """
 
         if "version" in json_data:
@@ -87,6 +98,7 @@ class JsonStatCollection:
         else:
             # jsonstat version 1.0
             self.__from_json_v1(json_data)
+        return self
 
     def __from_json_v1(self, json_data):
         """
