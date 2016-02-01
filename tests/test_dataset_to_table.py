@@ -33,6 +33,29 @@ class TestDataSetToTable(unittest.TestCase):
         second_row_expected = [u'Austria', u'2012', 12]
         self.assertEqual(second_row_expected, table[2])
 
+    def test_to_table_eurostat_one_dim(self):
+        # convert collection to table
+        collection = jsonstat.JsonStatCollection()
+        json_pathname = os.path.join(self.fixture_dir, "eurostat", "eurostat-name_gpd_c-geo_IT.json")
+        collection.from_file(json_pathname)
+        gdp_c = collection.dataset('nama_gdp_c')
+        table = gdp_c.to_table()
+
+        # read generate table by jsonstat js module
+        to_table_pathname = os.path.join(self.fixture_dir, "output_from_nodejs", "eurostat-name_gpd_c-geo_IT-to_table.csv")
+
+        import csv
+        with open(to_table_pathname, 'r') as csvfile:
+            cvs_reader = csv.reader(csvfile)
+            for i, row in enumerate(cvs_reader):
+                msg = "table and cvs don't match at line number {}".format(i)
+
+                def transform_row(v):
+                    if v is None: return ''
+                    return "{}".format(v)
+                t = list(map(transform_row, table[i]))
+                self.assertEquals(t, row, msg)
+
     @unittest.skip("working on it")
     def test_to_table_output(self):
         # convert collection to table
@@ -49,19 +72,29 @@ class TestDataSetToTable(unittest.TestCase):
         with open(to_table_pathname, 'r') as csvfile:
             cvs_reader = csv.reader(csvfile)
             for i, row in enumerate(cvs_reader):
-                print(table[i])
-                try:
-                    row[3] = float(row[3])
-                except ValueError:
-                    pass
-                print(row)
+                # print(table[i])
+                # try:
+                #     row[3] = float(row[3])
+                # except ValueError:
+                #     pass
+                # print(row)
+                #
+                # self.assertEquals(table[i][0], row[0])
+                # self.assertEquals(table[i][1], row[1])
+                # self.assertEquals(table[i][2], row[2])
+                # self.assertEquals(table[i][3], row[3])
 
-                self.assertEquals(table[i][0], row[0])
-                self.assertEquals(table[i][1], row[1])
-                self.assertEquals(table[i][2], row[2])
-                self.assertEquals(table[i][3], row[3])
+                msg = "table and cvs don't match at line number {}".format(i)
+                # self.assertEquals(table[i], row, msg)
+                def transform_row(v):
+                    if v is None: return ''
+                    return "{}".format(v)
+                t = list(map(transform_row, table[i]))
+                self.assertEquals(t, row, msg)
 
-                self.assertEquals(table[i], row, "table and cvs don't match at line number {}".format(i))
+
+
+
 
 
 if __name__ == '__main__':
