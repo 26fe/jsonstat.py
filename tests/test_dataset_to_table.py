@@ -33,6 +33,25 @@ class TestDataSetToTable(unittest.TestCase):
         second_row_expected = [u'Austria', u'2012', 12]
         self.assertEqual(second_row_expected, table[2])
 
+    def test_to_table_inverted_order(self):
+        dataset = jsonstat.JsonStatDataSet()
+        json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
+        dataset.from_file(json_pathname)
+        order = [i.name() for i in dataset.dimensions()]
+        order = order[::-1]  # reverse list
+        order = dataset.from_vec_idx_to_vec_dim(order)
+        table = dataset.to_table(order=order)
+
+        # table len is the size of dataset + 1 for headers
+        self.assertEqual(len(dataset) + 1, len(table))
+
+        header_expected = [u'OECD countries, EU15 and total', u'2003-2014', 'Value']
+        self.assertEqual(header_expected, table[0])
+        first_row_expected = [u'Australia', u'2012', 11]
+        self.assertEquals(first_row_expected, table[1])
+        second_row_expected = [u'Australia', u'2013', 21]
+        self.assertEqual(second_row_expected, table[2])
+
     def test_to_table_eurostat_one_dim(self):
         # convert collection to table
         collection = jsonstat.JsonStatCollection()
@@ -65,7 +84,11 @@ class TestDataSetToTable(unittest.TestCase):
         json_pathname = os.path.join(self.fixture_dir, "collection", "oecd-canada.json")
         collection.from_file(json_pathname)
         oecd = collection.dataset('oecd')
-        table = oecd.to_table()
+
+        order = [i.name() for i in oecd.dimensions()]
+        order = order[::-1]  # reverse list
+        order = oecd.from_vec_idx_to_vec_dim(order)
+        table = oecd.to_table(order=order)
 
         # read generate table by jsonstat js module
         to_table_pathname = os.path.join(self.fixture_dir, "output_from_nodejs", "oecd-canada-to_table.csv")
