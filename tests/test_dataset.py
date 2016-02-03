@@ -109,9 +109,9 @@ class TestDataSet(unittest.TestCase):
             "label:  'Unemployment rate in the OECD countries'\n"
             "source: 'Unemployment rate in the OECD countries'\n"
             "size: 12\n"
-            "dimensions:\n"
-            "dim id/name: 'area' size: '4' role: 'geo'\n"
-            "dim id/name: 'year' size: '3' role: 'time'\n"
+            "2 dimensions:\n"
+            "  0: dim id/name: 'area' size: '4' role: 'geo'\n"
+            "  1: dim id/name: 'year' size: '3' role: 'time'\n"
         )
         self.assertEquals(expected, dataset.__str__())
 
@@ -132,13 +132,13 @@ class TestDataSet(unittest.TestCase):
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(os.path.join(self.fixture_dir, "json_dataset_unemployment.json"))
 
-        result = list(dataset.all_pos(area="IT"))
+        result = list(dataset.all_pos({"area":"IT"}))
         expected = [[3, 0], [3, 1], [3, 2]]
         self.assertEquals(result, expected)
 
         dataset.generate_all_vec(area="IT")
 
-        result = list(dataset.all_pos(year="2014"))
+        result = list(dataset.all_pos({"year":"2014"}))
         expected = [[0, 2], [1, 2], [2, 2], [3, 2]]
         self.assertEquals(result, expected)
 
@@ -148,7 +148,7 @@ class TestDataSet(unittest.TestCase):
         dataset = jsonstat.JsonStatDataSet()
         dataset.from_file(os.path.join(self.fixture_dir, "json_three_dimensions.json"))
 
-        result = list(dataset.all_pos(one='one_1'))
+        result = list(dataset.all_pos({'one':'one_1'}))
 
         expected = [
             [0, 0, 0],[0, 1, 0],[0, 2, 0],[0, 0, 1],
@@ -159,7 +159,7 @@ class TestDataSet(unittest.TestCase):
         self.assertEquals(result, expected)
         dataset.generate_all_vec(one='one_1')
 
-        result = list(dataset.all_pos(two="two_2"))
+        result = list(dataset.all_pos({"two":"two_2"}))
         expected = [
             [0, 1, 0],[1, 1, 0],[0, 1, 1],[1, 1, 1],[0, 1, 2],[1, 1, 2],[0, 1, 3],[1, 1, 3]
         ]

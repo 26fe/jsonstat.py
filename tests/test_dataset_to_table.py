@@ -58,7 +58,9 @@ class TestDataSetToTable(unittest.TestCase):
 
     @unittest.skip("working on it")
     def test_to_table_output(self):
-        # convert collection to table
+        """
+        test convert dataset to table
+        """
         collection = jsonstat.JsonStatCollection()
         json_pathname = os.path.join(self.fixture_dir, "collection", "oecd-canada.json")
         collection.from_file(json_pathname)

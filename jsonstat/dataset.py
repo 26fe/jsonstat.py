@@ -192,11 +192,10 @@ class JsonStatDataSet:
         return self.__dimensions[spec]
 
     def __str__dimensions(self):
-        out = "dimensions:\n"
-        for i in range(len(self.__dimension_ids)):
-            dname = self.__dimension_ids[i]
+        out = "{} dimensions:\n".format(len(self.__dimension_ids))
+        for i, dname in enumerate(self.__dimension_ids):
             d = self.__dimensions[dname]
-            out += "dim id/name: '{}' size: '{}' role: '{}'\n".format(d.name(), d.size(), d.role())
+            out += "  {}: dim id/name: '{}' size: '{}' role: '{}'\n".format(i, d.name(), d.size(), d.role())
         return out
 
     def info_dimensions(self):
@@ -222,7 +221,6 @@ class JsonStatDataSet:
         out += "size: {}".format(len(self))
         out += "\n"
         out += self.__str__dimensions()
-        # self.info_dimensions()
         return out
 
     def __repr__(self):
@@ -230,7 +228,6 @@ class JsonStatDataSet:
         used by ipython to make a better representation
         """
         return self.__str__()
-
 
     def info(self):
         """
@@ -247,7 +244,6 @@ class JsonStatDataSet:
         if not self.__valid:
             raise JsonStatException('dataset not initialized')
 
-        # print "-----------value"
         a = len(self.__dimension_ids) * [0]
         for d in dims.items():
             cat = d[0]
@@ -259,6 +255,10 @@ class JsonStatDataSet:
         return self.value_from_vec_pos(a)
 
     def value_from_vec_pos(self, lst):
+        """
+        :param lst: [0,3,4]
+        :return: value at dimension [0,3,4]
+        """
         s = np.array(self.mult_vector)
         r = s * lst
         p = np.sum(r)
@@ -266,6 +266,10 @@ class JsonStatDataSet:
         return self.__value[p]
 
     def from_vec_pos_to_vec_idx(self,vec_pos):
+        """
+        :param vec_pos:  [0,3,4]
+        :return: ['dimension 1 index', 'dimension 2 label', 'dimension 3 label']
+        """
         vec_idx = len(vec_pos) * [None]
         for i in range(len(vec_pos)):
             dname = self.__dimension_ids[i]
@@ -273,7 +277,11 @@ class JsonStatDataSet:
             vec_idx[i] = d.pos2idx(vec_pos[i])
         return vec_idx
 
-    def from_vec_pos_to_vec_label(self,vec_pos):
+    def from_vec_pos_to_vec_label(self, vec_pos):
+        """
+        :param vec_pos:  [0,3,4]
+        :return: ['dimension 1 label or index', 'dimension 2 label  or index', 'dimension 3 label  or index']
+        """
         vec_idx = len(vec_pos) * [None]
         for i in range(len(vec_pos)):
             dname = self.__dimension_ids[i]
@@ -282,59 +290,78 @@ class JsonStatDataSet:
             lbl = d.pos2label(vec_pos[i])
             if lbl is None:
                 lbl = d.pos2idx(vec_pos[i])
+
             vec_idx[i] = lbl
         return vec_idx
 
-    def all_pos(self, **dims):
+    def all_pos(self, block_dim={}):
+        """
 
-        vec_pos_blocked = len(self.__dimension_ids) * [False]
-        vec_pos = len(self.__dimension_ids) * [0]
+        :param block_dim:  {"year":2013, country:"IT"}
+        :return:
+        """
 
-        for d in dims.items():
+        ids = self.__dimension_ids
+
+        vec_pos_blocked = len(ids) * [False]
+        vec_pos = len(ids) * [0]             # [0,0,0]
+
+        for d in block_dim.items():
             cat = d[0]
             idx = d[1]
             d = self.__dimensions[cat]
             vec_pos_blocked[d.pos()] = True
             vec_pos[d.pos()] = d.idx2pos(idx)
 
+        dsizes = self.__dimensions_sizes
+        max_dimensions = len(dsizes)
+        vec_dimension_reorder = range(len(ids))
         nrd = 0
-        while nrd < len(self.__dimensions_sizes):
+        while nrd < max_dimensions:
 
             yield list(vec_pos)  # make a shallow copy of vec_pos
 
             nrd = 0
+            current_dimension = vec_dimension_reorder[nrd]
             # se la posizione non e bloccata allora puoi far andare avanti la cifra
-            if not vec_pos_blocked[nrd]:
-                vec_pos[nrd] += 1
+            if not vec_pos_blocked[current_dimension]:
+                vec_pos[current_dimension] += 1
 
-            # se si arrivati al massimo valore o se la cifra e bloccata
-            while nrd < len(self.__dimensions_sizes) and \
-                    (vec_pos[nrd] == self.__dimensions_sizes[nrd] or vec_pos_blocked[nrd]):
+            # se non si arrivati all'ultima dimensione
+            # e se la dimensione corrente non e al massimo valore o se la dimensione corrente e bloccata
+            while nrd < max_dimensions and \
+                    (vec_pos[current_dimension] == dsizes[current_dimension] or vec_pos_blocked[current_dimension]):
 
                 # se la posizione non e' bloccata allora puoi far partire il valore dall'inizio
-                if not vec_pos_blocked[nrd]:
-                    vec_pos[nrd] = 0
+                if not vec_pos_blocked[current_dimension]:
+                    vec_pos[current_dimension] = 0
 
                 # esamina la prossima posizione
                 nrd += 1
-                if nrd < len(self.__dimensions_sizes) and not vec_pos_blocked[nrd]:
-                    vec_pos[nrd] += 1
+                # se la dimensione corrente non e' l'ultima
+                if nrd < max_dimensions:
+                    current_dimension = vec_dimension_reorder[nrd]
+                    # se la dimensione corrente non e bloccata puoi farla avanzare
+                    if not vec_pos_blocked[current_dimension]:
+                        vec_pos[current_dimension] += 1
 
     def generate_all_vec(self, **dims):
-        for vec_pos in self.all_pos(**dims):
+        for vec_pos in self.all_pos(dims):
             vec_idx = self.from_vec_pos_to_vec_idx(vec_pos)
             value = self.value_from_vec_pos(vec_pos)
             # print "{} - {} -> {}".format(vec_pos, vec_idx, value)
 
     def to_table(self, content="label"):
         """
-        Transforms a dataset into a table
-        content could be "label" or "id"
+        Transforms a dataset into a table (a list of row)
         table len is the size of dataset + 1 for headers
+        :param content can be "label" or "id"
+        return: a list of row, fist line is the header
         """
         table = []
-        header = []
 
+        # header
+        header = []
         if content == "label":
             for dname in self.__dimension_ids:
                 header.append(self.__dimensions[dname].label())
@@ -342,6 +369,8 @@ class JsonStatDataSet:
             header = list(self.__dimension_ids)
 
         header.append("Value")
+
+        # data
         table.append(header)
         for vec_pos in self.all_pos():
             value = self.value_from_vec_pos(vec_pos)
@@ -351,6 +380,7 @@ class JsonStatDataSet:
                 row = self.from_vec_pos_to_vec_idx(vec_pos)
             row.append(value)
             table.append(row)
+
         return table
 
     def to_data_frame(self, index, **dims):
@@ -379,7 +409,7 @@ class JsonStatDataSet:
             columns.append(d[1])
         indexes = []
         values = []
-        for vec_pos in self.all_pos(**dims):
+        for vec_pos in self.all_pos(dims):
             vec_idx = self.from_vec_pos_to_vec_idx(vec_pos)
             value = self.value_from_vec_pos(vec_pos)
             indexes.append(vec_idx[index_pos])
