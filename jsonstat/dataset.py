@@ -115,24 +115,35 @@ class JsonStatDataSet:
         """
         print(self)
 
+    #
+    # from function
+    #
+
     def value(self, **dims):
         """
         get a value
-        :param dims:
+        :param dims: {country:"AU", "year":2014}
         :return: value (typically a number)
         """
         if not self.__valid:
             raise JsonStatException('dataset not initialized')
 
-        a = len(self.__dimension_ids) * [0]
+        a = self.from_vec_dim_to_vec_pos(dims)
+        return self.value_from_vec_pos(a)
+
+    def from_vec_dim_to_vec_pos(self, dims):
+        """
+
+        :param dims: {country:"AU", "year":2014}
+        :return: [1,2,3]
+        """
+        vec_pos = len(self.__dimension_ids) * [0]
         for d in dims.items():
             cat = d[0]
             val = d[1]
             dim = self.__id2dimension[cat]
-            a[dim.pos()] = dim.idx2pos(val)
-            # print "{} -> {}".format(d, dim.position(val))
-
-        return self.value_from_vec_pos(a)
+            vec_pos[dim.pos()] = dim.idx2pos(val)
+        return vec_pos
 
     def value_from_vec_pos(self, lst):
         """
@@ -184,6 +195,9 @@ class JsonStatDataSet:
         """
         return [self.__id2dimension[iid].pos() for iid in lst_ids]
 
+    #
+    # generator
+    #
 
     def all_pos(self, block_dim = {}, order=None):
         """
