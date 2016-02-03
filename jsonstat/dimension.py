@@ -43,6 +43,103 @@ class JsonStatDimension:
         self.__label2index = {}
         self.__index2label = {}
 
+    def name(self):
+        """
+        name of dimension
+        """
+        return self.__name
+
+    def label(self):
+        """
+        label of this dimenion
+        """
+        return self.__label
+
+    def size(self):
+        """
+        size of this dimension
+        """
+        return self.__size
+
+    def __len__(self):
+        """
+        len of this dimesion (the same of the size)
+        """
+        return self.__size
+
+    def pos(self):
+        """
+        position of this dimension respect to the dataset which dimension belongs to
+        """
+        return self.__pos
+
+    def role(self):
+        return self.__role
+
+    def idx2pos(self, idx):
+        """
+        from index to position
+
+        :param idx:
+        :return:
+        """
+        if not self.__valid:
+            raise JsonStatException("dimension {} is not initialized".format(self.__name))
+        if idx not in self.__index2pos:
+            raise JsonStatException("dimension {} do not have index {}".format(self.__name, idx))
+        return self.__index2pos[idx]
+
+    def pos2idx(self, pos):
+        """
+        from position (integer) to index
+        :param pos:
+        :return:
+        """
+        return self.__pos2index[pos]
+
+    def pos2label(self, pos):
+        """
+        get the label associaate with the position
+        :param pos: integer
+        :return: the label or None if the label not exists at position pos
+        """
+        if self.__pos2label is None:
+            return None
+        else:
+            return self.__pos2label[pos]
+
+    def get_index(self):
+        """
+        get the index
+        :return: a list of value
+        """
+        return list(self.__pos2index)
+
+    def __str__(self):
+        out = "index\n"
+        f = "{:>5} {:>6} {:>6}\n"
+        out += f.format('pos', 'idx', 'label')
+        for p in range(len(self.__pos2index)):
+            idx = self.__pos2index[p]
+            lbl = self.pos2label(p)
+            if idx is None: idx = ""
+            if lbl is None: lbl = ""
+
+            out += f.format(p, idx, lbl)
+        return out
+
+    def __repr__(self):
+        """
+        used by ipython to make a better representation
+        """
+        return self.__str__()
+
+    def info(self):
+        """
+        print some info on standard output about this dimension
+        """
+        print(self)
+
     def from_string(self, json_string):
         """
         Parse a json string
@@ -167,100 +264,3 @@ class JsonStatDimension:
 
             self.__index2label[idx] = lbl
             self.__label2index[lbl] = idx
-
-    def name(self):
-        """
-        name of dimension
-        """
-        return self.__name
-
-    def label(self):
-        """
-        label of this dimenion
-        """
-        return self.__label
-
-    def size(self):
-        """
-        size of this dimension
-        """
-        return self.__size
-
-    def __len__(self):
-        """
-        len of this dimesion (the same of the size)
-        """
-        return self.__size
-
-    def pos(self):
-        """
-        position of this dimension respect to the dataset which dimension belongs to
-        """
-        return self.__pos
-
-    def role(self):
-        return self.__role
-
-    def idx2pos(self, idx):
-        """
-        from index to position
-
-        :param idx:
-        :return:
-        """
-        if not self.__valid:
-            raise JsonStatException("dimension {} is not initialized".format(self.__name))
-        if idx not in self.__index2pos:
-            raise JsonStatException("dimension {} do not have index {}".format(self.__name, idx))
-        return self.__index2pos[idx]
-
-    def pos2idx(self, pos):
-        """
-        from position (integer) to index
-        :param pos:
-        :return:
-        """
-        return self.__pos2index[pos]
-
-    def pos2label(self, pos):
-        """
-        get the label associaate with the position
-        :param pos: integer
-        :return: the label or None if the label not exists at position pos
-        """
-        if self.__pos2label is None:
-            return None
-        else:
-            return self.__pos2label[pos]
-
-    def get_index(self):
-        """
-        get the index
-        :return: a list of value
-        """
-        return list(self.__pos2index)
-
-    def __str__(self):
-        out = "index\n"
-        f = "{:>5} {:>6} {:>6}\n"
-        out += f.format('pos', 'idx', 'label')
-        for p in range(len(self.__pos2index)):
-            idx = self.__pos2index[p]
-            lbl = self.pos2label(p)
-            if idx is None: idx = ""
-            if lbl is None: lbl = ""
-
-            out += f.format(p, idx, lbl)
-        return out
-
-    def __repr__(self):
-        """
-        used by ipython to make a better representation
-        """
-        return self.__str__()
-
-    def info(self):
-        """
-        print some info on standard output about this dimension
-        """
-        print(self)
