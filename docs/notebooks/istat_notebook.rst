@@ -1,6 +1,6 @@
 
-Example using jsonstat.py to explore Istat data
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Notebook: using jsonstat.py to explore Istat data
+-------------------------------------------------
 
 This Jupyter notebook shows how to use
 `jsonstat.py <http://github.com/26fe/jsonstat.py>`__ python library to
@@ -15,6 +15,8 @@ querying italian statistics.
     import pandas as ps
     import jsonstat
     import jsonstat.istat as istat
+
+Setting a cache dir to store json files download by Istat api
 
 .. code:: python
 
@@ -40,49 +42,29 @@ List all istat areas
 
 .. parsed-literal::
 
-    3:2011 Population and housing census
-    4:Enterprises
-    7:Environment and Energy
-    8:Population and Households
-    9:Households Economic Conditions and Disparities
-    10:Health statistics
-    11:Social Security and Welfare
-    12:Education and training
-    13:Communication, culture, leisure and time use
-    14:Justice and Security
-    15:Citizens' opinions and satisfaction with life
-    16:Social participation
-    17:National Accounts
-    19:Agriculture
-    20:Industry and Construction
-    21:Services
-    22:Public Administrations and Private Institutions
-    24:External Trade and Internationalisation
-    25:Prices
-    26:Labour
-    24:External Trade and Internationalisation
-    25:Prices
-    26:Labour
-    20:Industry and Construction
-    21:Services
-    22:Public Administrations and Private Institutions
-    3:2011 Population and housing census
-    4:Enterprises
-    7:Environment and Energy
-    9:Households Economic Conditions and Disparities
-    8:Population and Households
-    11:Social Security and Welfare
-    10:Health statistics
-    13:Communication, culture and leisure
-    12:Education and training
-    15:Citizens' opinions and satisfaction with life
-    14:Justice and Security
-    17:National Accounts
-    16:Social participation
-    19:Agriculture
+    CEN:2011 Population and housing census
+    ENT:Enterprises
+    ENV:Environment and Energy
+    POP:Population and Households
+    HOU:Households Economic Conditions and Disparities
+    HEA:Health statistics
+    WEL:Social Security and Welfare
+    EDU:Education and training
+    COM:Communication, culture and leisure
+    JUS:Justice and Security
+    OPI:Citizens' opinions and satisfaction with life
+    SOC:Social participation
+    ACC:National Accounts
+    AGR:Agriculture
+    IND:Industry and Construction
+    SER:Services
+    PUB:Public Administrations and Private Institutions
+    EXT:External Trade and Internationalisation
+    PRI:Prices
+    LAB:Labour
 
 
-List all datasets contained into area 'Prices'
+List all datasets contained into area ``Prices``
 
 .. code:: python
 
@@ -118,7 +100,7 @@ List all datasets contained into area 'Prices'
     DCSP_FOI2B2010(5):FOI  Annual average from 2011  onwards
 
 
-List all dimension for dataset 'DCSP\_IPAB' (House price index)
+List all dimension for dataset ``DCSP_IPAB`` (House price index)
 
 .. code:: python
 
@@ -136,10 +118,11 @@ List all dimension for dataset 'DCSP\_IPAB' (House price index)
     dim 4 'Time and frequency' (2178:'Q3-2014', 2182:'Q4-2014', 2186:'2015', 2188:'Q1-2015', 2192:'Q2-2015', 2197:'Q3-2015', 2091:'2010', 2093:'Q1-2010', 2097:'Q2-2010', 2102:'Q3-2010', 2106:'Q4-2010', 2110:'2011', 2112:'Q1-2011', 2116:'Q2-2011', 2121:'Q3-2011', 2125:'Q4-2011', 2129:'2012', 2131:'Q1-2012', 2135:'Q2-2012', 2140:'Q3-2012', 2144:'Q4-2012', 2148:'2013', 2150:'Q1-2013', 2154:'Q2-2013', 2159:'Q3-2013', 2163:'Q4-2013', 2167:'2014', 2169:'Q1-2014', 2173:'Q2-2014')
 
 
-Get dataset with dimension "1,18,0,0,0" where the first dimension is
-Territory, etc. Below is the mapping: - Territory 1 -> Italy - Type 18
--> 'house price index (base 2010=100) - quarterly data' - Measure 0 ->
-ALL - Purchase of dwelling 0 -> ALL - Time and frequency 0 -> ALL
+Extract data from dataset ``DCSP_IPAB`` with dimension "1,18,0,0,0"
+where the first dimension is Territory, etc. Below is the mapping: -
+Territory 1 -> Italy - Type 18 -> 'house price index (base 2010=100) -
+quarterly data' - Measure 0 -> ALL - Purchase of dwelling 0 -> ALL -
+Time and frequency 0 -> ALL
 
 .. code:: python
 
@@ -172,10 +155,10 @@ From the jsonstat collection print some info of one dataset
 
     name:   'IDMISURA1*IDTYPPURCH*IDTIME'
     label:  'House price index  by Measure, Purchases of dwellings and Time and frequency - Italy - house price index (base 2010=100) - quarterly data'
-    
-    dimensions:
-    dim id/name: 'IDMISURA1' size: '3' role: 'None'
-    dim id/name: 'IDTYPPURCH' size: '3' role: 'None'
-    dim id/name: 'IDTIME' size: '23' role: 'None'
+    size: 207
+    3 dimensions:
+      0: dim id/name: 'IDMISURA1' size: '3' role: 'None'
+      1: dim id/name: 'IDTYPPURCH' size: '3' role: 'None'
+      2: dim id/name: 'IDTIME' size: '23' role: 'None'
     
 
