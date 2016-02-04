@@ -21,11 +21,12 @@ from jsonstat.exceptions import JsonStatMalformedJson
 
 class JsonStatDataSet:
     """
-    Represents a Dataset
+    Represents a JsonStat dataset
     """
     def __init__(self, dataset_name=None):
         """
-        Initialize a empty dataset. If we are parsing jsonstat version 1, the dataset has a name.
+        Initialize an empty dataset.
+        Dataset could have a name if we parse a jsonstat format version 1.
         :param dataset_name: dataset name (jsonstat v.1)
         """
         self.__valid = False
@@ -37,6 +38,7 @@ class JsonStatDataSet:
         self.__source = None
 
         self.__id2dimension = {}
+        self.__nrdimensions = 0
         self.__dimensions = []
         self.__dimension_ids = None
         self.__dimension_sizes = None
@@ -47,13 +49,11 @@ class JsonStatDataSet:
         """
         Returns the name of the dataset
         """
-
         return self.__name
 
     def __len__(self):
         """
-        size of the dataset
-        :return:
+        :return: size of the dataset
         """
         return len(self.__value)
 
@@ -66,9 +66,10 @@ class JsonStatDataSet:
     def dimension(self, spec):
         """
         get a dimension by spec
-        :param spec: name of the dimension
+        :param spec: name (string) or id of the dimension
         :return: a JsonStatDimension
         """
+        # TODO: spec could be an integer for positional dimension
         return self.__id2dimension[spec]
 
     def __str__dimensions(self):
@@ -80,7 +81,7 @@ class JsonStatDataSet:
 
     def info_dimensions(self):
         """
-        print on stdout same info on dimensions
+        print same info on dimensions on stdout
         """
         print(self.__str__dimensions())
 
@@ -122,7 +123,7 @@ class JsonStatDataSet:
     def value(self, **dims):
         """
         get a value
-        :param dims: {country:"AU", "year":2014}
+        :param dims: {country:"AU", "year":"2014:}
         :return: value (typically a number)
         """
         if not self.__valid:
@@ -150,7 +151,7 @@ class JsonStatDataSet:
         :param lst: [0,3,4]
         :return: value at dimension [0,3,4]
         """
-        s = np.array(self.mult_vector)
+        s = np.array(self.__mult_vector)
         r = s * lst
         p = np.sum(r)
         # print "pos vector {} * mult vect {} = {} ({})".format(a, self.mult_vector,r,p)
@@ -259,11 +260,11 @@ class JsonStatDataSet:
         for vec_pos in self.all_pos(dims):
             vec_idx = self.from_vec_pos_to_vec_idx(vec_pos)
             value = self.value_from_vec_pos(vec_pos)
-            # print "{} - {} -> {}".format(vec_pos, vec_idx, value)
 
     #
     # transforming function
     #
+
     def to_table(self, content="label", order=None):
         """
         Transforms a dataset into a table (a list of row)
@@ -341,7 +342,7 @@ class JsonStatDataSet:
 
     def from_file(self, filename):
         """
-        read a jsonstat from a file and parse it to inizialize this (empty) dataset
+        read a jsonstat from a file and parse it to initialize this (empty) dataset
         :param filename: path of the file.
         :return itself to chain call
         """
@@ -352,7 +353,7 @@ class JsonStatDataSet:
 
     def from_string(self, json_string):
         """
-        parse a string to inizialize this (empty) dataset
+        parse a string to initialize this (empty) dataset
         :param json_string:
         :return itself to chain call
         """
@@ -363,7 +364,7 @@ class JsonStatDataSet:
 
     def from_json(self, json_data, version=1):
         """
-
+        parse a json structure to initialize this (empty) dataset
         :param json_data:
         :param version:
         :return itself to chain call
@@ -376,7 +377,7 @@ class JsonStatDataSet:
 
     def __from_json_v1(self, json_data):
         """
-        parse jsonstat format version 1
+        parse a json structure complaint to jsonstat format version 1.x
         :param json_data: json structure
         """
 
@@ -423,27 +424,23 @@ class JsonStatDataSet:
 
         self.__valid = True
 
-    def __from_json_v2(self, json_data):
-        """
-        parse jsonstat format version 1
-        :param json_data: json structure
-        """
-        pass
-
     def __parse_dimensions(self, json_data_dimension):
 
         self.__dimension_ids = json_data_dimension['id']
         self.__dimensions_sizes = json_data_dimension['size']
+        self.__nrdimensions = len(self.__dimension_ids)
 
         if len(self.__dimension_ids) != len(self.__dimensions_sizes):
             msg = "dataset '{}': dataset_id is different of dataset_size".format(self.__name)
             raise JsonStatMalformedJson(msg)
 
-        acc = 1
-        self.mult_vector = [1]
-        for i in range(1, len(self.__dimensions_sizes)):
-            acc = acc * self.__dimensions_sizes[i - 1]
-            self.mult_vector.append(acc)
+        mult = 1
+        self.__mult_vector = self.__nrdimensions * [1]
+        i = self.__nrdimensions - 2
+        while i>=0:
+            mult = mult * self.__dimensions_sizes[i+1]
+            self.__mult_vector[i] = mult
+            i -= 1
 
         roles = {}
         if 'role' in json_data_dimension:
@@ -469,3 +466,9 @@ class JsonStatDataSet:
             self.__dimensions[dpos] = dimension
             dimension.from_json(json_data_dimension[dname])
 
+    def __from_json_v2(self, json_data):
+        """
+        parse a jsonstat structure complaint to jsonstat format version 2.x
+        :param json_data: json structure
+        """
+        pass
