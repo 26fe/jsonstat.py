@@ -20,27 +20,27 @@ class TestDataSet(unittest.TestCase):
 
         self.json_missing_value = '''
         {
-		    "label" : "three dimensions"
-		}
-		'''
+            "label" : "three dimensions"
+        }
+        '''
 
         self.json_missing_dimension = '''
         {
-		    "label" : "three dimensions",
-		    "value" : []
-		}
-		'''
+            "label" : "three dimensions",
+            "value" : []
+        }
+        '''
 
         self.json_string_incorrect_data_size = '''
         {
-		    "label" : "Unemployment rate in the OECD countries 2003-2014",
-		    "source" : "Economic Outlook No 92 - December 2012 - OECD Annual Projections",
-		    "value" : [1, 2, 3, 4],
-		    "dimension" : {
-		        "id" : ["area", "year"],
-		        "size" : [4, 12],
-		        "area" : {
-		            "category" : { "index" : { "AU" : 0, "AT" : 1, "BE" : 2, "CA" : 3 } }
+            "label" : "Unemployment rate in the OECD countries 2003-2014",
+            "source" : "Economic Outlook No 92 - December 2012 - OECD Annual Projections",
+            "value" : [1, 2, 3, 4],
+            "dimension" : {
+                "id" : ["area", "year"],
+                "size" : [4, 12],
+                "area" : {
+                    "category" : { "index" : { "AU" : 0, "AT" : 1, "BE" : 2, "CA" : 3 } }
                 },
                 "year" : {
                     "category" : {
@@ -50,10 +50,10 @@ class TestDataSet(unittest.TestCase):
                             "2010" : 7, "2011" : 8, "2012" : 9, "2013" : 10, "2014" : 11
                         }
                     }
-		        }
-		    }
-		}
-		'''
+                }
+            }
+        }
+        '''
 
     def test_exception_not_valid(self):
         dataset = jsonstat.JsonStatDataSet("canada")
@@ -111,8 +111,8 @@ class TestDataSet(unittest.TestCase):
             "source: 'Unemployment rate in the OECD countries'\n"
             "size: 12\n"
             "2 dimensions:\n"
-            "  0: dim id/name: 'area' size: '4' role: 'geo'\n"
-            "  1: dim id/name: 'year' size: '3' role: 'time'\n"
+            "  0: dim id/name: 'year' size: '3' role: 'time'\n"
+            "  1: dim id/name: 'area' size: '4' role: 'geo'\n"
         )
         self.assertEquals(expected, dataset.__str__())
 
@@ -122,8 +122,13 @@ class TestDataSet(unittest.TestCase):
         self.assertEquals(dataset.value(area="AU", year="2012"), 11)
         self.assertEquals(dataset.value(area="BE", year="2014"), 33)
 
-    @unittest.skip("working on it")
-    def test_value_bis(self):
+        dataset = jsonstat.JsonStatDataSet()
+        dataset.from_file(os.path.join(self.fixture_dataset_dir, "json_three_dimensions.json"))
+        self.assertEquals(dataset.value(one="one_1", two="two_1", three="three_1"), 111)
+        v = dataset.value(one="one_2", two="two_2", three="three_2")
+        self.assertEquals(v, 222)
+
+    def test_value_oecd(self):
         collection = jsonstat.JsonStatCollection()
         json_pathname = os.path.join(self.fixture_collection_dir, "oecd-canada.json")
         collection.from_file(json_pathname)
@@ -140,10 +145,10 @@ class TestDataSet(unittest.TestCase):
         dataset.from_file(os.path.join(self.fixture_dataset_dir, "json_dataset_unemployment.json"))
 
         ret = dataset.from_vec_idx_to_vec_dim(["area", "year"])
-        self.assertEquals([0,1], ret)
+        self.assertEquals([1,0], ret)
 
         ret = dataset.from_vec_idx_to_vec_dim(["year", "area"])
-        self.assertEquals([1,0], ret)
+        self.assertEquals([0,1], ret)
 
     #
     # enumeration function
@@ -154,21 +159,35 @@ class TestDataSet(unittest.TestCase):
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(os.path.join(self.fixture_dataset_dir, "json_dataset_unemployment.json"))
         result = list(dataset.all_pos())
-        expected = [[0, 0], [1, 0], [2, 0], [3, 0], [0, 1], [1, 1], [2, 1], [3, 1], [0, 2], [1, 2], [2, 2], [3, 2]]
+        expected = [[0, 0], [1, 0], [2, 0],  # last digit 0
+                    [0, 1], [1, 1], [2, 1],  # last digit 1
+                    [0, 2], [1, 2], [2, 2],  # last digit 2
+                    [0, 3], [1, 3], [2, 3]]  # last digit 3
+        self.assertEquals(result, expected)
+
+    def test_all_pos_reorder(self):
+        dataset = jsonstat.JsonStatDataSet("canada")
+        dataset.from_file(os.path.join(self.fixture_dataset_dir, "json_dataset_unemployment.json"))
+
+        reorder = dataset.from_vec_idx_to_vec_dim(["area", "year"])
+        result = list(dataset.all_pos(order=reorder))
+        expected = [[0, 0], [0, 1], [0, 2], [0, 3], # first digit 0
+                    [1, 0], [1, 1], [1, 2], [1, 3], # first digit 1
+                    [2, 0], [2, 1], [2, 2], [2, 3]] # first digit 2
         self.assertEquals(result, expected)
 
     def test_all_pos_with_block(self):
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(os.path.join(self.fixture_dataset_dir, "json_dataset_unemployment.json"))
 
-        result = list(dataset.all_pos({"area":"IT"}))
-        expected = [[3, 0], [3, 1], [3, 2]]
+        result = list(dataset.all_pos({"area": "IT"}))
+        expected = [[0, 3], [1, 3], [2, 3]]
         self.assertEquals(result, expected)
 
         dataset.generate_all_vec(area="IT")
 
-        result = list(dataset.all_pos({"year":"2014"}))
-        expected = [[0, 2], [1, 2], [2, 2], [3, 2]]
+        result = list(dataset.all_pos({"year": "2014"}))
+        expected = [[2, 0], [2, 1], [2, 2], [2, 3]]
         self.assertEquals(result, expected)
 
         dataset.generate_all_vec(year='2014')
@@ -193,38 +212,6 @@ class TestDataSet(unittest.TestCase):
             [0, 1, 0],[1, 1, 0],[0, 1, 1],[1, 1, 1],[0, 1, 2],[1, 1, 2],[0, 1, 3],[1, 1, 3]
         ]
         self.assertEquals(result, expected)
-
-    def test_all_pos(self):
-        dataset = jsonstat.JsonStatDataSet("canada")
-        dataset.from_file(os.path.join(self.fixture_dataset_dir, "json_dataset_unemployment.json"))
-
-        result = list(dataset.all_pos())
-        expected = [[0, 0], [1, 0], [2, 0], [3, 0], [0, 1], [1, 1], [2, 1], [3, 1], [0, 2], [1, 2], [2, 2], [3, 2]]
-        self.assertEquals(result, expected)
-
-        reorder = dataset.from_vec_idx_to_vec_dim(["year", "area"])
-        result = list(dataset.all_pos(order=reorder))
-        expected = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2], [3, 0], [3, 1], [3, 2]]
-        self.assertEquals(result, expected)
-
-    #
-    # transforming function
-    #
-    def test_to_data_frame_year_IT(self):
-        dataset = jsonstat.JsonStatDataSet()
-        dataset.from_file(os.path.join(self.fixture_dataset_dir, "json_dataset_unemployment.json"))
-        df = dataset.to_data_frame("year", area="IT")
-
-        # print df
-        self.assertEquals(df['IT']['2014'], 34)
-
-    # def test_extract_year_all_country(self):
-    #     dataset = jsonstat.JsonStatSingleDataSet("canada")
-    #     dataset.from_string(self.json_dataset_unemployment)
-    #     df = dataset.to_data_frame("year")
-    #
-    #     # print df
-    #     self.assertEquals(df['IT']['2014'], 34)
 
 
 if __name__ == '__main__':

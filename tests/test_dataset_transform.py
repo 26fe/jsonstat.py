@@ -26,11 +26,11 @@ class TestDataSetToTable(unittest.TestCase):
         # table len is the size of dataset + 1 for headers
         self.assertEqual(len(dataset) + 1, len(table))
 
-        header_expected = [u'OECD countries, EU15 and total', u'2003-2014', 'Value']
+        header_expected = [u'2003-2014', u'OECD countries, EU15 and total', u'Value']
         self.assertEqual(header_expected, table[0])
-        first_row_expected = [u'Australia', u'2012', 11]
+        first_row_expected = [u'2012', u'Australia', 11]
         self.assertEquals(first_row_expected, table[1])
-        second_row_expected = [u'Austria', u'2012', 12]
+        second_row_expected = [u'2013', u'Australia', 21]
         self.assertEqual(second_row_expected, table[2])
 
     def test_to_table_inverted_order(self):
@@ -45,11 +45,11 @@ class TestDataSetToTable(unittest.TestCase):
         # table len is the size of dataset + 1 for headers
         self.assertEqual(len(dataset) + 1, len(table))
 
-        header_expected = [u'OECD countries, EU15 and total', u'2003-2014', 'Value']
+        header_expected = ['2003-2014', 'OECD countries, EU15 and total', 'Value']
         self.assertEqual(header_expected, table[0])
-        first_row_expected = [u'Australia', u'2012', 11]
+        first_row_expected = ['2012', 'Australia', 11]
         self.assertEquals(first_row_expected, table[1])
-        second_row_expected = [u'Australia', u'2013', 21]
+        second_row_expected = ['2012', 'Austria', 12]
         self.assertEqual(second_row_expected, table[2])
 
     def test_to_table_eurostat_one_dim(self):
@@ -75,7 +75,7 @@ class TestDataSetToTable(unittest.TestCase):
                 t = list(map(transform_row, table[i]))
                 self.assertEquals(t, row, msg)
 
-    @unittest.skip("working on it")
+    # @unittest.skip("working on it")
     def test_to_table_output(self):
         """
         test convert dataset to table
@@ -118,6 +118,24 @@ class TestDataSetToTable(unittest.TestCase):
                 self.assertEquals(t, row, msg)
 
 
+    #
+    # transforming function
+    #
+    def test_to_data_frame_year_IT(self):
+        dataset = jsonstat.JsonStatDataSet()
+        dataset.from_file(os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json"))
+        df = dataset.to_data_frame("year", area="IT")
+
+        # print df
+        self.assertEquals(df['IT']['2014'], 34)
+
+    # def test_extract_year_all_country(self):
+    #     dataset = jsonstat.JsonStatSingleDataSet("canada")
+    #     dataset.from_string(self.json_dataset_unemployment)
+    #     df = dataset.to_data_frame("year")
+    #
+    #     # print df
+    #     self.assertEquals(df['IT']['2014'], 34)
 
 
 

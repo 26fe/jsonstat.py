@@ -9,10 +9,10 @@
   ],
   "dimension": {
     "id": [
-      "area", "year"
+      "year", "area"
     ],
     "size": [
-      4, 3
+      3, 4
     ],
     "role": {
       "time": ["year"

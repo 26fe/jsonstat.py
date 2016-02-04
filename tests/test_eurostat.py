@@ -51,7 +51,7 @@ class TestEurostat(unittest.TestCase):
         # extract collection
         collection = jsonstat.JsonStatCollection()
         collection.from_string(json_string)
-        print(collection)
+        # print(collection)
 
         # extract dataset contained into collection
         ds = collection.dataset('nama_gdp_c')
@@ -61,10 +61,10 @@ class TestEurostat(unittest.TestCase):
 
         # show some values
         v = ds.value(geo="IT", time="2011")
-        self.assertEquals(26300, v)
+        self.assertEquals(26000, v)
 
         v = ds.value(geo="FR", time="2011")
-        self.assertEquals(26200, v)
+        self.assertEquals(30700, v)
 
         # for r in ds.to_table():
         #     print(r)
