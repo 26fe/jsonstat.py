@@ -94,17 +94,19 @@ class JsonStatCollection:
         """
 
         if "version" in json_data:
-            self.__from_json_v2(json_data)
+            self.from_json_v2(json_data)
         else:
             # jsonstat version 1.0
-            self.__from_json_v1(json_data)
+            self.from_json_v1(json_data)
         return self
 
-    def __from_json_v1(self, json_data):
+    # TODO: this is meant of internal function of jsonstat not public api
+    def from_json_v1(self, json_data):
         """
         parse a jsonstat version 1
         :param json_data: json structure
         """
+
         for ds in json_data.items():
             dataset_name = ds[0]
             dataset_json = ds[1]
@@ -114,7 +116,8 @@ class JsonStatCollection:
             self.__name2dataset[dataset_name] = dataset
             self.__pos2dataset.append(dataset)
 
-    def __from_json_v2(self, json_data):
+    # TODO: this is meant of internal function of jsonstat not public api
+    def from_json_v2(self, json_data):
         """
         parse a jsonstat version 2
         :param json_data: json structure
