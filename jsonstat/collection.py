@@ -20,13 +20,17 @@ class JsonStatCollection:
     It contain one or more dataset.
     """
     def __init__(self):
-        self.__url = None
+
+        self.__href = None
+        self.__label = None
+        self.__updated = None
+
         self.__name2dataset = {}
         self.__pos2dataset = []
 
     def dataset(self, spec):
         """
-        returns a dataset beloging to the collection
+        returns a dataset belonging to the collection
         :param spec: can be:
                     - the name of collection (string) for jsonstat v1
                     - an integer (for jsonstat v2)
@@ -65,6 +69,9 @@ class JsonStatCollection:
         """
         print(self)
 
+    #
+    # parsing methods
+    #
     def from_file(self, filename):
         """
         initialize this collection from a file
@@ -106,7 +113,10 @@ class JsonStatCollection:
         parse a jsonstat version 1
         :param json_data: json structure
         """
-
+        # {
+        #   dataset1 : {...}
+        #   dataset2 : {...}
+        # }
         for ds in json_data.items():
             dataset_name = ds[0]
             dataset_json = ds[1]
@@ -122,15 +132,32 @@ class JsonStatCollection:
         parse a jsonstat version 2
         :param json_data: json structure
         """
-        # jsonstat version 2.0
+
         # "version" : "2.0",
         # "class" : "collection",
-        # "href" : "http://json-stat.org/samples/oecd-canada-col.json",
-        # "label" : "OECD-Canada Sample Collection",
-        # "updated" : "2015-12-24",
+        # "href" : "http://json-stat.org/samples/collection.json",
+        # "label" : "JSON-stat Dataset Sample Collection",
+        # "updated" : "2015-07-02",
+        # "link" : {
+		#    "item" : [
+        #         {},
+        #         {},
+        #     ]
+        # }
+
+        if "href" in json_data:
+            self.__href = json_data["href"]
+
+        if "label" in json_data:
+            self.__label = json_data["label"]
+
+        # TODO: parsing "updated" field as date
+        if "updated" in json_data:
+            self.__updated = json_data["updated"]
+
         json_data_ds = json_data["link"]["item"]
         self.__pos2dataset = len(json_data_ds) * [None]
         for pos, ds in enumerate(json_data_ds):
             dataset = JsonStatDataSet()
-            dataset.from_json(ds,version=2)
+            dataset.from_json_v2(ds)
             self.__pos2dataset[pos] = dataset

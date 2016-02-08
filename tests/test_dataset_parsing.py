@@ -24,14 +24,21 @@ class TestDataSet(unittest.TestCase):
         }
         '''
 
-        self.json_missing_dimension = '''
+        self.json_empty_value = '''
         {
             "label" : "three dimensions",
             "value" : []
         }
         '''
 
-        self.json_string_incorrect_data_size = '''
+        self.json_missing_dimension = '''
+        {
+            "label" : "three dimensions",
+            "value" : [1,2]
+        }
+        '''
+
+        self.json_incorrect_data_size = '''
         {
             "label" : "Unemployment rate in the OECD countries 2003-2014",
             "source" : "Economic Outlook No 92 - December 2012 - OECD Annual Projections",
@@ -60,6 +67,14 @@ class TestDataSet(unittest.TestCase):
         with self.assertRaises(jsonstat.JsonStatException):
             dataset.value(year="2003", area="CA")
 
+    def test_empty_value(self):
+        dataset = jsonstat.JsonStatDataSet("canada")
+        with self.assertRaises(jsonstat.JsonStatMalformedJson) as cm:
+            dataset.from_string(self.json_empty_value)
+        e = cm.exception
+        expected = "dataset 'canada': field 'value' is empty"
+        self.assertEqual(expected, e.value)
+
     def test_missing_value_field(self):
         dataset = jsonstat.JsonStatDataSet("canada")
         with self.assertRaises(jsonstat.JsonStatMalformedJson) as cm:
@@ -79,7 +94,7 @@ class TestDataSet(unittest.TestCase):
     def test_exception_dataset_size(self):
         dataset = jsonstat.JsonStatDataSet("canada")
         with self.assertRaises(jsonstat.JsonStatException) as cm:
-            dataset.from_string(self.json_string_incorrect_data_size)
+            dataset.from_string(self.json_incorrect_data_size)
         e = cm.exception
         # expected e il primo valore dell'assert (giusto per ricordare!)
         expected = "dataset 'canada': size 4 is different from calculate size 48 by dimension"

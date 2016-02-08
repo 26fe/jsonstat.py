@@ -55,6 +55,7 @@ class JsonStatFactory:
                     o.from_json_v2(json_data)
                 elif json_data["class"] == "dataset":
                     o = JsonStatDataSet()
+                    o.from_json_v2(json_data)
                 elif json_data["class"] == "dimension":
                     o = JsonStatDimension()
                     o.from_json(json_data)

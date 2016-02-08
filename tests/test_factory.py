@@ -16,7 +16,7 @@ import jsonstat
 
 class TestFactory(unittest.TestCase):
     def setUp(self):
-        self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures", "collection")
+        self.fixture_jsonstat_org_dir = os.path.join(os.path.dirname(__file__), "fixtures", "json-stat.org")
 
         self.json_string_v1_one_dataset = """
         {
@@ -57,6 +57,14 @@ class TestFactory(unittest.TestCase):
         ret = factory.from_string(self.json_string_v1_one_dataset)
         self.assertIsInstance(ret, jsonstat.JsonStatCollection)
 
+    def test_parse_dataset(self):
+        factory = jsonstat.JsonStatFactory()
+        f = os.path.join(self.fixture_jsonstat_org_dir, "canada.json")
+        dataset = factory.from_file(f)
+        self.assertIsNotNone(dataset)
+        self.assertIsInstance(dataset, jsonstat.JsonStatDataSet)
+        self.assertEquals(120, len(dataset))
+
     def test_dimension(self):
         self.json_string_dimension = """
         {
@@ -76,6 +84,19 @@ class TestFactory(unittest.TestCase):
         factory = jsonstat.JsonStatFactory()
         ret = factory.from_string(self.json_string_dimension)
         self.assertIsInstance(ret, jsonstat.JsonStatDimension)
+
+    def test_json_stat_org(self):
+
+        factory = jsonstat.JsonStatFactory()
+
+        from os import listdir
+        from os.path import isfile, join
+        onlyfiles = [f for f in listdir(self.fixture_jsonstat_org_dir) if isfile(join(self.fixture_jsonstat_org_dir, f))]
+        # print(onlyfiles)
+        for f in onlyfiles:
+            # print("parsing {}".format(f))
+            ret = factory.from_file(os.path.join(self.fixture_jsonstat_org_dir, f))
+            self.assertIsNotNone(ret)
 
 
 if __name__ == '__main__':
