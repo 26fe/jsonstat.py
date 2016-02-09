@@ -8,8 +8,9 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 # jsonstat
-from jsonstat.istat.istat_dimension import IstatDimension
 from jsonstat.istat.istat_exception import IstatException
+from jsonstat.istat.istat_dimension import IstatDimension
+from jsonstat.collection import JsonStatCollection
 
 
 class IstatDataset:
@@ -66,29 +67,56 @@ class IstatDataset:
             self.__download_dimensions()
         return len(self.__pos2dim)
 
-    def dimension(self, pos):
-        if self.__name2pos is None:
-            self.__download_dimensions()
-        return self.__pos2dim[pos]
-
     def dimensions(self):
+        """
+        Get list of dimensions
+        :return:
+        """
         if self.__name2pos is None:
             self.__download_dimensions()
         return self.__name2dim.values()
 
-    def getvalues(self, dim):
+    def dimension(self, spec):
+        """
+        Get dimension according to spec
+        :param spec: can be a int or a string
+        :return: a IstatDimension instance
+        """
+        if self.__name2pos is None:
+            self.__download_dimensions()
+        if type(spec) == int:
+            return self.__pos2dim[spec]
+        return self.__name2dim[spec]
+
+    def getvalues(self, spec, rtype=JsonStatCollection):
         """
         get values by dimensions
-        :param dim: it is a string for ex. "1,6,9,0,0"
-        :return: json structure representing dataset
+        :param spec: it is a string for ex. "1,6,9,0,0"
+        :param type:
+        :return: if type is JsonStatCollection return an istance of JsonStatCollection
+          otherwise return a json structure representing the istat dataset
         """
-        # TODO: returning a JsonStatCollection
-        json_data = self.__istat_helper.datajson(self.__dataset['Cod'], dim, show=False)
-        return json_data
+        if type(spec) == dict:
+            a = len(self.__pos2dim) * [0]
+            for (name, value) in spec.items():
+                d = self.dimension(name)
+                a[d.pos()] = value
+            spec = ",".join(map(str, a))
+
+        json_data = self.__istat_helper.datajson(self.__dataset['Cod'], spec, show=False)
+
+        if rtype == JsonStatCollection:
+            collection = JsonStatCollection()
+            collection.from_json(json_data)
+            return collection
+        elif rtype == "json":
+            return json_data
+
+        raise IstatException("unknow type {}".format(rtype))
 
     def __download_dimensions(self):
         """
-        download information about dimensions from the istat
+        downloads information about dimensions from the istat
         """
         json_data = self.__istat_helper.dim(self.__dataset['Cod'], show=False)
         if json_data is None:
@@ -100,12 +128,5 @@ class IstatDataset:
         for pos, item in enumerate(json_data.items()):
             name = item[0].strip()
             json_dimension = item[1]
-            self.__name2dim[name] = IstatDimension(name, json_dimension)
+            self.__name2dim[name] = IstatDimension(name, pos, json_dimension)
             self.__pos2dim[pos] = self.__name2dim[name]
-
-        # self.__name2pos = mame2pos
-        # self.__pos2dim = len(mame2pos) * [None]
-        # for item in mame2pos.items():
-        #     pos = item[1]
-        #     name = item[0]
-        #     self.__pos2dim[pos] = self.__name2dim[name]
