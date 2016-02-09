@@ -28,6 +28,12 @@ class JsonStatCollection:
         self.__name2dataset = {}
         self.__pos2dataset = []
 
+    def __len__(self):
+        """
+        the number of dataset contained in this collection
+        """
+        return len(self.__pos2dataset)
+
     def dataset(self, spec):
         """
         returns a dataset belonging to the collection
