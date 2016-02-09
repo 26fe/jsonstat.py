@@ -29,6 +29,15 @@ class Istat:
         self.__cod2area = None
         self.__desc2area = None
 
+    def areas(self):
+        """
+        Get a list of all areas
+        :return: list of IstatArea instances
+        """
+        if self.__id2area is None:
+            self.__download_areas()
+        return self.__id2area.values()
+
     def area(self, spec):
         """
         get a IstatArea by name or id
@@ -48,14 +57,16 @@ class Istat:
             spec = int(spec) # try to convert into int
             return self.__id2area[spec]
 
-    def areas(self):
+    def dataset(self, spec_area, spec_dataset):
         """
-        Get a list of all areas
-        :return: list of IstatArea instances
+        Returns an IstatDataset
+        :param spec_area: selector for an IstatArea
+        :param spec_dataset: selector for an IstatDataset that belong to the spec_area dataset
+        :return: an instance of IstatDataset
         """
-        if self.__id2area is None:
-            self.__download_areas()
-        return self.__id2area.values()
+        a = self.area(spec_area)
+        ds = a.dataset(spec_dataset)
+        return ds
 
     def __download_areas(self):
         self.__id2area = {}
