@@ -10,9 +10,10 @@ from __future__ import unicode_literals
 # jsonstat
 
 class IstatDimension:
-    def __init__(self, name, json_data):
+    def __init__(self, name, pos, json_data):
         self.__name = name
-        self.__json_data = json_data
+        self.__pos = pos
+        # self.__json_data = json_data
         self.__desc2cod = {}
         self.__cod2desc = {}
 
@@ -29,6 +30,9 @@ class IstatDimension:
         the name of the istat dimension
         """
         return self.__name
+
+    def pos(self):
+        return self.__pos
 
     def desc2cod(self, str):
         pass
