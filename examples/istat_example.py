@@ -41,11 +41,11 @@ if __name__ == "__main__":
     istat_dataset.info_dimensions()
 
     # get istat dataset with specific dimension
-    json_data = istat_dataset.getvalues("1,18,0,0,0")
+    collection = istat_dataset.getvalues("1,18,0,0,0")
 
     # from istat dataset to jsonstat collection
-    collection = jsonstat.JsonStatCollection()
-    collection.from_json(json_data)
+    # collection = jsonstat.JsonStatCollection()
+    # collection.from_json(json_data)
     collection.info()
 
     # print some info about jsonstat dataset
