@@ -113,8 +113,11 @@ class TestDataSet(unittest.TestCase):
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(os.path.join(self.fixture_dataset_dir, "json_dataset_unemployment.json"))
         self.assertEquals(dataset.dimension("year").name(), "year")
-        with self.assertRaises(KeyError):
+        with self.assertRaises(jsonstat.JsonStatException) as cm:
             dataset.dimension("not existent dim")
+        e = cm.exception
+        expected = "dataset 'canada': unknown dimension 'not existent dim' know dimensions ids are: year, area"
+        self.assertEqual(expected, e.value)
 
     def test_info(self):
         dataset = jsonstat.JsonStatDataSet("canada")

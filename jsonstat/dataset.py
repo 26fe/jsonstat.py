@@ -70,7 +70,11 @@ class JsonStatDataSet:
         :param spec: name (string) or id of the dimension
         :return: a JsonStatDimension
         """
-        # TODO: spec could be an integer for positional dimension
+        if type(spec) is int:
+            return self.__pos2dim[spec]
+        if spec not in self.__id2pos:
+            msg = "dataset '{}': unknown dimension '{}' know dimensions ids are: {}".format(self.__name, spec, ", ".join(self.__dim_ids))
+            raise JsonStatException(msg)
         return self.__id2pos[spec]
 
     def __str__dimensions(self):
@@ -201,10 +205,11 @@ class JsonStatDataSet:
     # generator
     #
 
-    def all_pos(self, block_dim={}, order=None):
+    def all_pos(self, blocked_dims={}, order=None):
         """
 
-        :param block_dim:  {"year":2013, country:"IT"}
+        :param blocked_dims:  {"year":2013, country:"IT"}
+        :param order
         :return:
         """
 
@@ -213,10 +218,8 @@ class JsonStatDataSet:
         vec_pos_blocked = len(ids) * [False]
         vec_pos = len(ids) * [0]  # [0,0,0]
 
-        for d in block_dim.items():
-            cat = d[0]
-            idx = d[1]
-            d = self.__id2pos[cat]
+        for (cat,idx) in blocked_dims.items():
+            d = self.dimension(cat)
             vec_pos_blocked[d.pos()] = True
             vec_pos[d.pos()] = d.idx2pos(idx)
 
@@ -257,8 +260,8 @@ class JsonStatDataSet:
                     if not vec_pos_blocked[current_dimension]:
                         vec_pos[current_dimension] += 1
 
-    def generate_all_vec(self, **dims):
-        for vec_pos in self.all_pos(dims):
+    def generate_all_vec(self, **blocked_dims):
+        for vec_pos in self.all_pos(blocked_dims):
             vec_idx = self.from_vec_pos_to_vec_idx(vec_pos)
             value = self.value_from_vec_pos(vec_pos)
 
@@ -266,12 +269,15 @@ class JsonStatDataSet:
     # transforming function
     #
 
-    def to_table(self, content="label", order=None):
+    def to_table(self, content="label", order=None, rtype=list, blocked_dims={}):
         """
         Transforms a dataset into a table (a list of row)
         table len is the size of dataset + 1 for headers
         :param content can be "label" or "id"
-        return: a list of row, fist line is the header
+        :param order
+        :param rtype
+        :param blocked_dims
+        :return a list of row, first line is the header
         """
         table = []
 
@@ -287,7 +293,7 @@ class JsonStatDataSet:
 
         # data
         table.append(header)
-        for vec_pos in self.all_pos(order=order):
+        for vec_pos in self.all_pos(order=order,blocked_dims=blocked_dims):
             value = self.value_from_vec_pos(vec_pos)
             if content == "label":
                 row = self.from_vec_pos_to_vec_label(vec_pos)
@@ -296,11 +302,16 @@ class JsonStatDataSet:
             row.append(value)
             table.append(row)
 
-        return table
+        if rtype == pd.DataFrame:
+            ret = pd.DataFrame(table[1:],columns=table[0])
+        else:
+            ret = table
 
-    def to_data_frame(self, index, **dims):
+        return ret
+
+    def to_data_frame(self, index, content="label", order=None, blocked_dims={}):
         """
-        extract a bidimensional table
+        Transform dataset to pandas data frame
               col ->
          row
 
@@ -312,29 +323,28 @@ class JsonStatDataSet:
         2012  |  3
 
         :param index:
-        :param dims:
+        :param blocked_dims:
         :return:
         """
 
-        index_pos = self.__id2pos[index].pos()
-        columns = []
-        for d in dims.items():
-            cat = d[0]
-            idx = d[1]
-            columns.append(d[1])
-        indexes = []
-        values = []
-        for vec_pos in self.all_pos(dims):
-            vec_idx = self.from_vec_pos_to_vec_idx(vec_pos)
-            value = self.value_from_vec_pos(vec_pos)
-            indexes.append(vec_idx[index_pos])
-            values.append(value)
-            # print "{} - {} -> {}".format(vec_pos, vec_idx, value)
-
-        df = pd.DataFrame(values,
-                          columns=columns,
-                          index=indexes)
-
+        # index_pos = self.__id2pos[index].pos()
+        # columns = []
+        # for (cat,idx) in blocked_dims.items():
+        #     columns.append(idx)
+        # indexes = []
+        # values = []
+        # for vec_pos in self.all_pos(blocked_dims):
+        #     vec_idx = self.from_vec_pos_to_vec_idx(vec_pos)
+        #     value = self.value_from_vec_pos(vec_pos)
+        #     indexes.append(vec_idx[index_pos])
+        #     values.append(value)
+        #
+        # df = pd.DataFrame(values,
+        #                   columns=columns,
+        #                   index=indexes)
+        df = self.to_table(content=content, order=order, rtype=pd.DataFrame, blocked_dims=blocked_dims)
+        df.index = df[index]
+        del df[index]
         return df
 
     #

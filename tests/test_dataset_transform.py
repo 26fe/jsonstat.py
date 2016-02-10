@@ -9,6 +9,9 @@ from __future__ import unicode_literals
 import unittest
 import os
 
+# external packages
+import pandas as pd
+
 # jsonstat
 import jsonstat
 
@@ -17,6 +20,9 @@ class TestDataSetToTable(unittest.TestCase):
     def setUp(self):
         self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures")
 
+    #
+    # to_table
+    #
     def test_to_table(self):
         dataset = jsonstat.JsonStatDataSet()
         json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
@@ -32,6 +38,12 @@ class TestDataSetToTable(unittest.TestCase):
         self.assertEquals(first_row_expected, table[1])
         second_row_expected = [u'2013', u'Australia', 21]
         self.assertEqual(second_row_expected, table[2])
+
+        df = dataset.to_table(content='id', blocked_dims={"area":"IT"}, rtype=pd.DataFrame)
+        print(df)
+
+        df = dataset.to_data_frame('year', content='id', blocked_dims={"area":"IT"})
+        print(df)
 
     def test_to_table_inverted_order(self):
         dataset = jsonstat.JsonStatDataSet()
@@ -75,7 +87,6 @@ class TestDataSetToTable(unittest.TestCase):
                 t = list(map(transform_row, table[i]))
                 self.assertEquals(t, row, msg)
 
-    # @unittest.skip("working on it")
     def test_to_table_output(self):
         """
         test convert dataset to table
@@ -97,47 +108,24 @@ class TestDataSetToTable(unittest.TestCase):
         with open(to_table_pathname, 'r') as csvfile:
             cvs_reader = csv.reader(csvfile)
             for i, row in enumerate(cvs_reader):
-                # print(table[i])
-                # try:
-                #     row[3] = float(row[3])
-                # except ValueError:
-                #     pass
-                # print(row)
-                #
-                # self.assertEquals(table[i][0], row[0])
-                # self.assertEquals(table[i][1], row[1])
-                # self.assertEquals(table[i][2], row[2])
-                # self.assertEquals(table[i][3], row[3])
-
                 msg = "table and cvs don't match at line number {}".format(i)
-                # self.assertEquals(table[i], row, msg)
                 def transform_row(v):
                     if v is None: return ''
                     return "{}".format(v)
                 t = list(map(transform_row, table[i]))
                 self.assertEquals(t, row, msg)
 
-
     #
-    # transforming function
+    # to_data_frame
     #
+    @unittest.skip("working on it")
     def test_to_data_frame_year_IT(self):
         dataset = jsonstat.JsonStatDataSet()
         dataset.from_file(os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json"))
-        df = dataset.to_data_frame("year", area="IT")
+        df = dataset.to_data_frame("year", content="id", blocked_dims={'area':"IT"})
 
-        # print df
-        self.assertEquals(df['IT']['2014'], 34)
-
-    # def test_extract_year_all_country(self):
-    #     dataset = jsonstat.JsonStatSingleDataSet("canada")
-    #     dataset.from_string(self.json_dataset_unemployment)
-    #     df = dataset.to_data_frame("year")
-    #
-    #     # print df
-    #     self.assertEquals(df['IT']['2014'], 34)
-
-
+        print(df)
+        self.assertEquals(df['IT'], 34)
 
 
 if __name__ == '__main__':
