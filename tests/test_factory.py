@@ -20,47 +20,45 @@ class TestFactory(unittest.TestCase):
 
         self.json_string_v1_one_dataset = """
         {
-	        "oecd" : {
-	            "value": [1],
-	            "dimension" : {
-	                "id": ["one"],
-	                "size": [1],
-	                "one": { "category": { "index":{"2010":0}} }
-	            }
-	        }
-	    }
+            "oecd" : {
+                "value": [1],
+                "dimension" : {
+                    "id": ["one"],
+                    "size": [1],
+                    "one": { "category": { "index":{"2010":0}} }
+                }
+            }
+        }
         """
 
         self.json_string_v1_two_datasets = """
         {
-	        "oecd" : {
-	            "value": [1],
-	            "dimension" : {
-	                "id": ["one"],
-	                "size": [1],
-	                "one": { "category": { "index":{"2010":0}} }
-	            }
-	        },
-	        "canada" : {
-	            "value": [1],
-	            "dimension": {
-	                "id": ["one"],
-	                "size": [1],
-	                "one": { "category": { "index":{"2010":0}} }
-	            }
-	        }
-	    }
+            "oecd" : {
+                "value": [1],
+                "dimension" : {
+                    "id": ["one"],
+                    "size": [1],
+                    "one": { "category": { "index":{"2010":0}} }
+                }
+            },
+            "canada" : {
+                "value": [1],
+                "dimension": {
+                    "id": ["one"],
+                    "size": [1],
+                    "one": { "category": { "index":{"2010":0}} }
+                }
+            }
+        }
         """
 
     def test_parse_collection(self):
-        factory = jsonstat.JsonStatFactory()
-        ret = factory.from_string(self.json_string_v1_one_dataset)
+        ret = jsonstat.from_string(self.json_string_v1_one_dataset)
         self.assertIsInstance(ret, jsonstat.JsonStatCollection)
 
     def test_parse_dataset(self):
-        factory = jsonstat.JsonStatFactory()
         f = os.path.join(self.fixture_jsonstat_org_dir, "canada.json")
-        dataset = factory.from_file(f)
+        dataset = jsonstat.from_file(f)
         self.assertIsNotNone(dataset)
         self.assertIsInstance(dataset, jsonstat.JsonStatDataSet)
         self.assertEquals(120, len(dataset))
@@ -68,26 +66,23 @@ class TestFactory(unittest.TestCase):
     def test_dimension(self):
         self.json_string_dimension = """
         {
-	        "version" : "2.0",
-	        "class" : "dimension",
-	        "label" : "sex",
-	        "category" : {
-		        "index" : ["T", "M", "F"],
-		        "label" : {
-			        "T" : "total",
-			        "M" : "male",
-			        "F" : "female"
-		        }
-	        }
-	    }
+            "version" : "2.0",
+            "class" : "dimension",
+            "label" : "sex",
+            "category" : {
+                "index" : ["T", "M", "F"],
+                "label" : {
+                    "T" : "total",
+                    "M" : "male",
+                    "F" : "female"
+                }
+            }
+        }
         """
-        factory = jsonstat.JsonStatFactory()
-        ret = factory.from_string(self.json_string_dimension)
+        ret = jsonstat.from_string(self.json_string_dimension)
         self.assertIsInstance(ret, jsonstat.JsonStatDimension)
 
     def test_json_stat_org(self):
-
-        factory = jsonstat.JsonStatFactory()
 
         from os import listdir
         from os.path import isfile, join
@@ -95,7 +90,7 @@ class TestFactory(unittest.TestCase):
         # print(onlyfiles)
         for f in onlyfiles:
             # print("parsing {}".format(f))
-            ret = factory.from_file(os.path.join(self.fixture_jsonstat_org_dir, f))
+            ret = jsonstat.from_file(os.path.join(self.fixture_jsonstat_org_dir, f))
             self.assertIsNotNone(ret)
 
 
