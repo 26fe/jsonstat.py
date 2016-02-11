@@ -61,5 +61,5 @@ if __name__ == "__main__":
 
     # cache_dir where to store downloaded data file
     JSONSTAT_HOME = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    cache_dir = os.path.join(JSONSTAT_HOME, "tmp", "examples")
+    cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "examples"))
     test(uri, cache_dir, json_filename)

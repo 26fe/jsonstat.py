@@ -17,7 +17,6 @@ except ImportError:
     import jsonstat
 
 
-
 def test(uri, cache_dir, filename):
     pathname = os.path.join(cache_dir, filename)
     # extract collection
@@ -36,7 +35,7 @@ def test(uri, cache_dir, filename):
 
 if __name__ == "__main__":
     # cache_dir directory where store json data downloaded from internet
-    cache_dir = os.path.join(JSONSTAT_HOME, "tmp", "examples")
+    cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "examples"))
     if not os.path.exists(cache_dir):
         os.makedirs(cache_dir)
 

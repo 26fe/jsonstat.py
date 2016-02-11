@@ -67,7 +67,7 @@ def list_area_dataset_dim(istat_helper):
 if __name__ == "__main__":
     # cache_dir where to store downloaded data file
     MAIN_DIRECTORY = os.path.join(os.path.dirname(__file__), "..")
-    cache_dir = os.path.normpath(os.path.join(MAIN_DIRECTORY, "tmp", "istat_cached"))
+    cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "istat_cached"))
     istat = IstatHelper(cache_dir,lang=1)
 
     # list_area_dataset_dim(istat_helper)

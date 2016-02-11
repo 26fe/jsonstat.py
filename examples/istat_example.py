@@ -30,7 +30,7 @@ except ImportError:
 if __name__ == "__main__":
     # cache_dir where to store downloaded data file
     JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
-    cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tmp", "istat_cached"))
+    cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "istat_cached"))
     if not os.path.exists(cache_dir):
         os.makedirs(cache_dir)
 
@@ -45,7 +45,12 @@ if __name__ == "__main__":
     area = i.area(area_name)
     for istat_dataset in area.datasets():
         # TODO: this not works print(istat_dataset)
-        print(u"{}({}):{}".format(istat_dataset.cod(), istat_dataset.nrdim(), istat_dataset.name()))
+        try:
+            print(u"{}({}):{}".format(istat_dataset.cod(), istat_dataset.nrdim(), istat_dataset.name()))
+        except istat.IstatException as e:
+            # ignore exception
+            # TODO: better diagnostic?
+            print(e)
 
     # print some info about istat dataset 'DCSP_IPAB'
     dataset_name = 'DCSP_IPAB'
