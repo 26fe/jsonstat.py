@@ -12,7 +12,6 @@ from __future__ import unicode_literals
 import os
 
 # jsonstat
-import jsonstat
 import jsonstat.istat as istat
 
 if __name__ == "__main__":

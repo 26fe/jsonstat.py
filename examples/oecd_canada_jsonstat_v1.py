@@ -43,7 +43,7 @@ def test(uri, json_filename):
     print("\ngenerate all vec")
     oecd.generate_all_vec(area='CA')
 
-    df = oecd.to_data_frame('year', area='CA')
+    df = oecd.to_data_frame('year', blocked_dims={'area':'CA'})
     print(df)
 
     table = oecd.to_table()
