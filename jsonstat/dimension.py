@@ -204,11 +204,16 @@ class JsonStatDimension:
                 self.__idx2pos[idx] = pos
                 self.__idx2lbl[idx] = lbl
 
-        # validate: index and labels must be match
+        # validate: number of indexes and labels must the same??
         if len(self.__idx2pos) > 0 and len(self.__lbl2idx) > 0:
             if len(self.__idx2pos) != len(self.__lbl2idx):
-                msg = "dimension '{}': mismatch between indexes {} and labels {}"
+                # TODO: warning see hierarchy.json
+                msg = "dimension '{}': the number of indexes ({}) are different of the numbers of labels ({})"
                 msg = msg.format(self.__name, len(self.__idx2pos), len(self.__lbl2idx))
+                # raise JsonStatMalformedJson(msg)
+            if len(self.__idx2pos) < len(self.__lbl2idx):
+                msg = "dimension '{}': the number of labels ({}) are greater than number of indexes ({})"
+                msg = msg.format(self.__name, len(self.__lbl2idx), len(self.__idx2pos))
                 raise JsonStatMalformedJson(msg)
 
         # validate: indexes must be consistent with size

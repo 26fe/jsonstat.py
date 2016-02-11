@@ -10,10 +10,11 @@ from collections import OrderedDict
 import json
 
 #jsonstat
+from jsonstat.exceptions import JsonStatMalformedJson
+from jsonstat.downloader import *
 from jsonstat.collection import JsonStatCollection
 from jsonstat.dataset import JsonStatDataSet
 from jsonstat.dimension import JsonStatDimension
-from jsonstat.exceptions import JsonStatMalformedJson
 
 
 def from_file(filename):
@@ -35,6 +36,7 @@ def from_string(json_string):
     """
     json_data = json.loads(json_string, object_pairs_hook=OrderedDict)
     return from_json(json_data)
+
 
 def from_json(json_data):
     """
@@ -64,3 +66,8 @@ def from_json(json_data):
         o = JsonStatCollection()
         o.from_json_v1(json_data)
     return o
+
+# TODO: pathname could be None so don't save on disk
+def from_url(uri, pathname):
+    json_string = download(uri, pathname)
+    return from_string(json_string)

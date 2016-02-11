@@ -139,14 +139,12 @@ class JsonStatDataSet:
 
     def from_vec_dim_to_vec_pos(self, dims):
         """
-
+        Transforms a dict to array
         :param dims: {country:"AU", "year":2014}
         :return: [1,2,3]
         """
         vec_pos = len(self.__dim_ids) * [0]
-        for d in dims.items():
-            cat = d[0]
-            val = d[1]
+        for (cat, val) in dims.items():
             dim = self.__id2pos[cat]
             vec_pos[dim.pos()] = dim.idx2pos(val)
         return vec_pos
@@ -368,7 +366,7 @@ class JsonStatDataSet:
         :param json_string:
         :return itself to chain call
         """
-
+        # TODO: try to determinate the json-stat version
         json_data = json.loads(json_string)
         self.from_json(json_data)
         return self
@@ -414,12 +412,13 @@ class JsonStatDataSet:
             msg = "dataset '{}': field 'value' is empty".format(self.__name)
             raise JsonStatMalformedJson(msg)
 
+        # parsing dimension
         if 'dimension' not in json_data:
             msg = "dataset '{}': missing 'dimension' key".format(self.__name)
             raise JsonStatMalformedJson(msg)
 
-        # parsing dimension
         json_data_dimension = json_data['dimension']
+
         if 'id' not in json_data_dimension:
             msg = "dataset '{}': missing 'dimension.id' key".format(self.__name)
             raise JsonStatMalformedJson(msg)
@@ -428,7 +427,19 @@ class JsonStatDataSet:
             msg = "dataset '{}': missing 'dimension.size' key".format(self.__name)
             raise JsonStatMalformedJson(msg)
 
-        self.__parse_dimensions(json_data_dimension)
+        self.__dim_ids = json_data_dimension['id']
+        self.__dim_sizes = json_data_dimension['size']
+        self.__dim_nr = len(self.__dim_ids)
+
+        # validating
+        if len(self.__dim_ids) != len(self.__dim_sizes):
+            msg = "dataset '{}': dataset_id is different of dataset_size".format(self.__name)
+            raise JsonStatMalformedJson(msg)
+
+        json_data_roles = None
+        if 'role' in json_data_dimension:
+            json_data_roles = json_data_dimension['role']
+        self.__parse_dimensions(json_data_dimension, json_data_roles)
 
         # validate
         size_total = reduce(lambda x, y: x * y, self.__dim_sizes)
@@ -437,7 +448,10 @@ class JsonStatDataSet:
             msg = msg.format(self.__name, len(self.__value), size_total)
             raise JsonStatMalformedJson(msg)
 
-        # acc_vector
+        self.__compute_acc_vector()
+        self.__valid = True
+
+    def __compute_acc_vector(self):
         acc = 1
         self.__acc_vector = self.__dim_nr * [1]
         i = self.__dim_nr - 2
@@ -445,42 +459,6 @@ class JsonStatDataSet:
             acc = acc * self.__dim_sizes[i + 1]
             self.__acc_vector[i] = acc
             i -= 1
-
-        self.__valid = True
-
-    def __parse_dimensions(self, json_data_dimension):
-
-        self.__dim_ids = json_data_dimension['id']
-        self.__dim_sizes = json_data_dimension['size']
-        self.__dim_nr = len(self.__dim_ids)
-
-        if len(self.__dim_ids) != len(self.__dim_sizes):
-            msg = "dataset '{}': dataset_id is different of dataset_size".format(self.__name)
-            raise JsonStatMalformedJson(msg)
-
-        # parsing roles
-        roles = {}
-        if 'role' in json_data_dimension:
-            json_roles = json_data_dimension['role']
-            for r in json_roles.items():
-                role = r[0]
-                for dname in r[1]:
-                    roles[dname] = role
-
-        # parsing each dimensions
-        self.__pos2dim = len(self.__dim_ids) * [None]
-        for dpos in range(len(self.__dim_ids)):
-            dname = self.__dim_ids[dpos]
-            dsize = self.__dim_sizes[dpos]
-
-            if dname not in json_data_dimension:
-                msg = "dataset '{}': malformed json: missing key {} in dimension".format(self.__name, dname)
-                raise JsonStatException(msg)
-
-            dimension = JsonStatDimension(dname, dsize, dpos, roles.get(dname))
-            dimension.from_json(json_data_dimension[dname])
-            self.__id2pos[dname] = dimension
-            self.__pos2dim[dpos] = dimension
 
     # TODO: this is meant of internal function of jsonstat not public api
     def from_json_v2(self, json_data):
@@ -520,6 +498,14 @@ class JsonStatDataSet:
                 # todo: download data?
                 return
 
+        # value is required
+        # https://json-stat.org/format/#value
+        # TODO: value into a numpy array?
+        self.__value = json_data['value']
+        if len(self.__value) == 0:
+            msg = "dataset '{}': field 'value' is empty".format(self.__name)
+            raise JsonStatMalformedJson(msg)
+
         # parsing when values are presents
         self.__dim_ids = json_data['id']
         self.__dim_sizes = json_data['size']
@@ -530,24 +516,49 @@ class JsonStatDataSet:
             msg = "dataset '{}': dataset_id is different of dataset_size".format(self.__name)
             raise JsonStatMalformedJson(msg)
 
+        # TODO: parsing status
+        # dimension
+        json_data_roles = None
+        if 'role' in json_data:
+            json_data_roles = json_data['role']
+        json_data_dimension = json_data["dimension"]
+        self.__parse_dimensions(json_data_dimension, json_data_roles)
+
+        # TODO: parsing link
+
+        self.__compute_acc_vector()
+        self.__valid = True
+
+    def __parse_dimensions(self, json_data_dimension, json_data_roles):
+        """
+        Parse dimension in json stat
+        it used for format v1 and v2
+        :param json_data_dimension:
+        :param json_data_roles:
+        :return:
+        """
+
         # parsing roles
         roles = {}
-        if 'role' in json_data:
-            json_roles = json_data['role']
+        if json_data_roles is not None:
+            json_roles = json_data_roles
             for r in json_roles.items():
                 role = r[0]
                 for dname in r[1]:
                     roles[dname] = role
 
-        # value is required
-        # https://json-stat.org/format/#value
-        # TODO: value into a numpy array?
-        self.__value = json_data['value']
-        if len(self.__value) == 0:
-            msg = "dataset '{}': field 'value' is empty".format(self.__name)
-            raise JsonStatMalformedJson(msg)
+        # parsing each dimensions
+        self.__pos2dim = len(self.__dim_ids) * [None]
+        for dpos in range(len(self.__dim_ids)):
+            dname = self.__dim_ids[dpos]
+            dsize = self.__dim_sizes[dpos]
 
-            # TODO: parsing status
-            # dimension
+            if dname not in json_data_dimension:
+                msg = "dataset '{}': malformed json: missing key {} in dimension".format(self.__name, dname)
+                raise JsonStatException(msg)
 
-            # TODO: parsing link
+            dimension = JsonStatDimension(dname, dsize, dpos, roles.get(dname))
+            dimension.from_json(json_data_dimension[dname])
+            self.__id2pos[dname] = dimension
+            self.__pos2dim[dpos] = dimension
+
