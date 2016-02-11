@@ -19,31 +19,32 @@ if sys.version_info < (3,):
 
 class TestRunningExamples(unittest.TestCase):
     def setUp(self):
-        pass
-
-    def test_run_examples(self):
         JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
-        examples_dir = os.path.abspath(os.path.join(JSONSTAT_HOME, "examples"))
+        self.examples_dir = os.path.abspath(os.path.join(JSONSTAT_HOME, "examples"))
 
+    @unittest.skip("working on it")
+    def test_run_examples(self):
+        for example in os.listdir(self.examples_dir):
+            example_path = os.path.join(self.examples_dir, example)
+            if os.path.isfile(example_path) and example_path.endswith(".py"):
+                self.__run_file(example)
 
+    def test_eurostat(self):
+        self.__run_file("eurostat.py")
+
+    def __run_file(self, example):
+        example_path = os.path.join(self.examples_dir, example)
         FNULL = open(os.devnull, 'w') # suppress output
-        for f in os.listdir(examples_dir):
-            example = os.path.join(examples_dir, f)
-            if os.path.isfile(example) and example.endswith(".py"):
-                # print(f)
-                # TODO change  pythonpath env variables (?)
-                # status = subprocess.call("python {}".format(example), shell=True, stdout=FNULL, stderr=FNULL)
-
-                from subprocess import Popen, PIPE
-
-                p = Popen(['python', example], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-                # status = subprocess.call("python {}".format(example), shell=True, stdout=stdout, stderr=stderr)
-
-                output, err = p.communicate()
-                status = p.returncode
-                msg = "running '{}'\nSTDOUT:\n{}\nSTDERR:\n{}".format(example, output, err)
-                self.assertEquals(0, status, msg)
-
+        # print(f)
+        # TODO change  pythonpath env variables (?)
+        # status = subprocess.call("python {}".format(example), shell=True, stdout=FNULL, stderr=FNULL)
+        from subprocess import Popen, PIPE
+        p = Popen(['python', example_path], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        # status = subprocess.call("python {}".format(example), shell=True, stdout=stdout, stderr=stderr)
+        output, err = p.communicate()
+        status = p.returncode
+        msg = "running '{}'\nSTDOUT:\n{}\nSTDERR:\n{}".format(example, output, err)
+        self.assertEquals(0, status, msg)
 
 if __name__ == '__main__':
     unittest.main()
