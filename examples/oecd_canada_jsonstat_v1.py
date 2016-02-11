@@ -10,18 +10,25 @@
 from __future__ import print_function
 import os
 
+# http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
+import sys
+# TODO: remove following hack
+# http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
+if sys.version_info < (3,):
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+
 # jsonstat
-import jsonstat
+JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
+try:
+    import jsonstat
+except ImportError:
+    sys.path.append(JSONSTAT_HOME)
+    import jsonstat
 
-# conf
-uri = 'http://json-stat.org/samples/oecd-canada.json'
-json_filename = "oecd-canada.json"
 
-JSONSTAT_HOME = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-out_dir = os.path.join(JSONSTAT_HOME, "tmp", "examples")
-
-def test(uri, json_filename):
-    pathname = os.path.join(out_dir, json_filename)
+def test(uri, cache_dir, json_filename):
+    pathname = os.path.join(cache_dir, json_filename)
     json_string = jsonstat.download(uri, pathname)
 
     collection = jsonstat.JsonStatCollection()
@@ -43,10 +50,16 @@ def test(uri, json_filename):
     print("\ngenerate all vec")
     oecd.generate_all_vec(area='CA')
 
-    df = oecd.to_data_frame('year', blocked_dims={'area':'CA'})
+    df = oecd.to_data_frame('year', content='id', blocked_dims={'area':'CA'})
     print(df)
 
     table = oecd.to_table()
 
 if __name__ == "__main__":
-    test(uri, json_filename)
+    uri = 'http://json-stat.org/samples/oecd-canada.json'
+    json_filename = "oecd-canada.json"
+
+    # cache_dir where to store downloaded data file
+    JSONSTAT_HOME = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    cache_dir = os.path.join(JSONSTAT_HOME, "tmp", "examples")
+    test(uri, cache_dir, json_filename)

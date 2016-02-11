@@ -13,8 +13,21 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import os
 
+# http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
+import sys
+# TODO: remove following hack
+# http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
+if sys.version_info < (3,):
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+
 # jsonstat
-from jsonstat.istat.istat_helper import IstatHelper
+JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
+try:
+    from jsonstat.istat.istat_helper import IstatHelper
+except ImportError:
+    sys.path.append(JSONSTAT_HOME)
+    from jsonstat.istat.istat_helper import IstatHelper
 
 def list_dim(istat_helper, dataset):
     """
@@ -48,6 +61,7 @@ def list_dataset_dim(istat_helper, area):
 
 
 if __name__ == "__main__":
+    # cache_dir where to store downloaded data file
     MAIN_DIRECTORY = os.path.join(os.path.dirname(__file__), "..")
     cache_dir = os.path.normpath(os.path.join(MAIN_DIRECTORY, "tmp", "istat_cached"))
     istat_helper = IstatHelper(cache_dir, lang=1)

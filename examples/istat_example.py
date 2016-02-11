@@ -11,10 +11,24 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import os
 
+import sys
+
+# TODO: remove following hack
+# http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
+if sys.version_info < (3,):
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+
 # jsonstat
-import jsonstat.istat as istat
+JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
+try:
+    import jsonstat.istat as istat
+except ImportError:
+    sys.path.append(JSONSTAT_HOME)
+    import jsonstat.istat as istat
 
 if __name__ == "__main__":
+    # cache_dir where to store downloaded data file
     JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
     cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tmp", "istat_cached"))
     if not os.path.exists(cache_dir):

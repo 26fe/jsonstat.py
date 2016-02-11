@@ -6,17 +6,22 @@
 # stdlib
 from __future__ import print_function
 import os
+import sys
 
 # jsonstat
-import jsonstat
+JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
+try:
+    import jsonstat
+except ImportError:
+    sys.path.append(JSONSTAT_HOME)
+    import jsonstat
 
 
-def test(uri, filename):
-    json_string = jsonstat.download(uri, os.path.join(out_dir, filename))
 
+def test(uri, cache_dir, filename):
+    pathname = os.path.join(cache_dir, filename)
     # extract collection
-    collection = jsonstat.JsonStatCollection()
-    collection.from_string(json_string)
+    collection = jsonstat.from_url(uri, pathname)
     print(collection)
 
     # extract dataset contained into collection
@@ -30,19 +35,17 @@ def test(uri, filename):
 
 
 if __name__ == "__main__":
-    # cache directory where store json data download from internet
-    JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
-    out_dir = os.path.join(JSONSTAT_HOME, "tmp", "examples")
-    if not os.path.exists(out_dir):
-        os.makedirs(out_dir)
+    # cache_dir directory where store json data downloaded from internet
+    cache_dir = os.path.join(JSONSTAT_HOME, "tmp", "examples")
+    if not os.path.exists(cache_dir):
+        os.makedirs(cache_dir)
 
     base = 'http://ec.europa.eu/eurostat/wdds/rest/data/v1.1/json/en/'
-
     uri = base + 'nama_gdp_c?precision=1&geo=IT&unit=EUR_HAB&indic_na=B1GM'
     filename = "eurostat-name_gpd_c-geo_IT.json"
-    test(uri, filename)
+    test(uri, cache_dir, filename)
 
     uri = base + 'nama_gdp_c?precision=1&unit=EUR_HAB&indic_na=B1GM'
     filename = "eurostat-name_gpd_c.json"
-    test(uri, filename)
+    test(uri, cache_dir, filename)
 
