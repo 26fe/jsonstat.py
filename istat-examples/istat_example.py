@@ -30,7 +30,7 @@ except ImportError:
 if __name__ == "__main__":
     # cache_dir where to store downloaded data file
     JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
-    cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "istat_cached"))
+    cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "istat-tests", "fixtures", "istat_cached"))
     if not os.path.exists(cache_dir):
         os.makedirs(cache_dir)
 
