@@ -6,3 +6,4 @@
 from istat import Istat
 from istat_exception import IstatException
 from istat_helper import IstatHelper
+from istat_functions import (cache_dir, area, areas, dataset)
