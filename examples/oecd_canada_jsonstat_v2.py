@@ -23,9 +23,10 @@ except ImportError:
     sys.path.append(JSONSTAT_HOME)
     import jsonstat
 
-def test():
+def test(uri, cache_dir):
     # main
-    json_string = jsonstat.download(uri, os.path.join(cache_dir, "oecd-canada-col.json"))
+    pathname = os.path.join(cache_dir, "oecd-canada-col.json")
+    json_string = jsonstat.download(uri, pathname)
     collection = jsonstat.JsonStatCollection()
     collection.from_string(json_string)
 
@@ -54,5 +55,5 @@ if __name__ == "__main__":
 
     JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
     cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "examples"))
-    out_dir = os.path.abspath(cache_dir)
-    test()
+    cache_dir = os.path.abspath(cache_dir)
+    test(uri, cache_dir)
