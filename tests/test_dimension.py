@@ -6,6 +6,7 @@
 # stdlib
 from __future__ import print_function
 from __future__ import unicode_literals
+import sys
 import unittest
 
 # jsonstat
@@ -16,58 +17,58 @@ class TestDimension(unittest.TestCase):
 
     def setUp(self):
         self.json_str_only_index= '''
-		{
-			"label" : "2003-2014",
-			"category" : {
-				"index" : {
-					"2003" : 0,
-					"2004" : 1,
-					"2005" : 2,
-					"2006" : 3,
-					"2007" : 4,
-					"2008" : 5,
-					"2009" : 6,
-					"2010" : 7,
-					"2011" : 8,
-					"2012" : 9,
-					"2013" : 10,
-					"2014" : 11
-				}
-			}
-		}
-		'''
+        {
+            "label" : "2003-2014",
+            "category" : {
+                "index" : {
+                    "2003" : 0,
+                    "2004" : 1,
+                    "2005" : 2,
+                    "2006" : 3,
+                    "2007" : 4,
+                    "2008" : 5,
+                    "2009" : 6,
+                    "2010" : 7,
+                    "2011" : 8,
+                    "2012" : 9,
+                    "2013" : 10,
+                    "2014" : 11
+                }
+            }
+        }
+        '''
 
         self.json_str_hole_in_index= '''
-		{
-			"label" : "2003-2014",
-			"category" : {
-				"index" : {
-					"2003" : 0,
-					"2004" : 1,
-					"2005" : 2,
-					"2006" : 3,
-					"2011" : 8,
-					"2012" : 9,
-					"2013" : 10,
-					"2014" : 11
-				}
-			}
-		}
-		'''
+        {
+            "label" : "2003-2014",
+            "category" : {
+                "index" : {
+                    "2003" : 0,
+                    "2004" : 1,
+                    "2005" : 2,
+                    "2006" : 3,
+                    "2011" : 8,
+                    "2012" : 9,
+                    "2013" : 10,
+                    "2014" : 11
+                }
+            }
+        }
+        '''
 
         self.json_str_size_one= '''
             {
-			    "label" : "country",
-			    "category" : {"label" : { "CA" : "Canada" }}
-			}
-		'''
+                "label" : "country",
+                "category" : {"label" : { "CA" : "Canada" }}
+            }
+        '''
 
 
         self.json_str_label_and_index= '''
-        	{
-		        "label" : "OECD countries, EU15 and total",
-		        "category" : {
-		            "index" : { "AU" : 0, "AT" : 1, "BE" : 2, "IT": 3 },
+            {
+                "label" : "OECD countries, EU15 and total",
+                "category" : {
+                    "index" : { "AU" : 0, "AT" : 1, "BE" : 2, "IT": 3 },
                     "label" : { "AU" : "Australia", "AT" : "Austria", "BE" : "Belgium", "CA" : "Canada", "IT":"Italy" }
                 }
             }
@@ -103,7 +104,10 @@ class TestDimension(unittest.TestCase):
         with self.assertRaises(jsonstat.JsonStatException) as cm:
             dim.from_string(self.json_str_hole_in_index)
         e = cm.exception
-        self.assertRegexpMatches(e.value, r)
+        if sys.version_info < (3,):
+            self.assertRegexpMatches(e.value, r)
+        else:
+            self.assertRegex(e.value, r)
 
     def test_size_one(self):
         dim = jsonstat.JsonStatDimension("country", 1, 0, None)
