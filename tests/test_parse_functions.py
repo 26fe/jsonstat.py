@@ -61,7 +61,7 @@ class TestParseFunctions(unittest.TestCase):
         dataset = jsonstat.from_file(f)
         self.assertIsNotNone(dataset)
         self.assertIsInstance(dataset, jsonstat.JsonStatDataSet)
-        self.assertEquals(120, len(dataset))
+        self.assertEqual(120, len(dataset))
 
     def test_dimension(self):
         self.json_string_dimension = """

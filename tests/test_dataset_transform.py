@@ -35,7 +35,7 @@ class TestDataSetToTable(unittest.TestCase):
         header_expected = [u'2003-2014', u'OECD countries, EU15 and total', u'Value']
         self.assertEqual(header_expected, table[0])
         first_row_expected = [u'2012', u'Australia', 11]
-        self.assertEquals(first_row_expected, table[1])
+        self.assertEqual(first_row_expected, table[1])
         second_row_expected = [u'2013', u'Australia', 21]
         self.assertEqual(second_row_expected, table[2])
 
@@ -60,7 +60,7 @@ class TestDataSetToTable(unittest.TestCase):
         header_expected = ['2003-2014', 'OECD countries, EU15 and total', 'Value']
         self.assertEqual(header_expected, table[0])
         first_row_expected = ['2012', 'Australia', 11]
-        self.assertEquals(first_row_expected, table[1])
+        self.assertEqual(first_row_expected, table[1])
         second_row_expected = ['2012', 'Austria', 12]
         self.assertEqual(second_row_expected, table[2])
 
@@ -85,7 +85,7 @@ class TestDataSetToTable(unittest.TestCase):
                     if v is None: return ''
                     return "{}".format(v)
                 t = list(map(transform_row, table[i]))
-                self.assertEquals(t, row, msg)
+                self.assertEqual(t, row, msg)
 
     def test_to_table_output(self):
         """
@@ -113,7 +113,7 @@ class TestDataSetToTable(unittest.TestCase):
                     if v is None: return ''
                     return "{}".format(v)
                 t = list(map(transform_row, table[i]))
-                self.assertEquals(t, row, msg)
+                self.assertEqual(t, row, msg)
 
     #
     # to_data_frame
@@ -125,7 +125,7 @@ class TestDataSetToTable(unittest.TestCase):
         df = dataset.to_data_frame("year", content="id", blocked_dims={'area':"IT"})
 
         print(df)
-        self.assertEquals(df['IT'], 34)
+        self.assertEqual(df['IT'], 34)
 
 
 if __name__ == '__main__':

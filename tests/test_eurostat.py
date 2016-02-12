@@ -31,13 +31,13 @@ class TestEurostat(unittest.TestCase):
 
         # extract dataset contained into collection
         ds = collection.dataset('nama_gdp_c')
-        self.assertEquals(69, len(ds))
+        self.assertEqual(69, len(ds))
         time = ds.dimension('time')
-        self.assertEquals(69, len(time))
+        self.assertEqual(69, len(time))
 
         # show some values
         v = ds.value(geo="IT", time="2011")
-        self.assertEquals(26000, v)
+        self.assertEqual(26000, v)
 
         # for r in ds.to_table():
         #     print(r)
@@ -55,16 +55,16 @@ class TestEurostat(unittest.TestCase):
 
         # extract dataset contained into collection
         ds = collection.dataset('nama_gdp_c')
-        self.assertEquals(138, len(ds))
+        self.assertEqual(138, len(ds))
         time = ds.dimension('time')
-        self.assertEquals(69, len(time))
+        self.assertEqual(69, len(time))
 
         # show some values
         v = ds.value(geo="IT", time="2011")
-        self.assertEquals(26000, v)
+        self.assertEqual(26000, v)
 
         v = ds.value(geo="FR", time="2011")
-        self.assertEquals(30700, v)
+        self.assertEqual(30700, v)
 
         # for r in ds.to_table():
         #     print(r)

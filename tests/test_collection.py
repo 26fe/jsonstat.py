@@ -58,7 +58,7 @@ class TestCollection(unittest.TestCase):
         out = StringIO()
         print(collection.__str__(), file=out, end="")
         expected = "0: dataset 'oecd'\n"
-        self.assertEquals(expected, out.getvalue())
+        self.assertEqual(expected, out.getvalue())
 
     def test_two_datasets_to_str(self):
         collection = jsonstat.JsonStatCollection()
@@ -66,7 +66,7 @@ class TestCollection(unittest.TestCase):
         out = StringIO()
         print(collection.__str__(), file=out, end="")
         expected = "0: dataset 'oecd'\n1: dataset 'canada'\n"
-        self.assertEquals(expected, out.getvalue())
+        self.assertEqual(expected, out.getvalue())
 
     def test_parse_v1_from_string(self):
         collection = jsonstat.JsonStatCollection()
@@ -90,7 +90,7 @@ class TestCollection(unittest.TestCase):
             "  pos    idx  label\n"
             "    0    UNR unemployment rate\n"
         )
-        self.assertEquals(expected, dim.__str__())
+        self.assertEqual(expected, dim.__str__())
 
     def test_parse_v2_from_file(self):
         filename = os.path.join(self.fixture_dir, "oecd-canada-col.json")

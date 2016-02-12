@@ -102,17 +102,17 @@ class TestDataSet(unittest.TestCase):
 
     def test_name(self):
         dataset = jsonstat.JsonStatDataSet("canada")
-        self.assertEquals(dataset.name(), "canada")
+        self.assertEqual(dataset.name(), "canada")
 
     def test_dimensions(self):
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(os.path.join(self.fixture_dataset_dir, "json_dataset_unemployment.json"))
-        self.assertEquals(len(dataset.dimensions()), 2)
+        self.assertEqual(len(dataset.dimensions()), 2)
 
     def test_get_dim(self):
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(os.path.join(self.fixture_dataset_dir, "json_dataset_unemployment.json"))
-        self.assertEquals(dataset.dimension("year").name(), "year")
+        self.assertEqual(dataset.dimension("year").name(), "year")
         with self.assertRaises(jsonstat.JsonStatException) as cm:
             dataset.dimension("not existent dim")
         e = cm.exception
@@ -132,19 +132,19 @@ class TestDataSet(unittest.TestCase):
             "  0: dim id/name: 'year' size: '3' role: 'time'\n"
             "  1: dim id/name: 'area' size: '4' role: 'geo'\n"
         )
-        self.assertEquals(expected, dataset.__str__())
+        self.assertEqual(expected, dataset.__str__())
 
     def test_value(self):
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(os.path.join(self.fixture_dataset_dir, "json_dataset_unemployment.json"))
-        self.assertEquals(dataset.value(area="AU", year="2012"), 11)
-        self.assertEquals(dataset.value(area="BE", year="2014"), 33)
+        self.assertEqual(dataset.value(area="AU", year="2012"), 11)
+        self.assertEqual(dataset.value(area="BE", year="2014"), 33)
 
         dataset = jsonstat.JsonStatDataSet()
         dataset.from_file(os.path.join(self.fixture_dataset_dir, "json_three_dimensions.json"))
-        self.assertEquals(dataset.value(one="one_1", two="two_1", three="three_1"), 111)
+        self.assertEqual(dataset.value(one="one_1", two="two_1", three="three_1"), 111)
         v = dataset.value(one="one_2", two="two_2", three="three_2")
-        self.assertEquals(v, 222)
+        self.assertEqual(v, 222)
 
     def test_value_oecd(self):
         collection = jsonstat.JsonStatCollection()
@@ -152,7 +152,7 @@ class TestDataSet(unittest.TestCase):
         collection.from_file(json_pathname)
         oecd = collection.dataset('oecd')
         v = oecd.value(concept='UNR',area='AU',year='2004')
-        self.assertEquals(5.39663128, v)
+        self.assertEqual(5.39663128, v)
 
     #
     # test from functions
@@ -163,10 +163,10 @@ class TestDataSet(unittest.TestCase):
         dataset.from_file(os.path.join(self.fixture_dataset_dir, "json_dataset_unemployment.json"))
 
         ret = dataset.from_vec_idx_to_vec_dim(["area", "year"])
-        self.assertEquals([1,0], ret)
+        self.assertEqual([1,0], ret)
 
         ret = dataset.from_vec_idx_to_vec_dim(["year", "area"])
-        self.assertEquals([0,1], ret)
+        self.assertEqual([0,1], ret)
 
     #
     # enumeration function
@@ -181,7 +181,7 @@ class TestDataSet(unittest.TestCase):
                     [0, 1], [1, 1], [2, 1],  # last digit 1
                     [0, 2], [1, 2], [2, 2],  # last digit 2
                     [0, 3], [1, 3], [2, 3]]  # last digit 3
-        self.assertEquals(result, expected)
+        self.assertEqual(result, expected)
 
     def test_all_pos_reorder(self):
         dataset = jsonstat.JsonStatDataSet("canada")
@@ -192,7 +192,7 @@ class TestDataSet(unittest.TestCase):
         expected = [[0, 0], [0, 1], [0, 2], [0, 3], # first digit 0
                     [1, 0], [1, 1], [1, 2], [1, 3], # first digit 1
                     [2, 0], [2, 1], [2, 2], [2, 3]] # first digit 2
-        self.assertEquals(result, expected)
+        self.assertEqual(result, expected)
 
     def test_all_pos_with_block(self):
         dataset = jsonstat.JsonStatDataSet("canada")
@@ -200,13 +200,13 @@ class TestDataSet(unittest.TestCase):
 
         result = list(dataset.all_pos({"area": "IT"}))
         expected = [[0, 3], [1, 3], [2, 3]]
-        self.assertEquals(result, expected)
+        self.assertEqual(result, expected)
 
         dataset.generate_all_vec(area="IT")
 
         result = list(dataset.all_pos({"year": "2014"}))
         expected = [[2, 0], [2, 1], [2, 2], [2, 3]]
-        self.assertEquals(result, expected)
+        self.assertEqual(result, expected)
 
         dataset.generate_all_vec(year='2014')
 
@@ -222,14 +222,14 @@ class TestDataSet(unittest.TestCase):
             [0, 2, 2],[0, 0, 3],[0, 1, 3],[0, 2, 3]
         ]
 
-        self.assertEquals(result, expected)
+        self.assertEqual(result, expected)
         dataset.generate_all_vec(one='one_1')
 
         result = list(dataset.all_pos({"two":"two_2"}))
         expected = [
             [0, 1, 0],[1, 1, 0],[0, 1, 1],[1, 1, 1],[0, 1, 2],[1, 1, 2],[0, 1, 3],[1, 1, 3]
         ]
-        self.assertEquals(result, expected)
+        self.assertEqual(result, expected)
 
 
 if __name__ == '__main__':

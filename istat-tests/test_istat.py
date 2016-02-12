@@ -27,7 +27,7 @@ class TestIstat(unittest.TestCase):
         self.assertEqual(u'Inattivi - dati mensili', d)
 
         dname = i.area(26).dataset('DCCV_INATTIVMENS').dimension(0).name()
-        self.assertEquals("Territorio", dname)
+        self.assertEqual("Territorio", dname)
 
     def test_istat_english(self):
         i = istat.Istat(self.fixture_dir, lang=1)
@@ -41,12 +41,12 @@ class TestIstat(unittest.TestCase):
         self.assertEqual('Territory', dim.name())
         
         dname = i.area(26).dataset('DCCV_INATTIVMENS').dimension(0).name()
-        self.assertEquals("Territory", dname)
+        self.assertEqual("Territory", dname)
 
     def test_areas(self):
         i = istat.Istat(self.fixture_dir, lang=1)
         istat_area = i.area(3)
-        self.assertEquals("CEN", istat_area.cod())
+        self.assertEqual("CEN", istat_area.cod())
 
     def test_dataset(self):
         i = istat.Istat(self.fixture_dir, lang=1)
@@ -54,13 +54,13 @@ class TestIstat(unittest.TestCase):
         istat_dataset_name = 'DCSP_IPAB'
         istat_dataset = i.dataset(istat_area_name, istat_dataset_name)
         istat_dimension = istat_dataset.dimension(0)
-        self.assertEquals("Territory", istat_dimension.name())
+        self.assertEqual("Territory", istat_dimension.name())
 
         collection = istat_dataset.getvalues("1,18,0,0,0")
-        self.assertEquals(1, len(collection))
+        self.assertEqual(1, len(collection))
 
         dataset = collection.dataset(0)
-        self.assertEquals('IDMISURA1*IDTYPPURCH*IDTIME', dataset.name())
+        self.assertEqual('IDMISURA1*IDTYPPURCH*IDTIME', dataset.name())
 
         # same istat dataset with explicit dimension
         spec = {
@@ -72,7 +72,7 @@ class TestIstat(unittest.TestCase):
         }
         collection = istat_dataset.getvalues(spec)
         dataset = collection.dataset(0)
-        self.assertEquals('IDMISURA1*IDTYPPURCH*IDTIME', dataset.name())
+        self.assertEqual('IDMISURA1*IDTYPPURCH*IDTIME', dataset.name())
 
 
 if __name__ == '__main__':

@@ -45,7 +45,7 @@ class TestRunningExamples(unittest.TestCase):
         output, err = p.communicate()
         status = p.returncode
         msg = "running '{}'\nSTDOUT:\n{}\nSTDERR:\n{}".format(example, output, err)
-        self.assertEquals(0, status, msg)
+        self.assertEqual(0, status, msg)
 
 if __name__ == '__main__':
     unittest.main()

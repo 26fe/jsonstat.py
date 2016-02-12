@@ -75,10 +75,10 @@ class TestDimension(unittest.TestCase):
 
     def test_getters(self):
         dim = jsonstat.JsonStatDimension("test_dim", 10, 0, 'role')
-        self.assertEquals(dim.name(), "test_dim")
-        self.assertEquals(dim.size(), 10)
-        self.assertEquals(dim.pos(), 0)
-        self.assertEquals(dim.role(), "role")
+        self.assertEqual(dim.name(), "test_dim")
+        self.assertEqual(dim.size(), 10)
+        self.assertEqual(dim.pos(), 0)
+        self.assertEqual(dim.role(), "role")
 
     def test_exception_not_valid(self):
         dim = jsonstat.JsonStatDimension("year", 10, 0, None)
@@ -114,21 +114,21 @@ class TestDimension(unittest.TestCase):
     def test_idx2pos(self):
         dim = jsonstat.JsonStatDimension("year", 12, 0, None)
         dim.from_string(self.json_str_only_index)
-        self.assertEquals(dim.idx2pos("2003"), 0)
-        self.assertEquals(dim.idx2pos("2014"), 11)
+        self.assertEqual(dim.idx2pos("2003"), 0)
+        self.assertEqual(dim.idx2pos("2014"), 11)
 
     def test_pos2idx(self):
         dim = jsonstat.JsonStatDimension("year", 12, 0, None)
         dim.from_string(self.json_str_only_index)
-        self.assertEquals(dim.pos2idx(0), "2003")
-        self.assertEquals(dim.pos2idx(11), "2014")
+        self.assertEqual(dim.pos2idx(0), "2003")
+        self.assertEqual(dim.pos2idx(11), "2014")
 
     def test_get_index(self):
         dim = jsonstat.JsonStatDimension("year", 12, 0, None)
         dim.from_string(self.json_str_only_index)
         expected = ['2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014']
         result = dim.get_index()
-        self.assertEquals(expected, result)
+        self.assertEqual(expected, result)
 
     def test_info(self):
         dim = jsonstat.JsonStatDimension("year", 12, 0, None)
@@ -150,7 +150,7 @@ class TestDimension(unittest.TestCase):
             "   11   2014       \n"
         )
         self.maxDiff = None
-        self.assertEquals(expected, dim.__str__())
+        self.assertEqual(expected, dim.__str__())
 
     def test_info_with_label(self):
         dim = jsonstat.JsonStatDimension("concept", 1, 0, None)
@@ -161,7 +161,7 @@ class TestDimension(unittest.TestCase):
             "    0     CA Canada\n"
         )
         self.maxDiff = None
-        self.assertEquals(expected, dim.__str__())
+        self.assertEqual(expected, dim.__str__())
 
     def test_exception_mismatch_index_and_label(self):
         dim = jsonstat.JsonStatDimension("year", 4, 0, None)
@@ -170,7 +170,7 @@ class TestDimension(unittest.TestCase):
 
         e = cm.exception
         expected = "dimension 'year': label 'Canada' is associated with index 'CA' that not exists!"
-        self.assertEquals(e.value, expected)
+        self.assertEqual(e.value, expected)
 
 if __name__ == '__main__':
     unittest.main()
