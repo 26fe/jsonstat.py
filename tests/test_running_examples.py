@@ -22,15 +22,16 @@ class TestRunningExamples(unittest.TestCase):
         JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
         self.examples_dir = os.path.abspath(os.path.join(JSONSTAT_HOME, "examples"))
 
-    @unittest.skip("working on it")
+    # @unittest.skip("working on it")
     def test_run_examples(self):
         for example in os.listdir(self.examples_dir):
             example_path = os.path.join(self.examples_dir, example)
             if os.path.isfile(example_path) and example_path.endswith(".py"):
                 self.__run_file(example)
 
-    def test_eurostat(self):
-        self.__run_file("eurostat.py")
+    # @unittest.skip("disabled")
+    # def test_eurostat(self):
+    #     self.__run_file("eurostat.py")
 
     def __run_file(self, example):
         example_path = os.path.join(self.examples_dir, example)
