@@ -103,7 +103,7 @@ class TestDimension(unittest.TestCase):
         with self.assertRaises(jsonstat.JsonStatException) as cm:
             dim.from_string(self.json_str_hole_in_index)
         e = cm.exception
-        self.assertRegexpMatches(e.value, r)
+        self.assertRegex(e.value, r)
 
     def test_size_one(self):
         dim = jsonstat.JsonStatDimension("country", 1, 0, None)

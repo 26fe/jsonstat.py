@@ -11,7 +11,7 @@ import os
 import unittest
 
 # jsonstat
-import istat as istat
+import istat
 
 
 class TestIstat(unittest.TestCase):
