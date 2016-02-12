@@ -8,9 +8,12 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 # jsonstat
-from jsonstat.istat.istat_exception import IstatException
-from jsonstat.istat.istat_dimension import IstatDimension
-from jsonstat.collection import JsonStatCollection
+import jsonstat
+#from jsonstat.collection import JsonStatCollection
+
+# jsonstat-istat
+from istat_exception import IstatException
+from istat_dimension import IstatDimension
 
 
 class IstatDataset:
@@ -88,7 +91,7 @@ class IstatDataset:
             return self.__pos2dim[spec]
         return self.__name2dim[spec]
 
-    def getvalues(self, spec, rtype=JsonStatCollection):
+    def getvalues(self, spec, rtype=jsonstat.JsonStatCollection):
         """
         get values by dimensions
         :param spec: it is a string for ex. "1,6,9,0,0"
@@ -105,8 +108,8 @@ class IstatDataset:
 
         json_data = self.__istat_helper.datajson(self.__dataset['Cod'], spec, show=False)
 
-        if rtype == JsonStatCollection:
-            collection = JsonStatCollection()
+        if rtype == jsonstat.JsonStatCollection:
+            collection = jsonstat.JsonStatCollection()
             collection.from_json(json_data)
             return collection
         elif rtype == "json":

@@ -9,8 +9,8 @@ from __future__ import unicode_literals
 import sys
 
 # jsonstat
-from jsonstat.istat.istat_helper import IstatHelper
-from jsonstat.istat.istat_area import IstatArea
+from istat_helper import IstatHelper
+from istat_area import IstatArea
 
 
 class Istat:

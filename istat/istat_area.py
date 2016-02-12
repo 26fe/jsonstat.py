@@ -7,9 +7,9 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
-# jsonstat
-from jsonstat.istat.istat_dataset import IstatDataset
-from jsonstat.istat.istat_exception import IstatException
+# jsonstat-istat
+from istat_dataset import IstatDataset
+from istat_exception import IstatException
 
 
 class IstatArea:

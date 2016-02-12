@@ -11,8 +11,8 @@ using JsonStatHelper class
 #  stdlib
 from __future__ import print_function
 from __future__ import unicode_literals
-import os
 
+import os
 # http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
 import sys
 # TODO: remove following hack
@@ -24,10 +24,10 @@ if sys.version_info < (3,):
 # jsonstat
 JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
 try:
-    from jsonstat.istat.istat_helper import IstatHelper
+    from istat import IstatHelper
 except ImportError:
     sys.path.append(JSONSTAT_HOME)
-    from jsonstat.istat.istat_helper import IstatHelper
+    from istat import IstatHelper
 
 def list_dim(istat_helper, dataset):
     """

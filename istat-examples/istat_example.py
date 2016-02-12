@@ -9,8 +9,8 @@ Example how to use istat classes for downloading a dataset from istat
 # stdlib
 from __future__ import print_function
 from __future__ import unicode_literals
-import os
 
+import os
 import sys
 
 # TODO: remove following hack
@@ -22,10 +22,10 @@ if sys.version_info < (3,):
 # jsonstat
 JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
 try:
-    import jsonstat.istat as istat
+    import istat as istat
 except ImportError:
     sys.path.append(JSONSTAT_HOME)
-    import jsonstat.istat as istat
+    import istat as istat
 
 if __name__ == "__main__":
     # cache_dir where to store downloaded data file
