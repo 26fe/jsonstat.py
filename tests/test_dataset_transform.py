@@ -40,10 +40,10 @@ class TestDataSetToTable(unittest.TestCase):
         self.assertEqual(second_row_expected, table[2])
 
         df = dataset.to_table(content='id', blocked_dims={"area":"IT"}, rtype=pd.DataFrame)
-        print(df)
+        # TODO: print(df)
 
         df = dataset.to_data_frame('year', content='id', blocked_dims={"area":"IT"})
-        print(df)
+        # TODO: print(df)
 
     def test_to_table_inverted_order(self):
         dataset = jsonstat.JsonStatDataSet()
@@ -124,7 +124,7 @@ class TestDataSetToTable(unittest.TestCase):
         dataset.from_file(os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json"))
         df = dataset.to_data_frame("year", content="id", blocked_dims={'area':"IT"})
 
-        print(df)
+        # print(df)
         self.assertEqual(df['IT'], 34)
 
 

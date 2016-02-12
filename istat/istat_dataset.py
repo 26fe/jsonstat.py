@@ -11,8 +11,8 @@ from __future__ import unicode_literals
 import jsonstat
 
 # istat
-from istat_exception import IstatException
-from istat_dimension import IstatDimension
+from istat.istat_exception import IstatException
+from istat.istat_dimension import IstatDimension
 
 
 class IstatDataset:

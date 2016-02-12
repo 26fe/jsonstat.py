@@ -8,8 +8,8 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 # istat
-from istat_dataset import IstatDataset
-from istat_exception import IstatException
+from istat.istat_dataset import IstatDataset
+from istat.istat_exception import IstatException
 
 
 class IstatArea:

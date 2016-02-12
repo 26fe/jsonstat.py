@@ -7,6 +7,7 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
+
 class IstatDimension:
     def __init__(self, name, pos, json_data):
         self.__name = name

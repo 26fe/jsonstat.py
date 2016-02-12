@@ -9,8 +9,8 @@ from __future__ import unicode_literals
 import sys
 
 # istat
-from istat_helper import IstatHelper
-from istat_area import IstatArea
+from istat.istat_helper import IstatHelper
+from istat.istat_area import IstatArea
 
 
 class IstatRoot:

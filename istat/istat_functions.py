@@ -4,7 +4,7 @@
 # See LICENSE file
 
 # istat
-from istat import IstatRoot
+from istat.istat_root import IstatRoot
 
 __istat__ = None
 

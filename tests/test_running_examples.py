@@ -35,7 +35,7 @@ class TestRunningExamples(unittest.TestCase):
 
     def __run_file(self, example):
         example_path = os.path.join(self.examples_dir, example)
-        FNULL = open(os.devnull, 'w') # suppress output
+        # FNULL = open(os.devnull, 'w') # suppress output
         # print(f)
         # TODO change  pythonpath env variables (?)
         # status = subprocess.call("python {}".format(example), shell=True, stdout=FNULL, stderr=FNULL)
