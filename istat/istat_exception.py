@@ -6,9 +6,6 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
-# jsonstat
-
-
 class IstatException(Exception):
     # def __init__(self, message, errors):
     #     # Call the base class constructor with the parameters it needs

@@ -7,7 +7,7 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
-# jsonstat-istat
+# istat
 from istat_dataset import IstatDataset
 from istat_exception import IstatException
 
@@ -84,7 +84,13 @@ class IstatArea:
         json_data = self.__istat_helper.dslist(self.__iid, show=False)
         if json_data is not None:
             for json_dataset in json_data:
-                self.__cod2dataset[json_dataset['Cod']] = IstatDataset(self.__istat_helper, json_dataset)
+                try:
+                    dataset = IstatDataset(self.__istat_helper, json_dataset)
+                    dataset.dimensions() # force download dimensions
+                    self.__cod2dataset[json_dataset['Cod']] = dataset
+                except IstatException:
+                    # ignore istatexception for dataset that cannot retrieve dimensions
+                    pass
         else:
             msg = "IstatArea area {}: cannot retrieve datasets".format(self.__area)
             raise IstatException(msg)

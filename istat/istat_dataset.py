@@ -9,9 +9,8 @@ from __future__ import unicode_literals
 
 # jsonstat
 import jsonstat
-#from jsonstat.collection import JsonStatCollection
 
-# jsonstat-istat
+# istat
 from istat_exception import IstatException
 from istat_dimension import IstatDimension
 
@@ -123,7 +122,7 @@ class IstatDataset:
         """
         json_data = self.__istat_helper.dim(self.__dataset['Cod'], show=False)
         if json_data is None:
-            msg = "cannot retrieve info for dataset: {}".format(self.__dataset)
+            msg = "dataset {}: cannot retrieve dimensions info".format(self.__dataset)
             raise IstatException(msg)
 
         self.__name2dim = {}

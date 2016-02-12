@@ -8,10 +8,9 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import sys
 
-# jsonstat
+# istat
 from istat_helper import IstatHelper
 from istat_area import IstatArea
-
 
 class Istat:
     """
@@ -83,4 +82,5 @@ class Istat:
             self.__id2area[iid] = istat_area
             self.__cod2area[cod] = istat_area
             self.__desc2area[desc] = istat_area
+
 
