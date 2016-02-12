@@ -48,7 +48,7 @@ setup(
         license='LGPL',
         # packages= setup.find_packages(exclude=['examples', 'docs', 'tests*', 'tmp']),
         packages=[
-            'jsonstat', 'jsonstat.istat'
+            'jsonstat', 'istat'
         ],
 
         install_requires=[
