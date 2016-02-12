@@ -68,6 +68,6 @@ def from_json(json_data):
     return o
 
 # TODO: pathname could be None so don't save on disk
-def from_url(uri, pathname):
+def from_url(uri, pathname=None):
     json_string = download(uri, pathname)
     return from_string(json_string)

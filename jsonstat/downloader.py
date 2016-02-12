@@ -24,22 +24,24 @@ class Downloader:
         """
         self.__dir = cache_dir
 
-    def download(self, url, filename):
+    def download(self, url, filename=None):
         """
         Download url from internet. Store the downloaded content into <cache_dir>/file.
         If <cache_dir>/file exists, it returns content from disk
         :param url: page to be donwloaded
-        :param filename: filename where to store the content of url
+        :param filename: filename where to store the content of url, None if we want not store
         :return: the content of url (str type)
         """
-
-        # note: html must be a str type not byte type
-        filename = os.path.join(self.__dir, filename)
-
-        if not self.__is_cached(filename):
+        if filename is None:
             html = requests.get(url).text
-            self.__write_page_from_cache(filename, html)
-        html = self.__read_cached_page(filename)
+        else:
+            # note: html must be a str type not byte type
+            filename = os.path.join(self.__dir, filename)
+
+            if not self.__is_cached(filename):
+                html = requests.get(url).text
+                self.__write_page_from_cache(filename, html)
+            html = self.__read_cached_page(filename)
         return html
 
     def __is_cached(self, pathname):
@@ -75,12 +77,16 @@ class Downloader:
         return content
 
 
-def download(url, pathname):
+def download(url, pathname=None):
     """
     download a url in pathname
     :param url:
     :param pathname:
     :return: the content of url
     """
-    d = Downloader(os.path.dirname(pathname))
-    return d.download(url, os.path.basename(pathname))
+    if pathname is None:
+        d = Downloader()
+        return d.download(url)
+    else:
+        d = Downloader(os.path.dirname(pathname))
+        return d.download(url, os.path.basename(pathname))
