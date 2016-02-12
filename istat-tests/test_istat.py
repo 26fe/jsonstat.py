@@ -6,11 +6,12 @@
 # stdlib
 from __future__ import print_function
 from __future__ import unicode_literals
+
 import os
 import unittest
 
 # jsonstat
-import jsonstat.istat as istat
+import istat as istat
 
 
 class TestIstat(unittest.TestCase):
