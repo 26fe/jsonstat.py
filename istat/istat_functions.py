@@ -4,7 +4,7 @@
 # See LICENSE file
 
 # istat
-from istat import Istat
+from istat import IstatRoot
 
 __istat__ = None
 
@@ -12,25 +12,25 @@ __istat__ = None
 def cache_dir(dir):
     global __istat__
     if __istat__ is None:
-        __istat__ = Istat(dir)
+        __istat__ = IstatRoot(dir)
 
 
 def areas():
     global __istat__
     if __istat__ is None:
-        __istat__ = Istat()
+        __istat__ = IstatRoot()
     return __istat__.areas()
 
 
 def area(spec):
     global __istat__
     if __istat__ is None:
-        __istat__ = Istat()
+        __istat__ = IstatRoot()
     return __istat__.area(spec)
 
 
 def dataset(spec_area, spec_dataset):
     global __istat__
     if __istat__ is None:
-        __istat__ = Istat()
+        __istat__ = IstatRoot()
     return __istat__.dataset(spec_area, spec_dataset)

@@ -19,7 +19,7 @@ class TestIstat(unittest.TestCase):
         self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures", "istat")
 
     def test_istat_italian(self):
-        i = istat.Istat(self.fixture_dir, lang=0)
+        i = istat.IstatRoot(self.fixture_dir, lang=0)
         n = i.area(26).desc()
         self.assertEqual("Lavoro", n)
 
@@ -30,7 +30,7 @@ class TestIstat(unittest.TestCase):
         self.assertEqual("Territorio", dname)
 
     def test_istat_english(self):
-        i = istat.Istat(self.fixture_dir, lang=1)
+        i = istat.IstatRoot(self.fixture_dir, lang=1)
         n = i.area(26).desc()
         self.assertEqual("Labour", n)
 
@@ -44,12 +44,12 @@ class TestIstat(unittest.TestCase):
         self.assertEqual("Territory", dname)
 
     def test_areas(self):
-        i = istat.Istat(self.fixture_dir, lang=1)
+        i = istat.IstatRoot(self.fixture_dir, lang=1)
         istat_area = i.area(3)
         self.assertEqual("CEN", istat_area.cod())
 
     def test_dataset(self):
-        i = istat.Istat(self.fixture_dir, lang=1)
+        i = istat.IstatRoot(self.fixture_dir, lang=1)
         istat_area_name = 'Prices'
         istat_dataset_name = 'DCSP_IPAB'
         istat_dataset = i.dataset(istat_area_name, istat_dataset_name)

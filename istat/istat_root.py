@@ -12,7 +12,8 @@ import sys
 from istat_helper import IstatHelper
 from istat_area import IstatArea
 
-class Istat:
+
+class IstatRoot:
     """
     Represent the root of all Istat dataseries
     """
