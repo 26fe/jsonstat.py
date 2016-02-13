@@ -38,11 +38,14 @@ class JsonStatDataSet:
         self.__label = None
         self.__source = None
 
-        self.__id2pos = {}
+        # dimensions
         self.__dim_nr = 0
-        self.__pos2dim = []
         self.__dim_ids = None
         self.__dimension_sizes = None
+
+        self.__pos2dim = []   # array int -> dim
+        self.__id2pos = {}    # dict  id  -> dim
+        self.__lbl2dim = {}   # dict  lbl -> dim
 
         self.__value = None
 
@@ -81,7 +84,7 @@ class JsonStatDataSet:
         out = "{} dimensions:\n".format(len(self.__dim_ids))
         for i, dname in enumerate(self.__dim_ids):
             d = self.__id2pos[dname]
-            out += "  {}: dim id/name: '{}' size: '{}' role: '{}'\n".format(i, d.name(), d.size(), d.role())
+            out += "  {}: dim id: '{}' label: '{}' size: '{}' role: '{}'\n".format(i, d.name(), d.label(), d.size(), d.role())
         return out
 
     def info_dimensions(self):
@@ -128,7 +131,11 @@ class JsonStatDataSet:
     def value(self, **dims):
         """
         get a value
-        :param dims: {country:"AU", "year":"2014:}
+        :param dims: { cat1:value1, ..., cati:valuei, ... }
+            cati can be the id of the dimension or the label of dimension
+            valuei can be the index or label of category
+            ex.:{country:"AU", "year":"2014"}
+
         :return: value (typically a number)
         """
         if not self.__valid:
@@ -136,6 +143,23 @@ class JsonStatDataSet:
 
         a = self.from_vec_dim_to_vec_pos(dims)
         return self.value_from_vec_pos(a)
+
+    def from_vec_dimid_to_vec_pos(self, dims):
+        """
+        Transforms a dict to array
+        :param dims: {country:"AU", "year":2014}
+        :return: [1,2,3]
+        """
+        vec_pos = len(self.__dim_ids) * [0]
+        for (cat, val) in dims.items():
+            if cat not in self.__id2pos:
+                allowed_categories = ", ".join(self.__dim_ids)
+                msg = "dataset '{}': category '{}' don't exists allowed category are: {}"
+                msg = msg.format(self.__name, cat, allowed_categories)
+                raise JsonStatException(msg)
+            dim = self.__id2pos[cat]
+            vec_pos[dim.pos()] = dim.idx2pos(val)
+        return vec_pos
 
     def from_vec_dim_to_vec_pos(self, dims):
         """
@@ -145,8 +169,18 @@ class JsonStatDataSet:
         """
         vec_pos = len(self.__dim_ids) * [0]
         for (cat, val) in dims.items():
-            dim = self.__id2pos[cat]
-            vec_pos[dim.pos()] = dim.idx2pos(val)
+            if cat in self.__id2pos:
+                dim = self.__id2pos[cat]
+            elif cat in self.__lbl2pos:
+                dim = self.__lbl2pos[cat]
+            else:
+                allowed_categories = ", ".join(self.__dim_ids)
+                msg = "dataset '{}': category '{}' don't exists allowed category are: {}"
+                msg = msg.format(self.__name, cat, allowed_categories)
+                raise JsonStatException(msg)
+
+            vec_pos[dim.pos()] = dim.idx_or_lbl_2pos(val)
+
         return vec_pos
 
     def value_from_vec_pos(self, lst):
@@ -561,4 +595,6 @@ class JsonStatDataSet:
             dimension.from_json(json_data_dimension[dname])
             self.__id2pos[dname] = dimension
             self.__pos2dim[dpos] = dimension
+            if dimension.label() is not None:
+                self.__lbl2dim[dimension.label()] = dimension
 
