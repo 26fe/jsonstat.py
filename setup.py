@@ -1,11 +1,17 @@
 # stdlib
+# from builtins import exec
+
 import sys
 import os
 from setuptools import setup
 
 # version_file = open(os.path.join(mypackage_root_dir, 'VERSION'))
 # version = version_file.read().strip()
-execfile('jsonstat/version.py')
+
+exec(open('jsonstat/version.py').read())
+
+# execfile is only python 2
+# execfile('jsonstat/version.py')
 
 # if sys.version_info >= (3,2):
 #     install_requires = ["threadpool >= 1.2.7"]
