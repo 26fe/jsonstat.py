@@ -129,8 +129,8 @@ class TestDataSet(unittest.TestCase):
             "source: 'Unemployment rate in the OECD countries'\n"
             "size: 12\n"
             "2 dimensions:\n"
-            "  0: dim id/name: 'year' size: '3' role: 'time'\n"
-            "  1: dim id/name: 'area' size: '4' role: 'geo'\n"
+            "  0: dim id: 'year' label: '2003-2014' size: '3' role: 'time'\n"
+            "  1: dim id: 'area' label: 'OECD countries, EU15 and total' size: '4' role: 'geo'\n"
         )
         self.assertEqual(expected, dataset.__str__())
 
