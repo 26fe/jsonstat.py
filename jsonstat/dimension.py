@@ -42,6 +42,7 @@ class JsonStatDimension:
         self.__idx2pos = {}
         self.__idx2lbl = {}
         self.__lbl2idx = {}
+        self.__lbl2pos = {}
 
     def name(self):
         """
@@ -86,10 +87,36 @@ class JsonStatDimension:
         :return: integer
         """
         if not self.__valid:
-            raise JsonStatException("dimension {} is not initialized".format(self.__name))
+            raise JsonStatException("dimension '{}': is not initialized".format(self.__name))
         if idx not in self.__idx2pos:
-            raise JsonStatException("dimension {} do not have index {}".format(self.__name, idx))
+            raise JsonStatException("dimension '{}': do not have index '{}'".format(self.__name, idx))
         return self.__idx2pos[idx]
+
+    def lbl2pos(self, lbl):
+        """
+        from label to position
+        :param lbl: index for ex.: "2013"
+        :return: integer
+        """
+        if not self.__valid:
+            raise JsonStatException("dimension '{}': is not initialized".format(self.__name))
+        if lbl not in self.__idx2pos:
+            raise JsonStatException("dimension '{}': do not have label {}".format(self.__name, lbl))
+        return self.__lbl2pos[lbl]
+
+    def idx_or_lbl_2pos(self,idx_or_lbl):
+        """
+        from index to position
+        :param idx: index for ex.: "2013"
+        :return: integer
+        """
+        if not self.__valid:
+            raise JsonStatException("dimension {} is not initialized".format(self.__name))
+        if idx_or_lbl in self.__idx2pos:
+            return self.__idx2pos[idx_or_lbl]
+        if idx_or_lbl in self.__lbl2pos:
+            return self.__lbl2pos[idx_or_lbl]
+        raise JsonStatException("dimension '{}': do not have index or label '{}'".format(self.__name, idx_or_lbl))
 
     def pos2idx(self, pos):
         """
@@ -201,6 +228,7 @@ class JsonStatDimension:
             for pos, lbl in enumerate(self.__pos2lbl):
                 idx = self.__lbl2idx[lbl]
                 self.__pos2idx[pos] = idx
+                self.__lbl2pos[lbl] = pos
                 self.__idx2pos[idx] = pos
                 self.__idx2lbl[idx] = lbl
 
