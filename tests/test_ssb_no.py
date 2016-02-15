@@ -27,8 +27,8 @@ class TestSsbNo(unittest.TestCase):
 
         # extract dataset contained into collection
         ds = collection.dataset(0)
-        ds.info()
-        ds.dimension('PKoder').info()
+        # ds.info()
+        # ds.dimension('PKoder').info()
 
         # v = ds.value(PKoder="Basic chemicals", Tid="2013M07")
         v = ds.value(PKoder="P1111", Tid="2013M07")
