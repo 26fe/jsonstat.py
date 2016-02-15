@@ -263,12 +263,12 @@ class JsonStatDataSet:
         else:
             vec_dimension_reorder = order
 
-        nrd = 0
-        while nrd < max_dimensions:
+        nrd = max_dimensions - 1
+        while nrd >= 0:
 
             yield list(vec_pos)  # make a shallow copy of vec_pos
 
-            nrd = 0
+            nrd = max_dimensions - 1
             current_dimension = vec_dimension_reorder[nrd]
             # se la posizione non e bloccata allora puoi far andare avanti la cifra
             if not vec_pos_blocked[current_dimension]:
@@ -276,7 +276,7 @@ class JsonStatDataSet:
 
             # se non si arrivati all'ultima dimensione
             # e se la dimensione corrente non e al massimo valore o se la dimensione corrente e bloccata
-            while nrd < max_dimensions and \
+            while nrd >= 0 and \
                     (vec_pos[current_dimension] == dsizes[current_dimension] or vec_pos_blocked[current_dimension]):
 
                 # se la posizione non e' bloccata allora puoi far partire il valore dall'inizio
@@ -284,9 +284,9 @@ class JsonStatDataSet:
                     vec_pos[current_dimension] = 0
 
                 # esamina la prossima posizione
-                nrd += 1
-                # se la dimensione corrente non e' l'ultima
-                if nrd < max_dimensions:
+                nrd -= 1
+                # se la dimensione corrente non e' la prima
+                if nrd >= 0:
                     current_dimension = vec_dimension_reorder[nrd]
                     # se la dimensione corrente non e bloccata puoi farla avanzare
                     if not vec_pos_blocked[current_dimension]:
@@ -359,24 +359,11 @@ class JsonStatDataSet:
         :return:
         """
 
-        # index_pos = self.__id2pos[index].pos()
-        # columns = []
-        # for (cat,idx) in blocked_dims.items():
-        #     columns.append(idx)
-        # indexes = []
-        # values = []
-        # for vec_pos in self.all_pos(blocked_dims):
-        #     vec_idx = self.from_vec_pos_to_vec_idx(vec_pos)
-        #     value = self.value_from_vec_pos(vec_pos)
-        #     indexes.append(vec_idx[index_pos])
-        #     values.append(value)
-        #
-        # df = pd.DataFrame(values,
-        #                   columns=columns,
-        #                   index=indexes)
         df = self.to_table(content=content, order=order, rtype=pd.DataFrame, blocked_dims=blocked_dims)
-        df.index = df[index]
-        del df[index]
+        # TODO: avoid creating a new dataframe (?)
+        # df.index = df[index]
+        # del df[index]
+        df = df.set_index([index])
         return df
 
     #
