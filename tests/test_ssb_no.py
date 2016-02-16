@@ -31,8 +31,9 @@ class TestSsbNo(unittest.TestCase):
         # ds.dimension('PKoder').info()
 
         # v = ds.value(PKoder="Basic chemicals", Tid="2013M07")
-        v = ds.value(PKoder="P1111", Tid="2013M07")
+        # self.assertEqual(112.2, v)
 
+        v = ds.value(PKoder="P1111", Tid="2013M07")
         self.assertEqual(112.2, v)
 
 

@@ -146,7 +146,7 @@ class JsonStatDimension:
 
     def __str__(self):
         out = "index\n"
-        f = "{:>5} {:>6} {:>6}\n"
+        f = "{:>5} {:<8} {:<8}\n"
         out += f.format('pos', 'idx', 'label')
         for p in range(len(self.__pos2idx)):
             idx = self.__pos2idx[p]
@@ -154,7 +154,7 @@ class JsonStatDimension:
             if idx is None: idx = ""
             if lbl is None: lbl = ""
 
-            out += f.format(p, idx, lbl)
+            out += f.format(p, "'" + idx + "'", "'" + lbl + "'")
         return out
 
     def __repr__(self):
@@ -306,13 +306,14 @@ class JsonStatDimension:
 
             if self.__pos2idx is None:
                 # if index are not defined in json, give an order to the label
-                self.__pos2lbl[i] = lbl
+                pos = i
             else:
                 pos = self.__idx2pos.get(idx)
                 if pos is None:
                     msg = "dimension '{}': label '{}' is associated with index '{}' that not exists!".format(self.__name, lbl, idx)
                     raise JsonStatMalformedJson(msg)
-                self.__pos2lbl[pos] = lbl
 
+            self.__pos2lbl[pos] = lbl
             self.__idx2lbl[idx] = lbl
             self.__lbl2idx[lbl] = idx
+            self.__lbl2pos[lbl] = pos

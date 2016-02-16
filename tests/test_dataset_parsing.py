@@ -111,7 +111,7 @@ class TestDataSet(unittest.TestCase):
 
         self.assertEqual(len(dataset.dimensions()), 2)
 
-    def test_get_dim(self):
+    def test_exception_no_existent_dimension(self):
         json_pathname = os.path.join(self.fixture_dataset_dir, "json_dataset_unemployment.json")
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(json_pathname)
@@ -139,12 +139,23 @@ class TestDataSet(unittest.TestCase):
         )
         self.assertEqual(expected, dataset.__str__())
 
+    #
+    # test dataset.value()
+    #
     def test_value(self):
         json_pathname = os.path.join(self.fixture_dataset_dir, "json_dataset_unemployment.json")
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(json_pathname)
 
         self.assertEqual(dataset.value(area="AU", year="2012"), 11)
+        # using label Australia insted of index AU
+        self.assertEqual(dataset.value(area="Australia", year="2012"), 11)
+
+        # using dictionary
+        self.assertEqual(dataset.value({'area':"Australia", 'year':"2012"}), 11)
+        self.assertEqual(dataset.value({'area':"AU", 'year':"2012"}), 11)
+        self.assertEqual(dataset.value({"OECD countries, EU15 and total":"AU", 'year':'2012'}), 11)
+
         self.assertEqual(dataset.value(area="BE", year="2014"), 33)
 
     def test_value2(self):

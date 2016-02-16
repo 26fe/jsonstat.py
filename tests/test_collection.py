@@ -87,8 +87,8 @@ class TestCollection(unittest.TestCase):
         dim = oecd.dimension("concept")
         expected = (
             "index\n"
-            "  pos    idx  label\n"
-            "    0    UNR unemployment rate\n"
+            "  pos idx      label   \n"
+            "    0 'UNR'    'unemployment rate'\n"
         )
         self.assertEqual(expected, dim.__str__())
 
