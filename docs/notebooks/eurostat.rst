@@ -1,6 +1,6 @@
 
 Notebook: using jsonstat.py with eurostat api
----------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This Jupyter notebook shows the python library
 `jsonstat.py <http://github.com/26fe/jsonstat.py>`__ in action. It shows
@@ -25,8 +25,14 @@ for discovering the rest api parameters
     import matplotlib as plt
     %matplotlib inline
 
+
+.. parsed-literal::
+
+    The history saving thread hit an unexpected error (DatabaseError('database disk image is malformed',)).History will not be written to the database.
+
+
 Exploring data with one dimension (time) with size > 1
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Download or use the json file cached on disk. Caching file is useful to
 avoid download file every time. Caching can speed the development, and
@@ -277,7 +283,7 @@ Adding a simple plot
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x112fe4ac8>
+    <matplotlib.axes._subplots.AxesSubplot at 0x1137b7470>
 
 
 
@@ -286,7 +292,7 @@ Adding a simple plot
 
 
 Exploring data with two dimensions (geo, time) with size > 1
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Download or use the jsonstat file cached on disk. The cache is used to
 avoid internet download during the devolopment to make the things a bit
@@ -456,7 +462,7 @@ faster. You can see the raw data
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x1133b0cf8>
+    <matplotlib.axes._subplots.AxesSubplot at 0x11628acf8>
 
 
 
@@ -475,7 +481,7 @@ faster. You can see the raw data
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x1135566d8>
+    <matplotlib.axes._subplots.AxesSubplot at 0x1162d5780>
 
 
 
@@ -494,7 +500,7 @@ faster. You can see the raw data
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x1136a5be0>
+    <matplotlib.axes._subplots.AxesSubplot at 0x116429320>
 
 
 

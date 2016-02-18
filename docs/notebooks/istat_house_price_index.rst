@@ -1,6 +1,6 @@
 
-Notebook: using jsonstat.py to explore Istat data
--------------------------------------------------
+Notebook: using jsonstat.py to explore ISTAT data (house price index)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This Jupyter notebook shows how to use
 `jsonstat.py <http://github.com/26fe/jsonstat.py>`__ python library to
@@ -13,6 +13,12 @@ querying italian statistics.
     from __future__ import print_function
     import os
     import istat
+
+
+.. parsed-literal::
+
+    The history saving thread hit an unexpected error (DatabaseError('database disk image is malformed',)).History will not be written to the database.
+
 
 Setting a cache dir where to store json files download by Istat api.
 Storing file on disk speed up development, and assures consistent
@@ -77,34 +83,34 @@ List all datasets contained into area ``Prices``
 
 .. parsed-literal::
 
-    DCSP_FOI2B2010(5):FOI  Annual average from 2011  onwards
-    DCSP_IPCATC2(5):HICP at constant tax rates  Annual average from 2002 onwards (base 2005=100) 
-    DCSP_IPAB(5):House price index 
-    DCSC_PREZPRODSERV_1(5):Services producer prices index
-    DCSP_NICDUEB2010(5):NIC  Annual average from 2011 onwards
-    DCSP_FOI3B2010(4):FOI  Weights from 2011 onwards
-    DCSP_NICTRE(4):NIC  Weights  until 2010
-    DCSP_FOI2B2015(5):FOI - Annual average from 2016 onwards
-    DCSP_FOI1B2015(5):FOI - Monthly data from 2016 onwards
-    DCSP_IPCATC1B2015(5):HICP at constant tax rates - Monthly data from 2002 onwards (base 2015=100)
-    DCSP_IPCA1B2015(5):HICP - Monthly data from 2001 onwards (base 2015=100)
-    DCSP_FOI3B2015(4):FOI - Weights from 2016 onwards
-    DCSP_FOI1B2010(5):FOI  Monthly data from 2011 onwards
-    DCSP_NICUNOBB2010(5):NIC  Monthly data from 2011 onwards
-    DCSP_NIC3B2015(4):NIC - Weights from 2016 onwards
-    DCSP_IPCA3(4):HICP  Weights from 2001 onwards
     DCSP_IPCA2(5):HICP  Annual average from 2001 onwards (base 2005=100) 
-    DCSC_FABBRESID_1(5):Construction costs index - monthly data
-    DCSP_IPCA1(5):HICP  Monthly data from 2001 onwards (base 2005=100)
-    DCSP_NICTREB2010(4):NIC  Weights from 2011 onwards
-    DCSP_FOI2(5):FOI  Annual average  until 2010
+    DCSP_IPCA1B2015(5):HICP - Monthly data from 2001 onwards (base 2015=100)
+    DCSP_IPCATC1(5):HICP at constant tax rates  Monthly data from 2002 onwards (base 2005=100) 
     DCSC_PREZZPIND_1(6):Producer price index for industrial products - monthly data
+    DCSP_FOI2B2010(5):FOI  Annual average from 2011  onwards
+    DCSP_FOI2B2015(5):FOI - Annual average from 2016 onwards
+    DCSP_IPCATC1B2015(5):HICP at constant tax rates - Monthly data from 2002 onwards (base 2015=100)
+    DCSP_FOI2(5):FOI  Annual average  until 2010
+    DCSP_NICTREB2010(4):NIC  Weights from 2011 onwards
+    DCSC_PREZPRODSERV_1(5):Services producer prices index
+    DCSP_IPCATC2(5):HICP at constant tax rates  Annual average from 2002 onwards (base 2005=100) 
+    DCSP_FOI3(4):FOI  Weights until 2010
     DCSP_NICUNOB(5):NIC  Monthly data until 2010
     DCSP_FOI1(5):FOI  Monthly data until 2010
-    DCSP_IPCATC1(5):HICP at constant tax rates  Monthly data from 2002 onwards (base 2005=100) 
+    DCSP_FOI3B2010(4):FOI  Weights from 2011 onwards
     DCSP_NIC1B2015(5):NIC - Monthly data from 2016 onwards
+    DCSP_FOI3B2015(4):FOI - Weights from 2016 onwards
+    DCSP_NICDUEB2010(5):NIC  Annual average from 2011 onwards
+    DCSP_FOI1B2015(5):FOI - Monthly data from 2016 onwards
+    DCSP_NICUNOBB2010(5):NIC  Monthly data from 2011 onwards
+    DCSP_IPCA1(5):HICP  Monthly data from 2001 onwards (base 2005=100)
+    DCSC_FABBRESID_1(5):Construction costs index - monthly data
+    DCSP_FOI1B2010(5):FOI  Monthly data from 2011 onwards
+    DCSP_IPAB(5):House price index 
+    DCSP_NIC3B2015(4):NIC - Weights from 2016 onwards
     DCSP_NICDUE(5):NIC  Annual average until 2010
-    DCSP_FOI3(4):FOI  Weights until 2010
+    DCSP_NICTRE(4):NIC  Weights  until 2010
+    DCSP_IPCA3(4):HICP  Weights from 2001 onwards
 
 
 List all dimension for dataset ``DCSP_IPAB`` (House price index)

@@ -1,6 +1,6 @@
 
-Notebook: using jsonstat.py python library with version 1 jsonstat format.
-==========================================================================
+Notebook: using jsonstat.py python library with jsonstat format version 1.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This Jupyter notebook shows the python library
 `jsonstat.py <http://github.com/26fe/jsonstat.py>`__ in action. The
@@ -20,6 +20,12 @@ json-stat.org site. This file is complaint to the version 1 of jsonstat.
     import jsonstat     # import jsonstat.py package
     
     import matplotlib as plt  # for plotting 
+
+
+.. parsed-literal::
+
+    The history saving thread hit an unexpected error (DatabaseError('database disk image is malformed',)).History will not be written to the database.
+
 
 .. code:: python
 
@@ -163,8 +169,8 @@ Shows some detailed info about dimensions
     
 
 
-access value in the dataset
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Accessing value in the dataset
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Print the value in oecd dataset for area = IT and year = 2012
 
@@ -207,8 +213,8 @@ Print the value in oecd dataset for area = IT and year = 2012
 
 
 
-Trasform dataset into pandas DataFrame
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Trasforming dataset into pandas DataFrame
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: python
 
@@ -284,7 +290,7 @@ Trasform dataset into pandas DataFrame
 
     count     432
     unique     36
-    top        CZ
+    top        IS
     freq       12
     Name: area, dtype: object
 
@@ -383,7 +389,7 @@ specific country (Canada)
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x1137e6f60>
+    <matplotlib.axes._subplots.AxesSubplot at 0x1136dc6a0>
 
 
 
@@ -391,8 +397,8 @@ specific country (Canada)
 .. image:: oecd-canada-jsonstat_v1_files/oecd-canada-jsonstat_v1_21_1.png
 
 
-Trasform a dataset into a python list
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Trasforming a dataset into a python list
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: python
 
