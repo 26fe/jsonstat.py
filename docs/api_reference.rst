@@ -1,5 +1,5 @@
-Auto Generated Documentation
-============================
+Api Reference
+=============
 
 .. automodule:: jsonstat
 
