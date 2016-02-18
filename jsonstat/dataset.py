@@ -25,8 +25,8 @@ class JsonStatDataSet:
     """
 
     def __init__(self, dataset_name=None):
-        """
-        Initialize an empty dataset.
+        """Initialize an empty dataset.
+
         Dataset could have a name if we parse a jsonstat format version 1.
         :param dataset_name: dataset name (jsonstat v.1)
         """
@@ -51,28 +51,22 @@ class JsonStatDataSet:
         self.__value = None
 
     def name(self):
-        """
-        Returns the name of the dataset
-        """
+        """Returns the name of the dataset"""
         return self.__name
 
     def __len__(self):
-        """
-        :return: size of the dataset
-        """
+        """returns the size of the dataset"""
         return len(self.__value)
 
     def dimensions(self):
-        """
-        :return: list of JsonStatDimension
-        """
+        """returns list of JsonStatDimension"""
         return self.__pos2dim
 
     def dimension(self, spec):
-        """
-        get a dimension by spec
+        """get a dimension by spec
+
         :param spec: name (string) or id of the dimension
-        :return: a JsonStatDimension
+        :returns: a JsonStatDimension
         """
         if type(spec) is int:
             return self.__pos2dim[spec]
@@ -89,9 +83,7 @@ class JsonStatDataSet:
         return out
 
     def info_dimensions(self):
-        """
-        print same info on dimensions on stdout
-        """
+        """print same info on dimensions on stdout"""
         print(self.__str__dimensions())
 
     def __str__(self):
@@ -114,15 +106,11 @@ class JsonStatDataSet:
         return out
 
     def __repr__(self):
-        """
-        used by ipython to make a better representation
-        """
+        """used by ipython to make a better representation"""
         return self.__str__()
 
     def info(self):
-        """
-        print ome info about this dataset on stdout
-        """
+        """print ome info about this dataset on stdout"""
         print(self)
 
     #
@@ -130,14 +118,14 @@ class JsonStatDataSet:
     #
 
     def value(self, *args, **kargs):
-        """
-        get a value
+        """get a value
+
         :param kargs: { cat1:value1, ..., cati:valuei, ... }
             cati can be the id of the dimension or the label of dimension
             valuei can be the index or label of category
             ex.:{country:"AU", "year":"2014"}
 
-        :return: value (typically a number)
+        :returns: value (typically a number)
         """
         if not self.__valid:
             raise JsonStatException('dataset not initialized')
@@ -150,10 +138,10 @@ class JsonStatDataSet:
         return self.value_from_vec_pos(a)
 
     def from_vec_dimid_to_vec_pos(self, dims):
-        """
-        Transforms a dict to array
+        """Transforms a dict to array
+
         :param dims: {country:"AU", "year":2014}
-        :return: [1,2,3]
+        :returns: [1,2,3]
         """
         vec_pos = len(self.__dim_ids) * [0]
         for (cat, val) in dims.items():
@@ -167,10 +155,10 @@ class JsonStatDataSet:
         return vec_pos
 
     def from_vec_dim_to_vec_pos(self, dims):
-        """
-        Transforms a dict to array
+        """Transforms a dict to array
+
         :param dims: {country:"AU", "year":2014}
-        :return: [1,2,3]
+        :returns: [1,2,3]
         """
         vec_pos = len(self.__dim_ids) * [0]
         for (cat, val) in dims.items():
@@ -190,8 +178,9 @@ class JsonStatDataSet:
 
     def value_from_vec_pos(self, lst):
         """
+
         :param lst: [0,3,4]
-        :return: value at dimension [0,3,4]
+        :returns: value at dimension [0,3,4]
         """
         s = np.array(self.__acc_vector)
         r = s * lst
@@ -201,8 +190,9 @@ class JsonStatDataSet:
 
     def from_vec_pos_to_vec_idx(self, vec_pos):
         """
+
         :param vec_pos:  [0,3,4]
-        :return: ['dimension 1 index', 'dimension 2 label', 'dimension 3 label']
+        :returns: ['dimension 1 index', 'dimension 2 label', 'dimension 3 label']
         """
         vec_idx = len(vec_pos) * [None]
         for i in range(len(vec_pos)):
@@ -213,8 +203,9 @@ class JsonStatDataSet:
 
     def from_vec_pos_to_vec_label(self, vec_pos):
         """
+
         :param vec_pos:  [0,3,4]
-        :return: ['dimension 1 label or index', 'dimension 2 label  or index', 'dimension 3 label  or index']
+        :returns: ['dimension 1 label or index', 'dimension 2 label  or index', 'dimension 3 label  or index']
         """
         vec_idx = len(vec_pos) * [None]
         for i in range(len(vec_pos)):
@@ -229,12 +220,13 @@ class JsonStatDataSet:
         return vec_idx
 
     def from_vec_idx_to_vec_dim(self, lst_ids):
-        """
-        From a list of dimension name to a list of numerical dimension position
-         F.e.
-         ["year", "country"] -> [1,0]
-         ["country", "year"] -> [0,1]
-        :return: list of number
+        """From a list of dimension name to a list of numerical dimension position
+
+          F.e.
+          ["year", "country"] -> [1,0]
+          ["country", "year"] -> [0,1]
+
+        :returns: list of number
         """
         return [self.__id2dim[iid].pos() for iid in lst_ids]
 
@@ -243,11 +235,11 @@ class JsonStatDataSet:
     #
 
     def all_pos(self, blocked_dims={}, order=None):
-        """
+        """all_pos doc
 
         :param blocked_dims:  {"year":2013, country:"IT"}
-        :param order
-        :return:
+        :param order: order
+        :returns:
         """
 
         ids = self.__dim_ids
@@ -307,14 +299,15 @@ class JsonStatDataSet:
     #
 
     def to_table(self, content="label", order=None, rtype=list, blocked_dims={}, value_column="Value"):
-        """
-        Transforms a dataset into a table (a list of row)
+        """Transforms a dataset into a table (a list of row)
+
         table len is the size of dataset + 1 for headers
-        :param content can be "label" or "id"
-        :param order
-        :param rtype
-        :param blocked_dims
-        :return a list of row, first line is the header
+
+        :param content: can be "label" or "id"
+        :param order:
+        :param rtype:
+        :param blocked_dims:
+        :returns: a list of row, first line is the header
         """
         table = []
 
@@ -347,10 +340,7 @@ class JsonStatDataSet:
         return ret
 
     def to_data_frame(self, index, content="label", order=None, blocked_dims={},value_column="Value"):
-        """
-        Transform dataset to pandas data frame
-              col ->
-         row
+        """Transform dataset to pandas data frame
 
         extract_bidimensional("year", "country")
         generate the following dataframe:
@@ -363,8 +353,9 @@ class JsonStatDataSet:
         :param content:
         :param blocked_dims:
         :param order:
-        :param value_column
-        :return:
+        :param value_column:
+
+        :returns:
         """
 
         df = self.to_table(content=content, order=order, rtype=pd.DataFrame,
@@ -380,10 +371,10 @@ class JsonStatDataSet:
     #
 
     def from_file(self, filename):
-        """
-        read a jsonstat from a file and parse it to initialize this (empty) dataset
+        """read a jsonstat from a file and parse it to initialize this (empty) dataset
+
         :param filename: path of the file.
-        :return itself to chain call
+        :returns: itself to chain call
         """
         with open(filename) as f:
             json_string = f.read()
@@ -391,10 +382,10 @@ class JsonStatDataSet:
         return self
 
     def from_string(self, json_string):
-        """
-        parse a string to initialize this (empty) dataset
+        """parse a string to initialize this (empty) dataset
+
         :param json_string:
-        :return itself to chain call
+        :returns: itself to chain call
         """
         # TODO: try to determinate the json-stat version
         json_data = json.loads(json_string)
@@ -402,11 +393,11 @@ class JsonStatDataSet:
         return self
 
     def from_json(self, json_data, version=1):
-        """
-        parse a json structure to initialize this (empty) dataset
-        :param json_data:
-        :param version:
-        :return itself to chain call
+        """parse a json structure to initialize this (empty) dataset
+
+        :param json_data: json structure
+        :param version: json stat version
+        :returns: itself to chain call
         """
         if version == 2:
             self.from_json_v2(json_data)
@@ -416,8 +407,8 @@ class JsonStatDataSet:
 
     # TODO: this is meant of internal function of jsonstat not public api
     def from_json_v1(self, json_data):
-        """
-        parse a json structure in accordance (?) to jsonstat format version 1.x
+        """parse a json structure in accordance (?) to jsonstat format version 1.x
+
         :param json_data: json structure
         """
 
@@ -485,8 +476,8 @@ class JsonStatDataSet:
 
     # TODO: this is meant of internal function of jsonstat not public api
     def from_json_v2(self, json_data):
-        """
-        parse a jsonstat structure complaint to jsonstat format version 2.x
+        """parse a jsonstat structure complaint to jsonstat format version 2.x
+
         :param json_data: json structure
         """
 
@@ -553,12 +544,13 @@ class JsonStatDataSet:
         self.__valid = True
 
     def __parse_dimensions(self, json_data_dimension, json_data_roles):
-        """
-        Parse dimension in json stat
+        """Parse dimension in json stat
+
         it used for format v1 and v2
+
         :param json_data_dimension:
         :param json_data_roles:
-        :return:
+        :returns:
         """
 
         # parsing roles

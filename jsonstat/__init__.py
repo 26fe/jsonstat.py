@@ -3,6 +3,9 @@
 # Copyright (C) 2016 gf <gf@26fe.com>
 # See LICENSE file
 
+"""
+jsonstat module docs
+"""
 from jsonstat.version import __version__
 
 from jsonstat.exceptions import JsonStatException

@@ -35,12 +35,12 @@ class JsonStatCollection:
         return len(self.__pos2dataset)
 
     def dataset(self, spec):
-        """
-        returns a dataset belonging to the collection
+        """select a dataset belonging to the collection
+
         :param spec: can be:
-                    - the name of collection (string) for jsonstat v1
-                    - an integer (for jsonstat v2)
-        :return: a dataset
+            - the name of collection (string) for jsonstat v1
+            - an integer (for jsonstat v2)
+        :returns: a dataset
         """
 
         # In Python2, str == bytes.
@@ -64,25 +64,21 @@ class JsonStatCollection:
         return out
 
     def __repr__(self):
-        """
-        used by ipython to make a better representation
-        """
+        """used by jupyter/ipython to make a better representation into notebooks"""
         return self.__str__()
 
     def info(self):
-        """
-        print some info about this collection
-        """
+        """print some info about this collection"""
         print(self)
 
     #
     # parsing methods
     #
     def from_file(self, filename):
-        """
-        initialize this collection from a file
+        """initialize this collection from a file
+
         :param filename: name containing a jsonstat
-        :return itself to chain call
+        :returns: itself to chain call
         """
         with open(filename) as f:
             json_string = f.read()
@@ -90,20 +86,20 @@ class JsonStatCollection:
         return self
 
     def from_string(self, json_string):
-        """
-        initialize this collection from a string
+        """Initialize this collection from a string
+
         :param json_string: string containing a json
-        :return itself to chain call
+        :returns: itself to chain call
         """
         json_data = json.loads(json_string, object_pairs_hook=OrderedDict)
         self.from_json(json_data)
         return self
 
     def from_json(self, json_data):
-        """
-        initialize this collection from a json structure
+        """initialize this collection from a json structure
+
         :param json_data: data structure (dictionary) representing a json
-        :return itself to chain call
+        :returns: itself to chain call
         """
 
         if "version" in json_data:
@@ -115,8 +111,8 @@ class JsonStatCollection:
 
     # TODO: this is meant of internal function of jsonstat not public api
     def from_json_v1(self, json_data):
-        """
-        parse a jsonstat version 1
+        """parse a jsonstat version 1
+
         :param json_data: json structure
         """
         # {
@@ -134,8 +130,8 @@ class JsonStatCollection:
 
     # TODO: this is meant of internal function of jsonstat not public api
     def from_json_v2(self, json_data):
-        """
-        parse a jsonstat version 2
+        """parse a jsonstat version 2
+
         :param json_data: json structure
         """
 
