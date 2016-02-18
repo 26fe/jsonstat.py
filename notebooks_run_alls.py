@@ -1,4 +1,3 @@
-
 import os
 from subprocess import Popen, PIPE
 
@@ -16,10 +15,9 @@ def run_all_notebooks(dir):
             if status != 0:
                 print("ERROR!")
 
-# jupyter nbconvert --to=rst --ExecutePreprocessor.enabled=True eurostat.ipynb
-
 JSONSTAT_HOME = os.path.normpath(os.path.join(os.path.dirname(__file__)))
 dirs = ["examples-notebooks", "istat-notebooks"]
 for d in dirs:
     dd = os.path.join(JSONSTAT_HOME, d)
     run_all_notebooks(dd)
+
