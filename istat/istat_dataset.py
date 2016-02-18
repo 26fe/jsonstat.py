@@ -91,11 +91,12 @@ class IstatDataset:
         return self.__name2dim[spec]
 
     def getvalues(self, spec, rtype=jsonstat.JsonStatCollection):
-        """
-        get values by dimensions
+        """get values by dimensions
+
         :param spec: it is a string for ex. "1,6,9,0,0"
         :param type:
-        :return: if type is JsonStatCollection return an istance of JsonStatCollection
+
+        :returns: if type is JsonStatCollection return an istance of JsonStatCollection
           otherwise return a json structure representing the istat dataset
         """
         if type(spec) == dict:
