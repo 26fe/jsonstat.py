@@ -1,20 +1,25 @@
 .. jsonstat documentation master file
 
-jsonstat.py documentation!
-==========================
+jsonstat.py
+===========
+
+**jsonstat.py** is a library for reading the **JSON-stat** [1]_ data format
+maintained and promoted by `Xavier Badosa <https://xavierbadosa.com/>`_.
+The JSON-stat format is a JSON format for publishing dataset.
+JSON-stat is used by several institutions to publish statistical data.
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
-   tutorial
    notebooks/oecd-canada-jsonstat_v1
    notebooks/oecd-canada-jsonstat_v2
    notebooks/eurostat
    notebooks/istat_house_price_index
-   notebooks/istat_unemployement
-   code
+   notebooks/istat_unemployment
+   tutorial
+   api_reference
 
 .. include:: ../README.rst
 

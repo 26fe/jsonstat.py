@@ -1,3 +1,4 @@
+=============
 Api Reference
 =============
 
@@ -6,10 +7,20 @@ Api Reference
 .. autoclass:: JsonStatCollection
     :members:
 
+.. autoclass:: JsonStatDataSet
+    :members:
+
 .. autoclass:: JsonStatDimension
     :members:
 
-.. automodule:: jsonstat.istat
+.. autoclass:: Downloader
+    :members:
 
-.. autoclass:: Istat
+.. automodule:: istat
+    :members:
+
+.. autoclass:: IstatArea
+    :members:
+
+.. autoclass:: IstatDataset
     :members:
