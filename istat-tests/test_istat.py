@@ -18,6 +18,10 @@ class TestIstat(unittest.TestCase):
     def setUp(self):
         self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures", "istat")
 
+    def test_cache_dir(self):
+        i = istat.IstatRoot(self.fixture_dir, lang=0)
+        self.assertEquals(i.cache_dir(), self.fixture_dir)
+
     def test_istat_italian(self):
         i = istat.IstatRoot(self.fixture_dir, lang=0)
         n = i.area(26).desc()

@@ -25,18 +25,21 @@ class IstatHelper:
     Helper class to invoke api.istat.it
     Each methods of this class is mapped to an api call
     """
-    def __init__(self, cache_dir, lang=1):
-        self.dwl = jsonstat.Downloader(cache_dir)
-        self.lang = lang
+    def __init__(self, cache_dir, time_to_live = None, lang=1):
+        self.__dwl = jsonstat.Downloader(cache_dir, time_to_live)
+        self.__lang = lang
 
     def __lang2str(self):
-        if self.lang == 0:
+        if self.__lang == 0:
             return "it"
         else:
             return "en"
 
+    def cache_dir(self):
+        return self.__dwl.cache_dir()
+
     def help(self):
-        uri = 'http://apistat.istat.it/?q=help&lang={}'.format(self.lang)
+        uri = 'http://apistat.istat.it/?q=help&lang={}'.format(self.__lang)
         html = requests.get(uri).text
         print(html)
 
@@ -52,9 +55,9 @@ class IstatHelper:
         :param show: if true print diagnosti output
         :return: json structure
         """
-        uri = 'http://apistat.istat.it/?q=getarea&lang={}'.format(self.lang)
+        uri = 'http://apistat.istat.it/?q=getarea&lang={}'.format(self.__lang)
         filename ="istat-area-{}.json".format(self.__lang2str())
-        json_string = self.dwl.download(uri,filename)
+        json_string = self.__dwl.download(uri, filename)
         json_data = json.loads(json_string)
         if show:
             dump = json.dumps(json_data, sort_keys=True, indent=4)
@@ -77,9 +80,9 @@ class IstatHelper:
         :param show: if true show some info on stdout
         :return: json structure
         """
-        uri = 'http://apistat.istat.it/?q=getdslist&area={}&lang={}'.format(area,self.lang)
+        uri = 'http://apistat.istat.it/?q=getdslist&area={}&lang={}'.format(area, self.__lang)
         filename = "istat-area-{}-{}.json".format(area, self.__lang2str())
-        json_string = self.dwl.download(uri, filename)
+        json_string = self.__dwl.download(uri, filename)
 
         json_data = json.loads(json_string)
         if show:
@@ -103,10 +106,10 @@ class IstatHelper:
         :param show:
         :return:
         """
-        uri = 'http://apistat.istat.it/?q=getdim&dataset={}&lang={}'.format(dataset,self.lang)
+        uri = 'http://apistat.istat.it/?q=getdim&dataset={}&lang={}'.format(dataset, self.__lang)
         filename="istat-dim-{}-{}.json".format(dataset, self.__lang2str())
         try:
-            json_string = self.dwl.download(uri,filename)
+            json_string = self.__dwl.download(uri, filename)
 
             # extract order using ijson
 
@@ -166,10 +169,10 @@ class IstatHelper:
         :param show:
         :return:
         """
-        uri = 'http://apistat.istat.it/?q=gettable&dataset={}&dim={}&lang={}'.format(dataset,dim,self.lang)
+        uri = 'http://apistat.istat.it/?q=gettable&dataset={}&dim={}&lang={}'.format(dataset, dim, self.__lang)
         filename = "istat-table-{}-{}-{}.json".format(dataset, dim, self.__lang2str())
         try:
-            json_string = self.dwl.download(uri, filename)
+            json_string = self.__dwl.download(uri, filename)
             json_data = json.loads(json_string)
             if show:
                 dump = json.dumps(json_data, indent=4)
@@ -234,10 +237,10 @@ class IstatHelper:
         :param show:
         :return:
         """
-        uri = 'http://apistat.istat.it/?q=getdatajson&dataset={}&dim={}&lang={}'.format(dataset,dim,self.lang)
+        uri = 'http://apistat.istat.it/?q=getdatajson&dataset={}&dim={}&lang={}'.format(dataset, dim, self.__lang)
         filename = "istat-datajson-{}-{}-{}.json".format(dataset, dim, self.__lang2str())
         try:
-            json_string = self.dwl.download(uri, filename)
+            json_string = self.__dwl.download(uri, filename)
             json_data = json.loads(json_string)
             if show:
                 dump = json.dumps(json_data, indent=4)

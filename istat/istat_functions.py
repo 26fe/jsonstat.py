@@ -9,10 +9,21 @@ from istat.istat_root import IstatRoot
 __istat__ = None
 
 
-def cache_dir(dir):
+def cache_dir(cached_dir=''):
+    """ Manage the directory where to store downloaded file
+
+    without parameter get the directory
+    with a parameter set the directory
+    """
     global __istat__
-    if __istat__ is None:
-        __istat__ = IstatRoot(dir)
+
+    if cached_dir == '':
+        if __istat__ is None:
+            __istat__ = IstatRoot()
+        return __istat__.cache_dir()
+
+    __istat__ = IstatRoot(cached_dir)
+    return __istat__.cache_dir()
 
 
 def areas():

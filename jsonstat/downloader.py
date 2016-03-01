@@ -31,10 +31,13 @@ class Downloader:
         self.__cache_dir = cache_dir
         self.__time_to_live = time_to_live
         if not os.path.exists(cache_dir):
-            os.mkdir(cache_dir)
+            os.makedirs(cache_dir)
         if not os.path.isdir(cache_dir):
             msg = "cache_dir '{}' is not a directory".format(cache_dir)
             raise JsonStatException(msg)
+
+    def cache_dir(self):
+        return self.__cache_dir
 
     def download(self, url, filename=None, time_to_live=None):
         """

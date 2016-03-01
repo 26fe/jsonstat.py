@@ -18,7 +18,7 @@ class IstatRoot:
     Represent the root of all Istat dataseries
     """
 
-    def __init__(self, cache_dir="istat_cached", lang=1):
+    def __init__(self, cache_dir="./istat_cached", lang=1):
         """
         Initialize Istat class.
         :param cache_dir: where to store the cached file
@@ -28,6 +28,9 @@ class IstatRoot:
         self.__id2area = None
         self.__cod2area = None
         self.__desc2area = None
+
+    def cache_dir(self):
+        return self.__istat_helper.cache_dir()
 
     def areas(self):
         """
