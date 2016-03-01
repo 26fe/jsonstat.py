@@ -1,6 +1,11 @@
+# -*- coding: utf-8 -*-
+# This file is part of https://github.com/26fe/jsonstat.py
+# Copyright (C) 2016 gf <gf@26fe.com>
+# See LICENSE file
 
 import os
 from subprocess import Popen, PIPE
+
 
 def convert_notebook_to_rst(dir):
     print("***** {}".format(dir))
@@ -21,7 +26,7 @@ def convert_notebook_to_rst(dir):
                  print("ERROR!")
                  print(err)
 
-JSONSTAT_HOME = os.path.normpath(os.path.join(os.path.dirname(__file__)))
+JSONSTAT_HOME = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 docs_notebooks = os.path.join(JSONSTAT_HOME, "docs", "notebooks")
 os.chdir(docs_notebooks)
 dirs = ["examples-notebooks", "istat-notebooks"]
