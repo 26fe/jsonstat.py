@@ -60,7 +60,7 @@ Usage
 *****
 
 Simple Usage
-============
+************
 
 simple usage::
 
