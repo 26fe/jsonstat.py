@@ -21,12 +21,6 @@ json-stat.org site. This file is complaint to the version 1 of jsonstat.
     
     import matplotlib as plt  # for plotting 
 
-
-.. parsed-literal::
-
-    The history saving thread hit an unexpected error (DatabaseError('database disk image is malformed',)).History will not be written to the database.
-
-
 .. code:: python
 
     %matplotlib inline
@@ -50,7 +44,7 @@ permits to work off-line and to speed up the exloration of the data.
 
 .. parsed-literal::
 
-    download file and storing on disk
+    using already downloaded file /Users/26fe_nas/gioprj.on_mac/prj.python/jsonstat.py/tests/fixtures/json-stat.org/oecd-canada.json
 
 
 Initialize JsonStatCollection from the file and print the list of
@@ -290,7 +284,7 @@ Trasforming dataset into pandas DataFrame
 
     count     432
     unique     36
-    top        IS
+    top        PL
     freq       12
     Name: area, dtype: object
 
@@ -389,7 +383,7 @@ specific country (Canada)
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x1136dc6a0>
+    <matplotlib.axes._subplots.AxesSubplot at 0x10ce6f1d0>
 
 
 
@@ -409,11 +403,11 @@ Trasforming a dataset into a python list
 
 .. parsed-literal::
 
-    [['indicator', 'OECD countries, EU15 and total', '2003-2014', 'Value'],
-     ['unemployment rate', 'Australia', '2003', 5.943826289],
-     ['unemployment rate', 'Australia', '2004', 5.39663128],
-     ['unemployment rate', 'Australia', '2005', 5.044790587],
-     ['unemployment rate', 'Australia', '2006', 4.789362794]]
+    [[u'indicator', u'OECD countries, EU15 and total', u'2003-2014', u'Value'],
+     [u'unemployment rate', u'Australia', u'2003', 5.943826289],
+     [u'unemployment rate', u'Australia', u'2004', 5.39663128],
+     [u'unemployment rate', u'Australia', u'2005', 5.044790587],
+     [u'unemployment rate', u'Australia', u'2006', 4.789362794]]
 
 
 
@@ -432,10 +426,10 @@ It is possible to trasform jsonstat data into table in different order
 
 .. parsed-literal::
 
-    [['indicator', 'OECD countries, EU15 and total', '2003-2014', 'Value'],
-     ['unemployment rate', 'Australia', '2003', 5.943826289],
-     ['unemployment rate', 'Austria', '2003', 4.278559338],
-     ['unemployment rate', 'Belgium', '2003', 8.158333333],
-     ['unemployment rate', 'Canada', '2003', 7.594616751]]
+    [[u'indicator', u'OECD countries, EU15 and total', u'2003-2014', u'Value'],
+     [u'unemployment rate', u'Australia', u'2003', 5.943826289],
+     [u'unemployment rate', u'Austria', u'2003', 4.278559338],
+     [u'unemployment rate', u'Belgium', u'2003', 8.158333333],
+     [u'unemployment rate', u'Canada', u'2003', 7.594616751]]
 
 

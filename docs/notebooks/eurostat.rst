@@ -25,12 +25,6 @@ for discovering the rest api parameters
     import matplotlib as plt
     %matplotlib inline
 
-
-.. parsed-literal::
-
-    The history saving thread hit an unexpected error (DatabaseError('database disk image is malformed',)).History will not be written to the database.
-
-
 Exploring data with one dimension (time) with size > 1
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -55,7 +49,7 @@ provides consistent result. You can see the raw data
 
 .. parsed-literal::
 
-    using alredy donwloaded file /Users/26fe_nas/prj.python/jsonstat.py/tests/fixtures/eurostat/eurostat-name_gpd_c-geo_IT.json
+    using alredy donwloaded file /Users/26fe_nas/gioprj.on_mac/prj.python/jsonstat.py/tests/fixtures/eurostat/eurostat-name_gpd_c-geo_IT.json
 
 
 Initialize JsonStatCollection with eurostat data and print some info
@@ -75,7 +69,7 @@ about the collection.
 
 
 
-Previous collection contains only a dataset named '``nama_gdp_c``\ '
+Previous collection contains only a dataset named '``nama_gdp_c``'
 
 .. code:: python
 
@@ -98,7 +92,7 @@ Previous collection contains only a dataset named '``nama_gdp_c``\ '
 
 
 
-All dimensions of the dataset '``nama_gdp_c``\ ' are of size 1 with
+All dimensions of the dataset '``nama_gdp_c``' are of size 1 with
 exception of ``time`` dimension. Let's explore the time dimension.
 
 .. code:: python
@@ -283,12 +277,18 @@ Adding a simple plot
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x1137b7470>
+    <matplotlib.axes._subplots.AxesSubplot at 0x10c974250>
 
 
 
+.. parsed-literal::
 
-.. image:: eurostat_files/eurostat_15_1.png
+    /extra/opt/anaconda/envs/python27/lib/python2.7/site-packages/matplotlib/font_manager.py:273: UserWarning: Matplotlib is building the font cache using fc-list. This may take a moment.
+      warnings.warn('Matplotlib is building the font cache using fc-list. This may take a moment.')
+
+
+
+.. image:: eurostat_files/eurostat_15_2.png
 
 
 Exploring data with two dimensions (geo, time) with size > 1
@@ -315,7 +315,7 @@ faster. You can see the raw data
 
 .. parsed-literal::
 
-    using alredy donwloaded file /Users/26fe_nas/prj.python/jsonstat.py/tests/fixtures/eurostat/eurostat-name_gpd_c-geo_IT_FR.json
+    using alredy donwloaded file /Users/26fe_nas/gioprj.on_mac/prj.python/jsonstat.py/tests/fixtures/eurostat/eurostat-name_gpd_c-geo_IT_FR.json
 
 
 .. code:: python
@@ -462,7 +462,7 @@ faster. You can see the raw data
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x11628acf8>
+    <matplotlib.axes._subplots.AxesSubplot at 0x10d1e8a50>
 
 
 
@@ -481,7 +481,7 @@ faster. You can see the raw data
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x1162d5780>
+    <matplotlib.axes._subplots.AxesSubplot at 0x10d1f1850>
 
 
 
@@ -500,7 +500,7 @@ faster. You can see the raw data
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x116429320>
+    <matplotlib.axes._subplots.AxesSubplot at 0x10cf17190>
 
 
 

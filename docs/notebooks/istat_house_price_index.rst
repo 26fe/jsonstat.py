@@ -14,12 +14,6 @@ querying italian statistics.
     import os
     import istat
 
-
-.. parsed-literal::
-
-    The history saving thread hit an unexpected error (DatabaseError('database disk image is malformed',)).History will not be written to the database.
-
-
 Setting a cache dir where to store json files download by Istat api.
 Storing file on disk speed up development, and assures consistent
 results over time. Anyway you can delete file to donwload a fresh copy.
@@ -34,7 +28,7 @@ results over time. Anyway you can delete file to donwload a fresh copy.
 
 .. parsed-literal::
 
-    cache_dir is '/Users/26fe_nas/prj.python/jsonstat.py/tmp/istat_cached'
+    cache_dir is '/Users/26fe_nas/gioprj.on_mac/prj.python/jsonstat.py/tmp/istat_cached'
 
 
 List all istat areas
@@ -83,34 +77,34 @@ List all datasets contained into area ``Prices``
 
 .. parsed-literal::
 
+    DCSP_FOI1B2015(5):FOI - Monthly data from 2016 onwards
+    DCSP_NICUNOB(5):NIC  Monthly data until 2010
+    DCSP_FOI3B2010(4):FOI  Weights from 2011 onwards
+    DCSP_NIC3B2015(4):NIC - Weights from 2016 onwards
+    DCSP_NICUNOBB2010(5):NIC  Monthly data from 2011 onwards
+    DCSP_IPCATC2(5):HICP at constant tax rates  Annual average from 2002 onwards (base 2005=100) 
+    DCSP_IPCATC1(5):HICP at constant tax rates  Monthly data from 2002 onwards (base 2005=100) 
+    DCSP_FOI2B2015(5):FOI - Annual average from 2016 onwards
+    DCSP_NICTREB2010(4):NIC  Weights from 2011 onwards
+    DCSP_IPCATC1B2015(5):HICP at constant tax rates - Monthly data from 2002 onwards (base 2015=100)
+    DCSP_IPCA1(5):HICP  Monthly data from 2001 onwards (base 2005=100)
+    DCSP_NICDUE(5):NIC  Annual average until 2010
+    DCSP_IPCA3(4):HICP  Weights from 2001 onwards
+    DCSP_FOI2(5):FOI  Annual average  until 2010
+    DCSP_FOI3(4):FOI  Weights until 2010
+    DCSP_FOI1(5):FOI  Monthly data until 2010
     DCSP_IPCA2(5):HICP  Annual average from 2001 onwards (base 2005=100) 
     DCSP_IPCA1B2015(5):HICP - Monthly data from 2001 onwards (base 2015=100)
-    DCSP_IPCATC1(5):HICP at constant tax rates  Monthly data from 2002 onwards (base 2005=100) 
-    DCSC_PREZZPIND_1(6):Producer price index for industrial products - monthly data
-    DCSP_FOI2B2010(5):FOI  Annual average from 2011  onwards
-    DCSP_FOI2B2015(5):FOI - Annual average from 2016 onwards
-    DCSP_IPCATC1B2015(5):HICP at constant tax rates - Monthly data from 2002 onwards (base 2015=100)
-    DCSP_FOI2(5):FOI  Annual average  until 2010
-    DCSP_NICTREB2010(4):NIC  Weights from 2011 onwards
-    DCSC_PREZPRODSERV_1(5):Services producer prices index
-    DCSP_IPCATC2(5):HICP at constant tax rates  Annual average from 2002 onwards (base 2005=100) 
-    DCSP_FOI3(4):FOI  Weights until 2010
-    DCSP_NICUNOB(5):NIC  Monthly data until 2010
-    DCSP_FOI1(5):FOI  Monthly data until 2010
-    DCSP_FOI3B2010(4):FOI  Weights from 2011 onwards
-    DCSP_NIC1B2015(5):NIC - Monthly data from 2016 onwards
     DCSP_FOI3B2015(4):FOI - Weights from 2016 onwards
-    DCSP_NICDUEB2010(5):NIC  Annual average from 2011 onwards
-    DCSP_FOI1B2015(5):FOI - Monthly data from 2016 onwards
-    DCSP_NICUNOBB2010(5):NIC  Monthly data from 2011 onwards
-    DCSP_IPCA1(5):HICP  Monthly data from 2001 onwards (base 2005=100)
-    DCSC_FABBRESID_1(5):Construction costs index - monthly data
-    DCSP_FOI1B2010(5):FOI  Monthly data from 2011 onwards
-    DCSP_IPAB(5):House price index 
-    DCSP_NIC3B2015(4):NIC - Weights from 2016 onwards
-    DCSP_NICDUE(5):NIC  Annual average until 2010
+    DCSP_NIC1B2015(5):NIC - Monthly data from 2016 onwards
     DCSP_NICTRE(4):NIC  Weights  until 2010
-    DCSP_IPCA3(4):HICP  Weights from 2001 onwards
+    DCSP_FOI1B2010(5):FOI  Monthly data from 2011 onwards
+    DCSP_NICDUEB2010(5):NIC  Annual average from 2011 onwards
+    DCSP_FOI2B2010(5):FOI  Annual average from 2011  onwards
+    DCSC_PREZPRODSERV_1(5):Services producer prices index
+    DCSP_IPAB(5):House price index 
+    DCSC_FABBRESID_1(5):Construction costs index - monthly data
+    DCSC_PREZZPIND_1(6):Producer price index for industrial products - monthly data
 
 
 List all dimension for dataset ``DCSP_IPAB`` (House price index)
@@ -128,7 +122,7 @@ List all dimension for dataset ``DCSP_IPAB`` (House price index)
     dim 1 'Index type' (18:'house price index (base 2010=100) - quarterly data', 19:'house price index (base 2010=100) - annual average', 20:'house price index (base 2010=100) - weights')
     dim 2 'Measure' (8:'annual average rate of change', 4:'index number', 22:'not applicable', 6:'percentage changes on the previous period', 7:'percentage changes on the same period of the previous year')
     dim 3 'Purchases of dwellings' (4:'H1 - all items', 5:'H11 - new dwellings', 6:'H12 - existing dwellings')
-    dim 4 'Time and frequency' (2112:'Q1-2011', 2178:'Q3-2014', 2116:'Q2-2011', 2182:'Q4-2014', 2121:'Q3-2011', 2186:'2015', 2188:'Q1-2015', 2125:'Q4-2011', 2192:'Q2-2015', 2129:'2012', 2131:'Q1-2012', 2197:'Q3-2015', 2135:'Q2-2012', 2140:'Q3-2012', 2144:'Q4-2012', 2148:'2013', 2150:'Q1-2013', 2154:'Q2-2013', 2091:'2010', 2093:'Q1-2010', 2159:'Q3-2013', 2097:'Q2-2010', 2163:'Q4-2013', 2102:'Q3-2010', 2167:'2014', 2169:'Q1-2014', 2106:'Q4-2010', 2173:'Q2-2014', 2110:'2011')
+    dim 4 'Time and frequency' (2178:'Q3-2014', 2182:'Q4-2014', 2186:'2015', 2188:'Q1-2015', 2192:'Q2-2015', 2197:'Q3-2015', 2091:'2010', 2093:'Q1-2010', 2097:'Q2-2010', 2102:'Q3-2010', 2106:'Q4-2010', 2110:'2011', 2112:'Q1-2011', 2116:'Q2-2011', 2121:'Q3-2011', 2125:'Q4-2011', 2129:'2012', 2131:'Q1-2012', 2135:'Q2-2012', 2140:'Q3-2012', 2144:'Q4-2012', 2148:'2013', 2150:'Q1-2013', 2154:'Q2-2013', 2159:'Q3-2013', 2163:'Q4-2013', 2167:'2014', 2169:'Q1-2014', 2173:'Q2-2014')
 
 
 Extract data from dataset ``DCSP_IPAB`` with dimension "1,18,0,0,0"

@@ -3,9 +3,11 @@ Api Reference
 =============
 
 .. automodule:: jsonstat
+    :members:
 
 .. autoclass:: JsonStatCollection
     :members:
+    :undoc-members:
 
 .. autoclass:: JsonStatDataSet
     :members:

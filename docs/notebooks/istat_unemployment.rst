@@ -5,8 +5,9 @@ Notebook: using jsonstat.py to explore ISTAT data (unemployment)
 This Jupyter notebook shows how to use
 `jsonstat.py <http://github.com/26fe/jsonstat.py>`__ python library to
 explore Istat data. `Istat <http://www.istat.it/en/about-istat>`__ is
-Italian National Institute of Statistics. It publishs a rest api for
-querying italian statistics.
+the Italian National Institute of Statistics. It publishs a rest api for
+browsing italian statistics. This api can return results in jsonstat
+format.
 
 .. code:: python
 
@@ -18,12 +19,6 @@ querying italian statistics.
     import matplotlib.pyplot as plt
     %matplotlib inline
 
-
-.. parsed-literal::
-
-    The history saving thread hit an unexpected error (DatabaseError('database disk image is malformed',)).History will not be written to the database.
-
-
 Setting a cache dir where to store json files download by Istat api.
 Storing file on disk speed up development, and assures consistent
 results over time. Anyway you can delete file to donwload a fresh copy.
@@ -31,22 +26,19 @@ results over time. Anyway you can delete file to donwload a fresh copy.
 .. code:: python
 
     cache_dir = os.path.abspath(os.path.join("..", "tmp", "istat_cached"))
-    if not os.path.exists(cache_dir):
-        os.makedirs(cache_dir)
-    print("cache_dir is '{}'".format(cache_dir))
+    istat.cache_dir(cache_dir)
+    print("cache_dir is '{}'".format(istat.cache_dir()))
 
 
 .. parsed-literal::
 
-    cache_dir is '/Users/26fe_nas/prj.python/jsonstat.py/tmp/istat_cached'
+    cache_dir is '/Users/26fe_nas/gioprj.on_mac/prj.python/jsonstat.py/tmp/istat_cached'
 
 
 List all istat areas
 
 .. code:: python
 
-    istat.cache_dir(cache_dir)
-    
     for istat_area in istat.areas():
         print(istat_area)
 
@@ -88,49 +80,49 @@ List all datasets contained into area ``LAB`` (Labour)
 
 .. parsed-literal::
 
-    DCCV_ORELAVMED(12):Employment by number of actual weekly hours and average number of actual weekly hours
-    DCCV_TAXINATTMENS(8):Inactivity rate - monthly data
-    DCCV_TAXDISOCCU(9):Unemployment rate
-    DCSC_RETRCONTR1C(6):Wages according to collective labour agreements by agreement  - monthly and annual data               .
-    DCSC_RETRCONTR1T(6):Indicators of bargaining tension - monthly and annual data
-    DCCV_FORZLVDE(7):Labour force - seasonally adjusted data
-    DCCV_TAXDISOCCUDE(7):Unemployment rate - seasonally adjusted data
-    DCCV_FORZLVMENS(8):Labour force - monthly data
-    DCCV_INATTIV(11):Inactive population
-    DCSC_RETRCONTR1O(6):Annual gross, net hours, holiday pay and other hours reduction according to collective labour agreements
-    DCSC_OROS_1(5):Number of payroll jobs index - quarterly data
-    DCSC_GI_OCC(6):Employment, inflow and outflow rates in enterprises with more than 500 employees - monthly data
-    DCCV_DISOCCUPTDE(7):Unemployed - seasonally adjusted data
-    DCSC_RETRULAOROS_1(5):Gross earnings per full time equivalent unit index - quarterly data
-    DCCV_TAXDISOCCUMENS(8):Unemployment rate - monthly data
-    DCSC_GI_RE(6):Gross earnings in enterprises with more than 500 employees - monthly data
-    DCCV_OCCUPATIT(14): Employment                                
-    DCCV_NEET(10):Young people not in employment, education or training
-    DCCV_INATTIVDE(7):Inactive population - seasonally adjusted data
-    DCIS_RICSTAT(6):New series of estimates on the resident population at NUTS-2 level for the 1/1/2002-1/1/2014 period
-    DCSC_GI_COS(6):Labour cost in enterprises with more than 500 employees - monthly data
-    DCSC_RETRCASSCOMPPA(7):Cash and accrual wages according to collective labour agreements per public administration employee per agreement - annual data -  euros
-    DCCV_COMPL(12):Supplementary indicators to unemployment
-    DCCV_TAXOCCUDE(7):Employment rate - seasonally adjusted data
-    DCSC_COSTLAVSTRUT_1(6):Labour cost survey (four-yearly survey)
-    DCCV_TAXOCCU(8):Employment rate
-    DCCV_INATTIVMENS(8):Inactive population - monthly data
-    DCCV_TAXATVT(8):Activity rate
-    DCSC_COSTLAVULAOROS_1(5):Labour cost per full time equivalent unit indicators - quarterly data
     DCCV_DISOCCUPTMENS(8):Unemployed - monthly data
-    DCCV_OCCUPATIMENS(8):Employed - monthly data
-    DCCV_FORZLV(8):Labour force
-    DCCV_TAXATVTDE(7):Activity rate - seasonally adjusted data
-    DCSC_POSTIVAC_1(5):Job vacancy rate - quarterly data
-    DCCV_TAXOCCUMENS(8):Employment rate - monthly data
-    DCCV_OCCUPATITDE(8):Employed - seasonally adjusted data
-    DCCV_TAXINATT(8):Inactivity rate
-    DCSC_RETRATECO1(6):Wages according to collective labour agreements by Nace rev.2
-    DCCV_TAXINATTDE(7):Inactivity rate - seasonally adjusted data
     DCSC_ORE10_1(5):Hours worked in enterprises with at least 10 employees - quarterly data
+    DCSC_OROS_1(5):Number of payroll jobs index - quarterly data
+    DCSC_RETRULAOROS_1(5):Gross earnings per full time equivalent unit index - quarterly data
+    DCCV_FORZLVDE(7):Labour force - seasonally adjusted data
+    DCCV_TAXOCCUDE(7):Employment rate - seasonally adjusted data
+    DCSC_COSTLAVULAOROS_1(5):Labour cost per full time equivalent unit indicators - quarterly data
     DCCV_TAXATVTMENS(8):Activity rate - monthly data
     DCCV_DISOCCUPT(10):Unemployment
+    DCCV_ORELAVMED(12):Employment by number of actual weekly hours and average number of actual weekly hours
+    DCSC_RETRCONTR1C(6):Wages according to collective labour agreements by agreement  - monthly and annual data               .
     DCSC_GI_ORE(6):Hours worked in enterprises with more than 500 employees - monthly data
+    DCCV_TAXDISOCCU(9):Unemployment rate
+    DCSC_GI_COS(6):Labour cost in enterprises with more than 500 employees - monthly data
+    DCCV_TAXDISOCCUDE(7):Unemployment rate - seasonally adjusted data
+    DCSC_COSTLAVSTRUT_1(6):Labour cost survey (four-yearly survey)
+    DCSC_GI_OCC(6):Employment, inflow and outflow rates in enterprises with more than 500 employees - monthly data
+    DCCV_TAXDISOCCUMENS(8):Unemployment rate - monthly data
+    DCSC_RETRCONTR1T(6):Indicators of bargaining tension - monthly and annual data
+    DCCV_DISOCCUPTDE(7):Unemployed - seasonally adjusted data
+    DCCV_TAXATVTDE(7):Activity rate - seasonally adjusted data
+    DCCV_OCCUPATIMENS(8):Employed - monthly data
+    DCCV_INATTIVMENS(8):Inactive population - monthly data
+    DCSC_RETRCASSCOMPPA(7):Cash and accrual wages according to collective labour agreements per public administration employee per agreement - annual data -  euros
+    DCCV_FORZLV(8):Labour force
+    DCIS_RICSTAT(6):New series of estimates on the resident population at NUTS-2 level for the 1/1/2002-1/1/2014 period
+    DCCV_OCCUPATIT(14): Employment                                
+    DCCV_NEET(10):Young people not in employment, education or training
+    DCCV_TAXOCCU(8):Employment rate
+    DCCV_TAXATVT(8):Activity rate
+    DCCV_TAXOCCUMENS(8):Employment rate - monthly data
+    DCCV_OCCUPATITDE(8):Employed - seasonally adjusted data
+    DCSC_RETRATECO1(6):Wages according to collective labour agreements by Nace rev.2
+    DCCV_FORZLVMENS(8):Labour force - monthly data
+    DCSC_GI_RE(6):Gross earnings in enterprises with more than 500 employees - monthly data
+    DCCV_COMPL(12):Supplementary indicators to unemployment
+    DCCV_TAXINATT(8):Inactivity rate
+    DCCV_TAXINATTDE(7):Inactivity rate - seasonally adjusted data
+    DCCV_INATTIV(11):Inactive population
+    DCSC_POSTIVAC_1(5):Job vacancy rate - quarterly data
+    DCCV_INATTIVDE(7):Inactive population - seasonally adjusted data
+    DCSC_RETRCONTR1O(6):Annual gross, net hours, holiday pay and other hours reduction according to collective labour agreements
+    DCCV_TAXINATTMENS(8):Inactivity rate - monthly data
 
 
 List all dimension for dataset ``DCCV_TAXDISOCCU`` (Unemployment rate)
@@ -649,14 +641,14 @@ collection
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x117130eb8>
+    <matplotlib.axes._subplots.AxesSubplot at 0x1182d9c18>
 
 
 
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x1170b6fd0>
+    <matplotlib.figure.Figure at 0x1182c1f28>
 
 
 
@@ -676,7 +668,7 @@ collection
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x119b7f278>
+    <matplotlib.axes._subplots.AxesSubplot at 0x11a648b00>
 
 
 
