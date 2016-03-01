@@ -67,7 +67,8 @@ setup(
 
     tests_require=[
         'httpretty',
-        'sure'
+        'sure',
+        'runipy'
     ],
 
     entry_points={
