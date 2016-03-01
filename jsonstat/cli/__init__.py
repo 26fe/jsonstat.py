@@ -4,17 +4,5 @@
 # See LICENSE file
 
 """
-jsonstat module docs
+jsonstat.cli module docs
 """
-from jsonstat.version import __version__
-
-from jsonstat.exceptions import JsonStatException
-from jsonstat.exceptions import JsonStatMalformedJson
-
-from jsonstat.dimension import JsonStatDimension
-from jsonstat.dataset import JsonStatDataSet
-from jsonstat.collection import JsonStatCollection
-from jsonstat.parse_functions import *
-
-from jsonstat.downloader import download
-from jsonstat.downloader import Downloader
