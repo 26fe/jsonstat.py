@@ -56,6 +56,7 @@ class TestIstat(unittest.TestCase):
         i = istat.IstatRoot(self.fixture_dir, lang=1)
         istat_area_name = 'Prices'
         istat_dataset_name = 'DCSP_IPAB'
+
         istat_dataset = i.dataset(istat_area_name, istat_dataset_name)
         istat_dimension = istat_dataset.dimension(0)
         self.assertEqual("Territory", istat_dimension.name())
@@ -77,7 +78,20 @@ class TestIstat(unittest.TestCase):
         collection = istat_dataset.getvalues(spec)
         dataset = collection.dataset(0)
         self.assertEqual('IDMISURA1*IDTYPPURCH*IDTIME', dataset.name())
+        self.assertEquals(207, len(dataset))
 
+        # same istat dataset with explicit dimension
+        spec = {
+            "Territory": 'Italy',
+            "Index type": 18,
+            # "Measure": 0,
+            # "Purchases of dwelling": 0,
+            # "Time and frequency": 0
+        }
+        collection = istat_dataset.getvalues(spec)
+        dataset = collection.dataset(0)
+        self.assertEqual('IDMISURA1*IDTYPPURCH*IDTIME', dataset.name())
+        self.assertEquals(207, len(dataset))
 
 if __name__ == '__main__':
     unittest.main()
