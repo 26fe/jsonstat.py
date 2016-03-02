@@ -40,7 +40,7 @@ class TestDownloader(unittest.TestCase):
         d = jsonstat.Downloader(cache_dir=self.__temp_dir)
         response = d.download(uri)
 
-        self.assertEquals(body, response)
+        self.assertEqual(body, response)
 
         # expect(response.json()).to.equal([{"title": "test"}])
 

@@ -40,8 +40,9 @@ class Downloader:
         return self.__cache_dir
 
     def download(self, url, filename=None, time_to_live=None):
-        """
-        Download url from internet. Store the downloaded content into <cache_dir>/file.
+        """Download url from internet.
+
+        Store the downloaded content into <cache_dir>/file.
         If <cache_dir>/file exists, it returns content from disk
         :param url: page to be downloaded
         :param filename: filename where to store the content of url, None if we want not store
@@ -67,10 +68,10 @@ class Downloader:
         return pathname
 
     def __is_cached(self, pathname):
-        """
-        check if pathname exists
+        """check if pathname exists
+
         :param pathname:
-        :return:
+        :return: True if the file can be retrieved from the disk (cache)
         """
         if not os.path.exists(pathname):
             return False
