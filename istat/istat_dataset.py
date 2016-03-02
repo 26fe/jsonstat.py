@@ -30,39 +30,44 @@ class IstatDataset:
         self.__pos2dim = None
         self.__name2dim = None
 
-    def name(self):
-        """
-        the name of this dataset
-        :return:
-        """
-        return self.__dataset['Desc']
-
     def cod(self):
-        """
-        return the code of this dataset
-        :return: code
-        """
+        """returns the code of this dataset"""
         return self.__dataset['Cod']
+
+    def name(self):
+        """returns the name of this dataset"""
+        return self.__dataset['Desc']
 
     def __str__(self):
         out = "{}({}):{}".format(self.cod(), self.nrdim(), self.name())
         return out
 
     def __repr__(self):
-        """
-        used by ipython to make a better representation
-        """
+        """used by ipython to make a better representation"""
         return self.__str__()
 
     def info(self):
         print(self)
 
     def info_dimensions(self):
-        """
-        print info about dimensions of this dataset
-        """
+        """print info about dimensions of this dataset"""
         for i, dim in enumerate(self.__pos2dim):
             print("dim {} {}".format(i, dim.__str__()))
+
+    def info_dimensions_as_html(self):
+        """print info about dimension in html format"""
+        # todo: using __repr__html for pretty print in ipython?
+        html = "<table>"
+        html +="<tr><th>nr</th><th>name</th><th>values</th></tr>"
+        for i, dim in enumerate(self.__pos2dim):
+            html += "<tr>"
+            html += "<td>{}</td>".format(i)
+            html += "<td>{}</td>".format(dim.name())
+            html += "<td>{}</td>".format(dim.values_as_str())
+            html += "</td>"
+            html += "</tr>"
+        html += "</table>"
+        return html
 
     def nrdim(self):
         if self.__name2pos is None:
@@ -79,8 +84,8 @@ class IstatDataset:
         return self.__name2dim.values()
 
     def dimension(self, spec):
-        """
-        Get dimension according to spec
+        """Get dimension according to spec
+
         :param spec: can be a int or a string
         :return: a IstatDimension instance
         """
@@ -102,8 +107,16 @@ class IstatDataset:
         if type(spec) == dict:
             a = len(self.__pos2dim) * [0]
             for (name, value) in spec.items():
-                d = self.dimension(name)
-                a[d.pos()] = value
+                dim = self.dimension(name)
+                # if cannot find the value in dimension
+                # search value into the description
+                if value !=0 and dim.cod2desc(value) is None:
+                    if dim.desc2cod(value) is None:
+                        msg = "unknown value '{}' for dimension '{}'".format(value, dim.name())
+                        raise IstatException(msg)
+                    value = dim.desc2cod(value)
+
+                a[dim.pos()] = value
             spec = ",".join(map(str, a))
 
         json_data = self.__istat_helper.datajson(self.__dataset['Cod'], spec, show=False)
@@ -115,12 +128,10 @@ class IstatDataset:
         elif rtype == "json":
             return json_data
 
-        raise IstatException("unknow type {}".format(rtype))
+        raise IstatException("unknown type {}".format(rtype))
 
     def __download_dimensions(self):
-        """
-        downloads information about dimensions from the istat
-        """
+        """downloads information about dimensions from the istat"""
         json_data = self.__istat_helper.dim(self.__dataset['Cod'], show=False)
         if json_data is None:
             msg = "dataset {}: cannot retrieve dimensions info".format(self.__dataset)

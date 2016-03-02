@@ -25,21 +25,15 @@ class IstatArea:
         self.__cod2dataset = None
 
     def iid(self):
-        """
-        returns the id of the area
-        """
+        """returns the id of the area"""
         return self.__iid
 
     def cod(self):
-        """
-        returns name of the area
-        """
+        """returns name of the area"""
         return self.__cod
 
     def desc(self):
-        """
-        returns name of the area
-        """
+        """returns name of the area"""
         return self.__desc
 
     def __str__(self):
@@ -47,15 +41,11 @@ class IstatArea:
         return out
 
     def __repr__(self):
-        """
-        used by ipython to make a better representation
-        """
+        """used by ipython to make a better representation"""
         return self.__str__()
 
     def info(self):
-        """
-        print some info about the area
-        """
+        """print some info about the area"""
         print(self)
 
     def dataset(self, spec):
@@ -69,12 +59,28 @@ class IstatArea:
         return self.__cod2dataset[spec]
 
     def datasets(self):
-        """
-        Return a list of IstatDataset
-        """
+        """Returns a list of IstatDataset"""
         if self.__cod2dataset is None:
             self.__download_datasets()
         return self.__cod2dataset.values()
+
+    def datasets_as_html(self):
+        """returns an html string useful to show into ipython notebook"""
+        if self.__cod2dataset is None:
+            self.__download_datasets()
+
+        # todo: using __repr__html?
+        html = "<table>"
+        html += "<tr><th>cod</th><th>name</th><th>dim</th></tr>"
+        for cod, ds in sorted(self.__cod2dataset.items()):
+            html += "<tr>"
+            html += "<td>{}</td>".format(cod)
+            html += "<td>{}</td>".format(ds.name())
+            html += "<td>{}</td>".format(ds.nrdim())
+            html += "</td>"
+            html += "</tr>"
+        html += "</table>"
+        return html
 
     def __download_datasets(self):
         """

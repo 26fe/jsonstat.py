@@ -18,13 +18,13 @@ class IstatRoot:
     Represent the root of all Istat dataseries
     """
 
-    def __init__(self, cache_dir="./istat_cached", lang=1):
+    def __init__(self, cache_dir="./istat_cached", time_to_live = None, lang=1):
         """
         Initialize Istat class.
         :param cache_dir: where to store the cached file
         :param lang: 1=english, otherwise italian
         """
-        self.__istat_helper = IstatHelper(cache_dir, lang)
+        self.__istat_helper = IstatHelper(cache_dir, time_to_live, lang)
         self.__id2area = None
         self.__cod2area = None
         self.__desc2area = None
@@ -33,17 +33,34 @@ class IstatRoot:
         return self.__istat_helper.cache_dir()
 
     def areas(self):
-        """
-        Get a list of all areas
+        """Get a list of all areas
+
         :return: list of IstatArea instances
         """
         if self.__id2area is None:
             self.__download_areas()
         return self.__id2area.values()
 
+    def areas_as_html(self):
+        """returns html string useful to be showed into ipython notebooks"""
+        if self.__id2area is None:
+            self.__download_areas()
+
+        # todo: using __repr__html?
+        html = "<table>"
+        html += "<tr><th>id</th><th>desc</th></tr>"
+        for iid, area in sorted(self.__id2area.items()):
+            html += "<tr>"
+            html += "<td>{}</td>".format(iid)
+            html += "<td>{}</td>".format(area.desc())
+            html += "</td>"
+            html += "</tr>"
+        html += "</table>"
+        return html
+
     def area(self, spec):
-        """
-        get a IstatArea by name or id
+        """Get a IstatArea by name or id
+
         :param spec: can be a string (for code or desc) or an int (for id)
         :return: a IstatArea istance
         """
@@ -61,8 +78,8 @@ class IstatRoot:
             return self.__id2area[spec]
 
     def dataset(self, spec_area, spec_dataset):
-        """
-        Returns an IstatDataset
+        """Returns an IstatDataset
+
         :param spec_area: selector for an IstatArea
         :param spec_dataset: selector for an IstatDataset that belong to the spec_area dataset
         :return: an instance of IstatDataset

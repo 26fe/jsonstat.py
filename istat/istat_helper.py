@@ -25,7 +25,7 @@ class IstatHelper:
     Helper class to invoke api.istat.it
     Each methods of this class is mapped to an api call
     """
-    def __init__(self, cache_dir, time_to_live = None, lang=1):
+    def __init__(self, cache_dir, time_to_live=None, lang=1):
         self.__dwl = jsonstat.Downloader(cache_dir, time_to_live)
         self.__lang = lang
 

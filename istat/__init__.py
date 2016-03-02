@@ -12,4 +12,4 @@ from istat.istat_area import IstatArea
 from istat.istat_dataset import IstatDataset
 from istat.istat_root import IstatRoot
 
-from istat.istat_functions import (cache_dir, area, areas, dataset)
+from istat.istat_functions import (cache_dir, areas, areas_as_html, area, dataset)

@@ -35,7 +35,7 @@ if __name__ == "__main__":
         os.makedirs(cache_dir)
 
     # print all istat area
-    i = istat.IstatRoot(cache_dir, 1)
+    i = istat.IstatRoot(cache_dir, lang=1)
     for area in i.areas():
         print(area)
 
