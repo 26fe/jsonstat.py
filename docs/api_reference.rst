@@ -2,27 +2,10 @@
 Api Reference
 =============
 
-.. automodule:: jsonstat
-    :members:
+Contents:
 
-.. autoclass:: JsonStatCollection
-    :members:
-    :undoc-members:
+.. toctree::
+   :maxdepth: 2
 
-.. autoclass:: JsonStatDataSet
-    :members:
-
-.. autoclass:: JsonStatDimension
-    :members:
-
-.. autoclass:: Downloader
-    :members:
-
-.. automodule:: istat
-    :members:
-
-.. autoclass:: IstatArea
-    :members:
-
-.. autoclass:: IstatDataset
-    :members:
+   api_jsonstat
+   api_istat
