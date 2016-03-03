@@ -29,6 +29,9 @@ class IstatHelper:
         self.__dwl = jsonstat.Downloader(cache_dir, time_to_live)
         self.__lang = lang
 
+    def lang(self, lg):
+        self.__lang = lg
+
     def __lang2str(self):
         if self.__lang == 0:
             return "it"

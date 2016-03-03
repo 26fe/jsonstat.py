@@ -38,6 +38,10 @@ class IstatDataset:
         """returns the name of this dataset"""
         return self.__dataset['Desc']
 
+    def __len__(self):
+        """ returns the number of dimensions"""
+        return len(self.__name2pos)
+
     def __str__(self):
         out = "{}({}):{}".format(self.cod(), self.nrdim(), self.name())
         return out
@@ -54,16 +58,22 @@ class IstatDataset:
         for i, dim in enumerate(self.__pos2dim):
             print("dim {} {}".format(i, dim.__str__()))
 
-    def info_dimensions_as_html(self):
-        """print info about dimension in html format"""
+    def info_dimensions_as_html(self, show_values=3):
+        """prints info about dimension in html format
+
+        :param show_values: number of values to show. If equals to 0 show all values
+        :returns: html string
+        """
         # todo: using __repr__html for pretty print in ipython?
         html = "<table>"
-        html +="<tr><th>nr</th><th>name</th><th>values</th></tr>"
+        html +="<tr><th>nr</th><th>name</th><th>nr. values</th>"
+        html +="<th>values (first {} values)</th></tr>".format(show_values)
         for i, dim in enumerate(self.__pos2dim):
             html += "<tr>"
             html += "<td>{}</td>".format(i)
             html += "<td>{}</td>".format(dim.name())
-            html += "<td>{}</td>".format(dim.values_as_str())
+            html += "<td>{}</td>".format(len(dim))
+            html += "<td>{}</td>".format(dim.values_as_str(show_values))
             html += "</td>"
             html += "</tr>"
         html += "</table>"

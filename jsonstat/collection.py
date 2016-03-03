@@ -15,8 +15,7 @@ from jsonstat.dataset import JsonStatDataSet
 
 
 class JsonStatCollection:
-    """
-    Represent a jsonstat collection.
+    """Represents a jsonstat collection.
     It contain one or more dataset.
     """
     def __init__(self):
@@ -29,9 +28,7 @@ class JsonStatCollection:
         self.__pos2dataset = []
 
     def __len__(self):
-        """
-        the number of dataset contained in this collection
-        """
+        """the number of dataset contained in this collection"""
         return len(self.__pos2dataset)
 
     def dataset(self, spec):

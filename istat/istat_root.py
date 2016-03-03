@@ -15,7 +15,7 @@ from istat.istat_area import IstatArea
 
 class IstatRoot:
     """
-    Represent the root of all Istat dataseries
+    Represent the root of all Istat datasets
     """
 
     def __init__(self, cache_dir="./istat_cached", time_to_live = None, lang=1):
@@ -31,6 +31,9 @@ class IstatRoot:
 
     def cache_dir(self):
         return self.__istat_helper.cache_dir()
+
+    def lang(self,lg):
+        self.__istat_helper.lang(lg)
 
     def areas(self):
         """Get a list of all areas

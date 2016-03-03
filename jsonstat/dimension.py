@@ -15,11 +15,11 @@ from jsonstat.exceptions import JsonStatMalformedJson
 
 class JsonStatDimension:
     """
-    Represents a JsonStatDimension. It is contained into a Dataset.
+    Represents a JsonStat Dimension. It is contained into a JsonStat Dataset.
     """
     def __init__(self, name=None, size=None, pos=None, role=None):
-        """
-        initialize a dimension
+        """initialize a dimension
+
         :param name: name of dimension
         :param size: size of dimension (nr of values)
         :param pos: position of dimension into the dataset
@@ -45,39 +45,27 @@ class JsonStatDimension:
         self.__lbl2pos = {}
 
     def name(self):
-        """
-        name of dimension
-        """
+        """name of dimension"""
         return self.__name
 
     def label(self):
-        """
-        label of this dimension
-        """
+        """label of this dimension"""
         return self.__label
 
     def size(self):
-        """
-        size of this dimension
-        """
+        """size of this dimension"""
         return self.__size
 
     def __len__(self):
-        """
-        len of this dimesion (the same of the size)
-        """
+        """len of this dimension (the same of the size)"""
         return self.__size
 
     def pos(self):
-        """
-        position of this dimension respect to the dataset which dimension belongs to
-        """
+        """position of this dimension respect to the dataset which dimension belongs to"""
         return self.__pos
 
     def role(self):
-        """
-        role of this dimension (time, geo or metric)
-        """
+        """role of this dimension (time, geo or metric)"""
         return self.__role
 
     def idx2pos(self, idx):

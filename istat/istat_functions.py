@@ -26,9 +26,16 @@ def cache_dir(cached_dir='', time_to_live=None):
     return __istat__.cache_dir()
 
 
-# todo new function to select language istat.lang(lang)
+def lang(lg):
+    global __istat__
+    if __istat__ is None:
+        __istat__ = IstatRoot(lang=lg)
+    __istat__.lang(lg)
+    return lg
+
 
 def areas():
+    """returns a list of IstatArea representing all the area used to classify datasets"""
     global __istat__
     if __istat__ is None:
         __istat__ = IstatRoot()
@@ -43,6 +50,7 @@ def areas_as_html():
 
 
 def area(spec):
+    """reterns a IstatArea conforming to ``spec``. Where spec is the name of the area."""
     global __istat__
     if __istat__ is None:
         __istat__ = IstatRoot()
@@ -50,6 +58,9 @@ def area(spec):
 
 
 def dataset(spec_area, spec_dataset):
+    """returns the IstatDataset indetified by ``spec_dataset``` (name of the dataset)
+    contained into the IstatArea indentified by ```spec_area``` (name of the area)
+    """
     global __istat__
     if __istat__ is None:
         __istat__ = IstatRoot()

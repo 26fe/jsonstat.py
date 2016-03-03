@@ -9,6 +9,7 @@ from __future__ import unicode_literals
 
 
 class IstatDimension:
+    """Represents a IstatDimension (it is different from JsonStat Dimension"""
     def __init__(self, name, pos, json_data):
         self.__name = name
         self.__pos = pos
@@ -28,8 +29,12 @@ class IstatDimension:
         return self.__name
 
     def pos(self):
-        """ position into the dataset"""
+        """position into the dataset"""
         return self.__pos
+
+    def __len__(self):
+        """returns the number of categories"""
+        return len(self.__cod2desc)
 
     def cod2desc(self, spec):
         if spec in self.__cod2desc:
@@ -43,8 +48,8 @@ class IstatDimension:
         else:
             return None
 
-    def values_as_str(self):
-        out = "("
+    def values_as_str(self, show_values=0):
+        out = ""
         comma = False
         for item in self.__cod2desc.items():
             code = item[0]
@@ -52,11 +57,16 @@ class IstatDimension:
             if comma: out += ", "
             out += "{}:'{}'".format(code, description)
             comma = True
-        out += ")"
+            if show_values != 0:
+                show_values-=1
+                if show_values == 0:
+                    out += " ..."
+                if show_values == 0:
+                    break
         return out
 
     def __str__(self):
-        out = "'{}' {}".format(self.__name, self.values_as_str())
+        out = "'{}' ({})".format(self.__name, self.values_as_str())
         return out
 
     def __repr__(self):
