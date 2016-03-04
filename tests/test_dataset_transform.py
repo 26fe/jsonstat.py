@@ -93,7 +93,7 @@ class TestDataSetToTable(unittest.TestCase):
         """
         test convert dataset to table
         """
-        json_pathname = os.path.join(self.fixture_dir, "collection", "oecd-canada.json")
+        json_pathname = os.path.join(self.fixture_dir, "json-stat.org", "oecd-canada.json")
         collection = jsonstat.JsonStatCollection()
         collection.from_file(json_pathname)
         oecd = collection.dataset('oecd')

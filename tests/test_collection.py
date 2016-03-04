@@ -16,7 +16,7 @@ import jsonstat
 
 class TestCollection(unittest.TestCase):
     def setUp(self):
-        self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures", "collection")
+        self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures")
 
         self.json_string_v1_one_dataset = """
         {
@@ -76,7 +76,7 @@ class TestCollection(unittest.TestCase):
         self.assertIsNotNone(collection.dataset('canada'))
 
     def test_parse_v1_from_file(self):
-        filename = os.path.join(self.fixture_dir, "oecd-canada.json")
+        filename = os.path.join(self.fixture_dir, "json-stat.org", "oecd-canada.json")
         collection = jsonstat.JsonStatCollection()
         collection.from_file(filename)
 
@@ -93,7 +93,7 @@ class TestCollection(unittest.TestCase):
         self.assertEqual(expected, dim.__str__())
 
     def test_parse_v2_from_file(self):
-        filename = os.path.join(self.fixture_dir, "oecd-canada-col.json")
+        filename = os.path.join(self.fixture_dir, "json-stat.org", "oecd-canada-col.json")
         collection = jsonstat.JsonStatCollection()
         collection.from_file(filename)
 
