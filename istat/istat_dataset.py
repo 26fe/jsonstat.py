@@ -26,9 +26,8 @@ class IstatDataset:
         self.__istat_helper = istat_helper
         self.__dataset = dataset
 
-        self.__name2pos = None
-        self.__pos2dim = None
-        self.__name2dim = None
+        self.__name2dim = None  # dict
+        self.__pos2dim = None   # array
 
     def cod(self):
         """returns the code of this dataset"""
@@ -40,7 +39,8 @@ class IstatDataset:
 
     def __len__(self):
         """ returns the number of dimensions"""
-        return len(self.__name2pos)
+        self.__download_dimensions()
+        return len(self.__name2dim)
 
     def __str__(self):
         out = "{}({}):{}".format(self.cod(), self.nrdim(), self.name())
@@ -80,27 +80,25 @@ class IstatDataset:
         return html
 
     def nrdim(self):
-        if self.__name2pos is None:
-            self.__download_dimensions()
+        """returns the number of dimensions"""
+        self.__download_dimensions()
         return len(self.__pos2dim)
 
     def dimensions(self):
+        """Get list of dimensions
+
+        :return: list of IstatDimension
         """
-        Get list of dimensions
-        :return:
-        """
-        if self.__name2pos is None:
-            self.__download_dimensions()
+        self.__download_dimensions()
         return self.__name2dim.values()
 
     def dimension(self, spec):
         """Get dimension according to spec
 
         :param spec: can be a int or a string
-        :return: a IstatDimension instance
+        :return: an IstatDimension instance
         """
-        if self.__name2pos is None:
-            self.__download_dimensions()
+        self.__download_dimensions()
         if type(spec) == int:
             return self.__pos2dim[spec]
         return self.__name2dim[spec]
@@ -115,19 +113,26 @@ class IstatDataset:
           otherwise return a json structure representing the istat dataset
         """
         if type(spec) == dict:
-            a = len(self.__pos2dim) * [0]
-            for (name, value) in spec.items():
-                dim = self.dimension(name)
-                # if cannot find the value in dimension
+
+            dim_values_array = len(self.__pos2dim) * [0]
+            for i, dim in enumerate(self.__pos2dim):
+                # if the cardinality of IstatDimension is 1
+                # use the unique value as default
+                if len(dim) == 1:
+                    dim_values_array[i] = dim.pos2cod(0)
+
+            for (dim_name, value) in spec.items():
+                dim = self.dimension(dim_name)
+                # if cannot find the value in dimension keys
                 # search value into the description
-                if value !=0 and dim.cod2desc(value) is None:
+                if value != 0 and dim.cod2desc(value) is None:
                     if dim.desc2cod(value) is None:
                         msg = "unknown value '{}' for dimension '{}'".format(value, dim.name())
                         raise IstatException(msg)
                     value = dim.desc2cod(value)
 
-                a[dim.pos()] = value
-            spec = ",".join(map(str, a))
+                dim_values_array[dim.pos()] = value
+            spec = ",".join(map(str, dim_values_array))
 
         json_data = self.__istat_helper.datajson(self.__dataset['Cod'], spec, show=False)
 
@@ -142,6 +147,9 @@ class IstatDataset:
 
     def __download_dimensions(self):
         """downloads information about dimensions from the istat"""
+        if self.__name2dim is not None:
+            return
+
         json_data = self.__istat_helper.dim(self.__dataset['Cod'], show=False)
         if json_data is None:
             msg = "dataset {}: cannot retrieve dimensions info".format(self.__dataset)
