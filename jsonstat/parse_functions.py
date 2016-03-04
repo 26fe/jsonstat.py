@@ -18,10 +18,16 @@ from jsonstat.dimension import JsonStatDimension
 
 
 def from_file(filename):
-    """
-    read a file containing a jsonstat format and returns the appropriate object
+    """read a file containing a jsonstat format and returns the appropriate object
+
     :param filename: name containing a jsonstat
     :return a JsonStatCollection, JsonStatDataset or JsonStatDimension object
+
+    ex::
+
+        filename = os.path.join(self.fixture_dir, "oecd-canada.json")
+        collection = jsonstat.from_file(filename)
+
     """
     with open(filename) as f:
         json_string = f.read()
@@ -29,8 +35,8 @@ def from_file(filename):
 
 
 def from_string(json_string):
-    """
-    parse a jsonstat string and returns the appropriate object
+    """parse a jsonstat string and returns the appropriate object
+
     :param json_string: string containing a json
     :return a JsonStatCollection, JsonStatDataset or JsonStatDimension object
     """

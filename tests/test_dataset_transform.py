@@ -35,13 +35,13 @@ class TestDataSetToTable(unittest.TestCase):
         # table len is the size of dataset + 1 for headers
         self.assertEqual(len(dataset) + 1, len(table))
 
-        header_expected = [u'2003-2014', u'OECD countries, EU15 and total', u'Value']
+        header_expected = [u'serie', u'2012-2014', u'OECD countries, EU15 and total', u'Value']
         self.assertEqual(header_expected, table[0])
 
-        first_row_expected = [u'2012', u'Australia', 11]
+        first_row_expected = [u'serie', u'2012', u'Australia', 11]
         self.assertEqual(first_row_expected, table[1])
 
-        second_row_expected = [u'2012', u'Austria', 12]
+        second_row_expected = [u'serie', u'2012', u'Austria', 12]
         self.assertEqual(second_row_expected, table[2])
 
     def test_to_table_inverted_order(self):
@@ -57,13 +57,13 @@ class TestDataSetToTable(unittest.TestCase):
         # table len is the size of dataset + 1 for headers
         self.assertEqual(len(dataset) + 1, len(table))
 
-        header_expected = ['2003-2014', 'OECD countries, EU15 and total', 'Value']
+        header_expected = ['serie', '2012-2014', 'OECD countries, EU15 and total', 'Value']
         self.assertEqual(header_expected, table[0])
 
-        first_row_expected = ['2012', 'Australia', 11]
+        first_row_expected = ['serie', '2012', 'Australia', 11]
         self.assertEqual(first_row_expected, table[1])
 
-        second_row_expected = ['2013', 'Australia', 21]
+        second_row_expected = ['serie', '2013', 'Australia', 21]
         self.assertEqual(second_row_expected, table[2])
 
     def test_to_table_eurostat_one_dim(self):
@@ -90,9 +90,7 @@ class TestDataSetToTable(unittest.TestCase):
                 self.assertEqual(t, row, msg)
 
     def test_to_table_oecd_canada(self):
-        """
-        test convert dataset to table
-        """
+        """test convert dataset to table"""
         json_pathname = os.path.join(self.fixture_dir, "json-stat.org", "oecd-canada.json")
         collection = jsonstat.JsonStatCollection()
         collection.from_file(json_pathname)
@@ -150,15 +148,15 @@ class TestDataSetToTable(unittest.TestCase):
         df = dataset.to_table(content='id', blocked_dims={"area":"IT"}, rtype=pd.DataFrame)
         # print(df)
 
-        ar = [['2012','IT', 14], ['2013', 'IT', 24], ['2014', 'IT', 34]]
-        expected = pd.DataFrame(ar, columns=['year','area','Value'])
+        ar = [['serie', '2012','IT', 14], ['serie', '2013', 'IT', 24], ['serie', '2014', 'IT', 34]]
+        expected = pd.DataFrame(ar, columns=['serie', 'year','area','Value'])
         pdt.assert_frame_equal(expected, df)
 
         df = dataset.to_data_frame('year', content='id', blocked_dims={"area": "IT"})
         # TODO: print(df)
 
-        ar = [['IT', 14], ['IT', 24], ['IT', 34]]
-        expected = pd.DataFrame(ar, columns=['area','Value'], index=['2012','2013','2014'])
+        ar = [['serie', 'IT', 14], ['serie', 'IT', 24], ['serie', 'IT', 34]]
+        expected = pd.DataFrame(ar, columns=['serie', 'area','Value'], index=['2012','2013','2014'])
         expected.index.name = 'year'
         pdt.assert_frame_equal(expected, df)
 
@@ -169,15 +167,16 @@ class TestDataSetToTable(unittest.TestCase):
         df = dataset.to_data_frame("year", content="id", blocked_dims={'area':"IT"})
 
         # print(df)
-        #      area  Value
+        #       serie area  Value
         # year
-        # 2012   IT     14
-        # 2013   IT     24
-        # 2014   IT     34
+        # 2012  serie   IT     14
+        # 2013  serie   IT     24
+        # 2014  serie   IT     34
+
         # print(df.columns)
 
         # checking taht colums are ['geo','Value]
-        self.assertTrue((df.columns == pd.Series(['area','Value'])).all())
+        self.assertTrue((df.columns == pd.Series(['serie', 'area','Value'])).all())
         # pdt.assert_series_equal(df.columns,pd.Series(['area', 'Value']))
         self.assertEqual(34, df.loc['2014']['Value'])
 

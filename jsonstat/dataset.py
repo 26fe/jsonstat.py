@@ -20,9 +20,7 @@ from jsonstat.exceptions import JsonStatMalformedJson
 
 
 class JsonStatDataSet:
-    """
-    Represents a JsonStat dataset
-    """
+    """Represents a JsonStat dataset"""
 
     def __init__(self, dataset_name=None):
         """Initialize an empty dataset.
@@ -40,11 +38,11 @@ class JsonStatDataSet:
 
         # dimensions
         self.__dim_nr = 0
-        self.__dim_ids = None
+        self.__pos2iid = None
         self.__dimension_sizes = None
 
         self.__pos2dim = []   # array int -> dim
-        self.__id2dim = {}    # dict  id  -> pos
+        self.__iid2dim = {}    # dict  id  -> pos
         self.__lbl2dim = {}   # dict  lbl -> dim
         self.__lbl2pos = {}   # dict  lbl -> pos
 
@@ -70,15 +68,15 @@ class JsonStatDataSet:
         """
         if type(spec) is int:
             return self.__pos2dim[spec]
-        if spec not in self.__id2dim:
-            msg = "dataset '{}': unknown dimension '{}' know dimensions ids are: {}".format(self.__name, spec, ", ".join(self.__dim_ids))
+        if spec not in self.__iid2dim:
+            msg = "dataset '{}': unknown dimension '{}' know dimensions ids are: {}".format(self.__name, spec, ", ".join(self.__pos2iid))
             raise JsonStatException(msg)
-        return self.__id2dim[spec]
+        return self.__iid2dim[spec]
 
     def __str__dimensions(self):
-        out = "{} dimensions:\n".format(len(self.__dim_ids))
-        for i, dname in enumerate(self.__dim_ids):
-            d = self.__id2dim[dname]
+        out = "{} dimensions:\n".format(len(self.__pos2iid))
+        for i, dname in enumerate(self.__pos2iid):
+            d = self.__iid2dim[dname]
             out += "  {}: dim id: '{}' label: '{}' size: '{}' role: '{}'\n".format(i, d.name(), d.label(), d.size(), d.role())
         return out
 
@@ -143,14 +141,14 @@ class JsonStatDataSet:
         :param dims: {country:"AU", "year":2014}
         :returns: [1,2,3]
         """
-        vec_pos = len(self.__dim_ids) * [0]
+        vec_pos = len(self.__pos2iid) * [0]
         for (cat, val) in dims.items():
-            if cat not in self.__id2dim:
-                allowed_categories = ", ".join(self.__dim_ids)
+            if cat not in self.__iid2dim:
+                allowed_categories = ", ".join(self.__pos2iid)
                 msg = "dataset '{}': category '{}' don't exists allowed category are: {}"
                 msg = msg.format(self.__name, cat, allowed_categories)
                 raise JsonStatException(msg)
-            dim = self.__id2dim[cat]
+            dim = self.__iid2dim[cat]
             vec_pos[dim.pos()] = dim.idx2pos(val)
         return vec_pos
 
@@ -160,14 +158,14 @@ class JsonStatDataSet:
         :param dims: {country:"AU", "year":2014}
         :returns: [1,2,3]
         """
-        vec_pos = len(self.__dim_ids) * [0]
+        vec_pos = len(self.__pos2iid) * [0]
         for (cat, val) in dims.items():
-            if cat in self.__id2dim:
-                dim = self.__id2dim[cat]
+            if cat in self.__iid2dim:
+                dim = self.__iid2dim[cat]
             elif cat in self.__lbl2pos:
                 dim = self.__lbl2dim[cat]
             else:
-                allowed_categories = ", ".join(self.__dim_ids)
+                allowed_categories = ", ".join(self.__pos2iid)
                 msg = "dataset '{}': category '{}' don't exists allowed category are: {}"
                 msg = msg.format(self.__name, cat, allowed_categories)
                 raise JsonStatException(msg)
@@ -188,38 +186,46 @@ class JsonStatDataSet:
         # print "pos vector {} * mult vect {} = {} ({})".format(a, self.mult_vector,r,p)
         return self.__value[p]
 
-    def from_vec_pos_to_vec_idx(self, vec_pos):
+    def from_vec_pos_to_vec_idx(self, vec_pos, without_one_dimension=False):
         """
 
         :param vec_pos:  [0,3,4]
         :returns: ['dimension 1 index', 'dimension 2 label', 'dimension 3 label']
         """
-        vec_idx = len(vec_pos) * [None]
-        for i in range(len(vec_pos)):
-            dname = self.__dim_ids[i]
-            d = self.__id2dim[dname]
-            vec_idx[i] = d.pos2idx(vec_pos[i])
+        # vec_idx = len(vec_pos) * [None]
+        vec_idx = []
+        for pos in range(len(vec_pos)):
+            dim_iid = self.__pos2iid[pos]
+            dim = self.__iid2dim[dim_iid]
+            # vec_idx[i] = dim.pos2idx(vec_pos[i])
+            if not(without_one_dimension and len(dim) == 1):
+                vec_idx.append(dim.pos2idx(vec_pos[pos]))
         return vec_idx
 
-    def from_vec_pos_to_vec_label(self, vec_pos):
+    def from_vec_pos_to_vec_label(self, vec_pos, without_one_dimension=False):
         """
 
         :param vec_pos:  [0,3,4]
         :returns: ['dimension 1 label or index', 'dimension 2 label  or index', 'dimension 3 label  or index']
         """
-        vec_idx = len(vec_pos) * [None]
-        for i in range(len(vec_pos)):
-            dname = self.__dim_ids[i]
-            d = self.__id2dim[dname]
 
-            lbl = d.pos2label(vec_pos[i])
+        # vec_idx = len(vec_pos) * [None]
+        vec_idx = []
+        for pos in range(len(vec_pos)):
+            dim_iid = self.__pos2iid[pos]
+            dim = self.__iid2dim[dim_iid]
+
+            lbl = dim.pos2label(vec_pos[pos])
             if lbl is None:
-                lbl = d.pos2idx(vec_pos[i])
+                lbl = dim.pos2idx(vec_pos[pos])
 
-            vec_idx[i] = lbl
+            # vec_idx[i] = lbl
+            if not(without_one_dimension and len(dim) == 1):
+                vec_idx.append(lbl)
+
         return vec_idx
 
-    def from_vec_idx_to_vec_dim(self, lst_ids):
+    def from_vec_idx_to_vec_dim(self, lst_iids):
         """From a list of dimension name to a list of numerical dimension position
 
           F.e.
@@ -228,7 +234,7 @@ class JsonStatDataSet:
 
         :returns: list of number
         """
-        return [self.__id2dim[iid].pos() for iid in lst_ids]
+        return [self.__iid2dim[iid].pos() for iid in lst_iids]
 
     #
     # generator
@@ -242,52 +248,54 @@ class JsonStatDataSet:
         :returns:
         """
 
-        ids = self.__dim_ids
+        nrdim = len(self.__pos2iid)
+        if order is not None and len(order) != nrdim:
+            msg = "length of the order vector is different from number of dimension {}".format(nrdim)
+            raise JsonStatException(msg)
 
-        vec_pos_blocked = len(ids) * [False]
-        vec_pos = len(ids) * [0]  # [0,0,0]
+        vec_pos_blocked = nrdim * [False]
+        vec_pos = nrdim * [0]
 
         for (cat,idx) in blocked_dims.items():
             d = self.dimension(cat)
             vec_pos_blocked[d.pos()] = True
             vec_pos[d.pos()] = d.idx2pos(idx)
 
-        dsizes = self.__dim_sizes
-        max_dimensions = len(dsizes)
+        pos2size = self.__pos2size
 
         if order is None:
-            vec_dimension_reorder = range(len(ids))
+            vec_dimension_reorder = range(nrdim)
         else:
             vec_dimension_reorder = order
 
-        nrd = max_dimensions - 1
+        nrd = nrdim - 1
         while nrd >= 0:
 
             yield list(vec_pos)  # make a shallow copy of vec_pos
 
-            nrd = max_dimensions - 1
-            current_dimension = vec_dimension_reorder[nrd]
+            nrd = nrdim - 1
+            cur_dim = vec_dimension_reorder[nrd]
             # se la posizione non e bloccata allora puoi far andare avanti la cifra
-            if not vec_pos_blocked[current_dimension]:
-                vec_pos[current_dimension] += 1
+            if not vec_pos_blocked[cur_dim]:
+                vec_pos[cur_dim] += 1
 
             # se non si arrivati all'ultima dimensione
             # e se la dimensione corrente non e al massimo valore o se la dimensione corrente e bloccata
             while nrd >= 0 and \
-                    (vec_pos[current_dimension] == dsizes[current_dimension] or vec_pos_blocked[current_dimension]):
+                    (vec_pos[cur_dim] == pos2size[cur_dim] or vec_pos_blocked[cur_dim]):
 
                 # se la posizione non e' bloccata allora puoi far partire il valore dall'inizio
-                if not vec_pos_blocked[current_dimension]:
-                    vec_pos[current_dimension] = 0
+                if not vec_pos_blocked[cur_dim]:
+                    vec_pos[cur_dim] = 0
 
                 # esamina la prossima posizione
                 nrd -= 1
                 # se la dimensione corrente non e' la prima
                 if nrd >= 0:
-                    current_dimension = vec_dimension_reorder[nrd]
+                    cur_dim = vec_dimension_reorder[nrd]
                     # se la dimensione corrente non e bloccata puoi farla avanzare
-                    if not vec_pos_blocked[current_dimension]:
-                        vec_pos[current_dimension] += 1
+                    if not vec_pos_blocked[cur_dim]:
+                        vec_pos[cur_dim] += 1
 
     def generate_all_vec(self, **blocked_dims):
         for vec_pos in self.all_pos(blocked_dims):
@@ -298,7 +306,8 @@ class JsonStatDataSet:
     # transforming function
     #
 
-    def to_table(self, content="label", order=None, rtype=list, blocked_dims={}, value_column="Value"):
+    def to_table(self, content="label", order=None, rtype=list, blocked_dims={}, value_column="Value",
+                 without_one_dimensions=False):
         """Transforms a dataset into a table (a list of row)
 
         table len is the size of dataset + 1 for headers
@@ -314,10 +323,10 @@ class JsonStatDataSet:
         # header
         header = []
         if content == "label":
-            for dname in self.__dim_ids:
-                header.append(self.__id2dim[dname].label())
+            for dname in self.__pos2iid:
+                header.append(self.__iid2dim[dname].label())
         else:
-            header = list(self.__dim_ids)
+            header = list(self.__pos2iid)
 
         header.append(value_column)
 
@@ -326,9 +335,9 @@ class JsonStatDataSet:
         for vec_pos in self.all_pos(order=order,blocked_dims=blocked_dims):
             value = self.value_from_vec_pos(vec_pos)
             if content == "label":
-                row = self.from_vec_pos_to_vec_label(vec_pos)
+                row = self.from_vec_pos_to_vec_label(vec_pos, without_one_dimension=without_one_dimensions)
             else:
-                row = self.from_vec_pos_to_vec_idx(vec_pos)
+                row = self.from_vec_pos_to_vec_idx(vec_pos, without_one_dimension=without_one_dimensions)
             row.append(value)
             table.append(row)
 
@@ -449,12 +458,12 @@ class JsonStatDataSet:
             msg = "dataset '{}': missing 'dimension.size' key".format(self.__name)
             raise JsonStatMalformedJson(msg)
 
-        self.__dim_ids = json_data_dimension['id']
-        self.__dim_sizes = json_data_dimension['size']
-        self.__dim_nr = len(self.__dim_ids)
+        self.__pos2iid = json_data_dimension['id']
+        self.__pos2size = json_data_dimension['size']
+        self.__dim_nr = len(self.__pos2iid)
 
         # validate dimension
-        if len(self.__dim_ids) != len(self.__dim_sizes):
+        if len(self.__pos2iid) != len(self.__pos2size):
             msg = "dataset '{}': dataset_id is different of dataset_size".format(self.__name)
             raise JsonStatMalformedJson(msg)
 
@@ -464,7 +473,7 @@ class JsonStatDataSet:
         self.__parse_dimensions(json_data_dimension, json_data_roles)
 
         # validate
-        size_total = reduce(lambda x, y: x * y, self.__dim_sizes)
+        size_total = reduce(lambda x, y: x * y, self.__pos2size)
         if len(self.__value) != size_total:
             msg = "dataset '{}': size {} is different from calculate size {} by dimension"
             msg = msg.format(self.__name, len(self.__value), size_total)
@@ -521,12 +530,12 @@ class JsonStatDataSet:
             raise JsonStatMalformedJson(msg)
 
         # parsing when values are presents
-        self.__dim_ids = json_data['id']
-        self.__dim_sizes = json_data['size']
-        self.__dim_nr = len(self.__dim_ids)
+        self.__pos2iid = json_data['id']
+        self.__pos2size = json_data['size']
+        self.__dim_nr = len(self.__pos2iid)
 
         # validate len(ids) == len(sizes)
-        if len(self.__dim_ids) != len(self.__dim_sizes):
+        if len(self.__pos2iid) != len(self.__pos2size):
             msg = "dataset '{}': dataset_id is different of dataset_size".format(self.__name)
             raise JsonStatMalformedJson(msg)
 
@@ -563,10 +572,10 @@ class JsonStatDataSet:
                     roles[dname] = role
 
         # parsing each dimensions
-        self.__pos2dim = len(self.__dim_ids) * [None]
-        for dpos in range(len(self.__dim_ids)):
-            dname = self.__dim_ids[dpos]
-            dsize = self.__dim_sizes[dpos]
+        self.__pos2dim = len(self.__pos2iid) * [None]
+        for dpos in range(len(self.__pos2iid)):
+            dname = self.__pos2iid[dpos]
+            dsize = self.__pos2size[dpos]
 
             if dname not in json_data_dimension:
                 msg = "dataset '{}': malformed json: missing key {} in dimension".format(self.__name, dname)
@@ -574,7 +583,7 @@ class JsonStatDataSet:
 
             dimension = JsonStatDimension(dname, dsize, dpos, roles.get(dname))
             dimension.from_json(json_data_dimension[dname])
-            self.__id2dim[dname] = dimension
+            self.__iid2dim[dname] = dimension
             self.__pos2dim[dpos] = dimension
             if dimension.label() is not None:
                 self.__lbl2dim[dimension.label()] = dimension
@@ -585,6 +594,6 @@ class JsonStatDataSet:
         self.__acc_vector = self.__dim_nr * [1]
         i = self.__dim_nr - 2
         while i >= 0:
-            acc = acc * self.__dim_sizes[i + 1]
+            acc = acc * self.__pos2size[i + 1]
             self.__acc_vector[i] = acc
             i -= 1

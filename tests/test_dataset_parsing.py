@@ -108,7 +108,7 @@ class TestDataSet(unittest.TestCase):
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(json_pathname)
 
-        self.assertEqual(len(dataset.dimensions()), 2)
+        self.assertEqual(len(dataset.dimensions()), 3)
 
     def test_exception_no_existent_dimension(self):
         json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
@@ -119,7 +119,7 @@ class TestDataSet(unittest.TestCase):
         with self.assertRaises(jsonstat.JsonStatException) as cm:
             dataset.dimension("not existent dim")
         e = cm.exception
-        expected = "dataset 'canada': unknown dimension 'not existent dim' know dimensions ids are: year, area"
+        expected = "dataset 'canada': unknown dimension 'not existent dim' know dimensions ids are: serie, year, area"
         self.assertEqual(expected, e.value)
 
     def test_info(self):
@@ -132,9 +132,10 @@ class TestDataSet(unittest.TestCase):
             "label:  'Unemployment rate in the OECD countries'\n"
             "source: 'Unemployment rate in the OECD countries'\n"
             "size: 12\n"
-            "2 dimensions:\n"
-            "  0: dim id: 'year' label: '2003-2014' size: '3' role: 'time'\n"
-            "  1: dim id: 'area' label: 'OECD countries, EU15 and total' size: '4' role: 'geo'\n"
+            "3 dimensions:\n"
+            "  0: dim id: 'serie' label: 'serie' size: '1' role: 'None'\n"
+            "  1: dim id: 'year' label: '2012-2014' size: '3' role: 'time'\n"
+            "  2: dim id: 'area' label: 'OECD countries, EU15 and total' size: '4' role: 'geo'\n"
         )
         self.assertEqual(expected, dataset.__str__())
 
@@ -185,10 +186,10 @@ class TestDataSet(unittest.TestCase):
         dataset.from_file(json_pathfile)
 
         ret = dataset.from_vec_idx_to_vec_dim(["area", "year"])
-        self.assertEqual([1,0], ret)
+        self.assertEqual([2,1], ret)
 
         ret = dataset.from_vec_idx_to_vec_dim(["year", "area"])
-        self.assertEqual([0,1], ret)
+        self.assertEqual([1,2], ret)
 
     #
     # enumeration function
@@ -201,9 +202,13 @@ class TestDataSet(unittest.TestCase):
         dataset.from_file(json_pathfile)
 
         result = list(dataset.all_pos())
-        expected = [[0, 0], [0, 1], [0, 2], [0, 3], # first digit 0
-                    [1, 0], [1, 1], [1, 2], [1, 3], # first digit 1
-                    [2, 0], [2, 1], [2, 2], [2, 3]] # first digit 2
+        # fist digit is serie always 0
+        # second digit is year from 0 to 2
+        # third digit is area from 0 to 3
+        # order is ["serie", "year", "area"]
+        expected = [[0, 0, 0], [0, 0, 1], [0, 0, 2], [0, 0, 3], # first digit 0
+                    [0, 1, 0], [0, 1, 1], [0, 1, 2], [0, 1, 3], # first digit 1
+                    [0, 2, 0], [0, 2, 1], [0, 2, 2], [0, 2, 3]] # first digit 2
         self.assertEqual(result, expected)
 
     def test_all_pos_reorder(self):
@@ -211,12 +216,16 @@ class TestDataSet(unittest.TestCase):
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(json_pathfile)
 
-        reorder = dataset.from_vec_idx_to_vec_dim(["area", "year"])
+        reorder = dataset.from_vec_idx_to_vec_dim(["area", "year", "serie"])
         result = list(dataset.all_pos(order=reorder))
-        expected = [[0, 0], [1, 0], [2, 0],  # last digit 0
-                    [0, 1], [1, 1], [2, 1],  # last digit 1
-                    [0, 2], [1, 2], [2, 2],  # last digit 2
-                    [0, 3], [1, 3], [2, 3]]  # last digit 3
+        # fist digit is serie always 0
+        # second digit is year from 0 to 2
+        # third digit is area from 0 to 3
+        # first changing digit is year (second digit)
+        expected = [[0, 0, 0], [0, 1, 0], [0, 2, 0],  # last digit 0
+                    [0, 0, 1], [0, 1, 1], [0, 2, 1],  # last digit 1
+                    [0, 0, 2], [0, 1, 2], [0, 2, 2],  # last digit 2
+                    [0, 0, 3], [0, 1, 3], [0, 2, 3]]  # last digit 3
         self.assertEqual(result, expected)
 
     def test_all_pos_with_block(self):
@@ -225,13 +234,13 @@ class TestDataSet(unittest.TestCase):
         dataset.from_file(json_pathfile)
 
         result = list(dataset.all_pos({"area": "IT"}))
-        expected = [[0, 3], [1, 3], [2, 3]]
+        expected = [[0, 0, 3], [0, 1, 3], [0, 2, 3]]
         self.assertEqual(result, expected)
 
         dataset.generate_all_vec(area="IT")
 
         result = list(dataset.all_pos({"year": "2014"}))
-        expected = [[2, 0], [2, 1], [2, 2], [2, 3]]
+        expected = [[0, 2, 0], [0, 2, 1], [0, 2, 2], [0, 2, 3]]
         self.assertEqual(result, expected)
 
         dataset.generate_all_vec(year='2014')
