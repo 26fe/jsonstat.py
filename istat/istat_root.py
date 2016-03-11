@@ -8,6 +8,9 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import sys
 
+# jsonstat
+import jsonstat
+
 # istat
 from istat.istat_helper import IstatHelper
 from istat.istat_area import IstatArea
@@ -18,13 +21,16 @@ class IstatRoot:
     Represent the root of all Istat datasets
     """
 
-    def __init__(self, cache_dir="./istat_cached", time_to_live = None, lang=1):
-        """
-        Initialize Istat class.
-        :param cache_dir: where to store the cached file
+    def __init__(self, downloader=None, lang=1):
+        """Initialize Istat class.
+        :param downloader: where to store the cached file
         :param lang: 1=english, otherwise italian
         """
-        self.__istat_helper = IstatHelper(cache_dir, time_to_live, lang)
+
+        if downloader is None:
+            downloader = jsonstat.Downloader(cache_dir="./istat_cached", time_to_live=None)
+
+        self.__istat_helper = IstatHelper(downloader, lang)
         self.__id2area = None
         self.__cod2area = None
         self.__desc2area = None
@@ -32,7 +38,7 @@ class IstatRoot:
     def cache_dir(self):
         return self.__istat_helper.cache_dir()
 
-    def lang(self,lg):
+    def lang(self, lg):
         self.__istat_helper.lang(lg)
 
     def areas(self):
@@ -77,7 +83,7 @@ class IstatRoot:
             if spec in self.__cod2area: return self.__cod2area[spec]
             if spec in self.__desc2area: return self.__desc2area[spec]
         else:
-            spec = int(spec) # try to convert into int
+            spec = int(spec)  # try to convert into int
             return self.__id2area[spec]
 
     def dataset(self, spec_area, spec_dataset):
@@ -106,5 +112,3 @@ class IstatRoot:
             self.__id2area[iid] = istat_area
             self.__cod2area[cod] = istat_area
             self.__desc2area[desc] = istat_area
-
-

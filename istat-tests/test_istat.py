@@ -10,54 +10,55 @@ from __future__ import unicode_literals
 import os
 import unittest
 
-# jsonstat
+# jsonstat/istat
+import jsonstat
 import istat
 
 
 class TestIstat(unittest.TestCase):
+
     def setUp(self):
         self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures", "istat")
+        self.downloader = jsonstat.Downloader(self.fixture_dir)
+        self.i_en = istat.IstatRoot(self.downloader, lang=1)
 
     def test_cache_dir(self):
-        i = istat.IstatRoot(self.fixture_dir, lang=0)
-        self.assertEquals(i.cache_dir(), self.fixture_dir)
+        i_it = istat.IstatRoot(self.downloader, lang=0)
+        self.assertEquals(i_it.cache_dir(), self.fixture_dir)
 
     def test_istat_italian(self):
-        i = istat.IstatRoot(self.fixture_dir, lang=0)
-        n = i.area(26).desc()
+        i_it = istat.IstatRoot(self.downloader, lang=0)
+        n = i_it.area(26).desc()
         self.assertEqual("Lavoro", n)
 
-        d = i.area(26).dataset('DCCV_INATTIVMENS').name()
+        d = i_it.area(26).dataset('DCCV_INATTIVMENS').name()
         self.assertEqual(u'Inattivi - dati mensili', d)
 
-        dname = i.area(26).dataset('DCCV_INATTIVMENS').dimension(0).name()
+        dname = i_it.area(26).dataset('DCCV_INATTIVMENS').dimension(0).name()
         self.assertEqual("Territorio", dname)
 
     def test_istat_english(self):
-        i = istat.IstatRoot(self.fixture_dir, lang=1)
-        n = i.area(26).desc()
+        n = self.i_en.area(26).desc()
         self.assertEqual("Labour", n)
 
-        d = i.area(26).dataset('DCCV_INATTIVMENS').name()
+        d = self.i_en.area(26).dataset('DCCV_INATTIVMENS').name()
         self.assertEqual(u'Inactive population - monthly data', d)
 
-        dim = i.area(26).dataset('DCCV_INATTIVMENS').dimension(0)
+        dim = self.i_en.area(26).dataset('DCCV_INATTIVMENS').dimension(0)
         self.assertEqual('Territory', dim.name())
         
-        dname = i.area(26).dataset('DCCV_INATTIVMENS').dimension(0).name()
+        dname = self.i_en.area(26).dataset('DCCV_INATTIVMENS').dimension(0).name()
         self.assertEqual("Territory", dname)
 
     def test_areas(self):
-        i = istat.IstatRoot(self.fixture_dir, lang=1)
-        istat_area = i.area(3)
+        istat_area = self.i_en.area(3)
         self.assertEqual("CEN", istat_area.cod())
 
     def test_dataset(self):
-        i = istat.IstatRoot(self.fixture_dir, lang=1)
         istat_area_name = 'Prices'
         istat_dataset_name = 'DCSP_IPAB'
 
-        istat_dataset = i.dataset(istat_area_name, istat_dataset_name)
+        istat_dataset = self.i_en.dataset(istat_area_name, istat_dataset_name)
         istat_dimension = istat_dataset.dimension(0)
         self.assertEqual("Territory", istat_dimension.name())
 

@@ -21,12 +21,18 @@ import jsonstat
 
 
 class IstatHelper:
-    """
-    Helper class to invoke api.istat.it
+    """Helper class useful to invoke istat api (api.istat.it)
     Each methods of this class is mapped to an api call
     """
-    def __init__(self, cache_dir, time_to_live=None, lang=1):
-        self.__dwl = jsonstat.Downloader(cache_dir, time_to_live)
+
+    def __init__(self, downloader, lang=1):
+        """
+        :param downloader:
+        :param lang:
+        :return:
+        """
+
+        self.__dwl = downloader
         self.__lang = lang
 
     def lang(self, lg):
