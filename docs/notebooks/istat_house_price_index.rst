@@ -13,6 +13,7 @@ querying italian statistics.
     from __future__ import print_function
     import os
     import istat
+    from IPython.core.display import HTML
 
 Setting a cache dir where to store json files download by Istat api.
 Storing file on disk speed up development, and assures consistent
@@ -21,9 +22,8 @@ results over time. Anyway you can delete file to donwload a fresh copy.
 .. code:: python
 
     cache_dir = os.path.abspath(os.path.join("..", "tmp", "istat_cached"))
-    if not os.path.exists(cache_dir):
-        os.makedirs(cache_dir)
-    print("cache_dir is '{}'".format(cache_dir))
+    istat.cache_dir(cache_dir)
+    print("cache_dir is '{}'".format(istat.cache_dir()))
 
 
 .. parsed-literal::
@@ -35,33 +35,15 @@ List all istat areas
 
 .. code:: python
 
-    istat.cache_dir(cache_dir)
-    for istat_area in istat.areas():
-        print(istat_area)
+    HTML(istat.areas_as_html())
 
 
-.. parsed-literal::
 
-    CEN:2011 Population and housing census
-    ENT:Enterprises
-    ENV:Environment and Energy
-    POP:Population and Households
-    HOU:Households Economic Conditions and Disparities
-    HEA:Health statistics
-    WEL:Social Security and Welfare
-    EDU:Education and training
-    COM:Communication, culture and leisure
-    JUS:Justice and Security
-    OPI:Citizens' opinions and satisfaction with life
-    SOC:Social participation
-    ACC:National Accounts
-    AGR:Agriculture
-    IND:Industry and Construction
-    SER:Services
-    PUB:Public Administrations and Private Institutions
-    EXT:External Trade and Internationalisation
-    PRI:Prices
-    LAB:Labour
+
+.. raw:: html
+
+    <table><tr><th>id</th><th>desc</th></tr><tr><td>3</td><td>2011 Population and housing census</td></td></tr><tr><td>4</td><td>Enterprises</td></td></tr><tr><td>7</td><td>Environment and Energy</td></td></tr><tr><td>8</td><td>Population and Households</td></td></tr><tr><td>9</td><td>Households Economic Conditions and Disparities</td></td></tr><tr><td>10</td><td>Health statistics</td></td></tr><tr><td>11</td><td>Social Security and Welfare</td></td></tr><tr><td>12</td><td>Education and training</td></td></tr><tr><td>13</td><td>Communication, culture and leisure</td></td></tr><tr><td>14</td><td>Justice and Security</td></td></tr><tr><td>15</td><td>Citizens' opinions and satisfaction with life</td></td></tr><tr><td>16</td><td>Social participation</td></td></tr><tr><td>17</td><td>National Accounts</td></td></tr><tr><td>19</td><td>Agriculture</td></td></tr><tr><td>20</td><td>Industry and Construction</td></td></tr><tr><td>21</td><td>Services</td></td></tr><tr><td>22</td><td>Public Administrations and Private Institutions</td></td></tr><tr><td>24</td><td>External Trade and Internationalisation</td></td></tr><tr><td>25</td><td>Prices</td></td></tr><tr><td>26</td><td>Labour</td></td></tr></table>
+
 
 
 List all datasets contained into area ``Prices``
@@ -71,40 +53,15 @@ List all datasets contained into area ``Prices``
     istat_area_name = 'Prices'
     istat_area = istat.area(istat_area_name)
     
-    for istat_dataset in istat_area.datasets():
-        print(u"{}({}):{}".format(istat_dataset.cod(), istat_dataset.nrdim(), istat_dataset.name()))
+    HTML(istat_area.datasets_as_html())
 
 
-.. parsed-literal::
 
-    DCSP_FOI1B2015(5):FOI - Monthly data from 2016 onwards
-    DCSP_NICUNOB(5):NIC  Monthly data until 2010
-    DCSP_FOI3B2010(4):FOI  Weights from 2011 onwards
-    DCSP_NIC3B2015(4):NIC - Weights from 2016 onwards
-    DCSP_NICUNOBB2010(5):NIC  Monthly data from 2011 onwards
-    DCSP_IPCATC2(5):HICP at constant tax rates  Annual average from 2002 onwards (base 2005=100) 
-    DCSP_IPCATC1(5):HICP at constant tax rates  Monthly data from 2002 onwards (base 2005=100) 
-    DCSP_FOI2B2015(5):FOI - Annual average from 2016 onwards
-    DCSP_NICTREB2010(4):NIC  Weights from 2011 onwards
-    DCSP_IPCATC1B2015(5):HICP at constant tax rates - Monthly data from 2002 onwards (base 2015=100)
-    DCSP_IPCA1(5):HICP  Monthly data from 2001 onwards (base 2005=100)
-    DCSP_NICDUE(5):NIC  Annual average until 2010
-    DCSP_IPCA3(4):HICP  Weights from 2001 onwards
-    DCSP_FOI2(5):FOI  Annual average  until 2010
-    DCSP_FOI3(4):FOI  Weights until 2010
-    DCSP_FOI1(5):FOI  Monthly data until 2010
-    DCSP_IPCA2(5):HICP  Annual average from 2001 onwards (base 2005=100) 
-    DCSP_IPCA1B2015(5):HICP - Monthly data from 2001 onwards (base 2015=100)
-    DCSP_FOI3B2015(4):FOI - Weights from 2016 onwards
-    DCSP_NIC1B2015(5):NIC - Monthly data from 2016 onwards
-    DCSP_NICTRE(4):NIC  Weights  until 2010
-    DCSP_FOI1B2010(5):FOI  Monthly data from 2011 onwards
-    DCSP_NICDUEB2010(5):NIC  Annual average from 2011 onwards
-    DCSP_FOI2B2010(5):FOI  Annual average from 2011  onwards
-    DCSC_PREZPRODSERV_1(5):Services producer prices index
-    DCSP_IPAB(5):House price index 
-    DCSC_FABBRESID_1(5):Construction costs index - monthly data
-    DCSC_PREZZPIND_1(6):Producer price index for industrial products - monthly data
+
+.. raw:: html
+
+    <table><tr><th>cod</th><th>name</th><th>dim</th></tr><tr><td>DCSC_FABBRESID_1</td><td>Construction costs index - monthly data</td><td>5</td></td></tr><tr><td>DCSC_PREZPRODSERV_1</td><td>Services producer prices index</td><td>5</td></td></tr><tr><td>DCSC_PREZZPIND_1</td><td>Producer price index for industrial products - monthly data</td><td>6</td></td></tr><tr><td>DCSP_FOI1</td><td>FOI  Monthly data until 2010</td><td>5</td></td></tr><tr><td>DCSP_FOI1B2010</td><td>FOI - Monthly data from 2011 to 2015</td><td>5</td></td></tr><tr><td>DCSP_FOI1B2015</td><td>FOI - Monthly data from 2016 onwards</td><td>5</td></td></tr><tr><td>DCSP_FOI2</td><td>FOI  Annual average  until 2010</td><td>5</td></td></tr><tr><td>DCSP_FOI2B2010</td><td>FOI  Annual average from 2011  onwards</td><td>5</td></td></tr><tr><td>DCSP_FOI2B2015</td><td>FOI - Annual average from 2016 onwards</td><td>5</td></td></tr><tr><td>DCSP_FOI3</td><td>FOI  Weights until 2010</td><td>4</td></td></tr><tr><td>DCSP_FOI3B2010</td><td>FOI - Weights from 2011 to 2015</td><td>4</td></td></tr><tr><td>DCSP_FOI3B2015</td><td>FOI - Weights from 2016 onwards</td><td>4</td></td></tr><tr><td>DCSP_IPAB</td><td>House price index </td><td>5</td></td></tr><tr><td>DCSP_IPCA1</td><td>HICP - Monthly data from 2001 to 2015 (base 2005=100)</td><td>5</td></td></tr><tr><td>DCSP_IPCA1B2015</td><td>HICP - Monthly data from 2001 onwards (base 2015=100)</td><td>5</td></td></tr><tr><td>DCSP_IPCA2</td><td>HICP - Annual average from 2001 to 2015 (base 2005=100)</td><td>5</td></td></tr><tr><td>DCSP_IPCA2B2015</td><td>HICP - Annual average from 2001 onwards (base 2015=100)</td><td>5</td></td></tr><tr><td>DCSP_IPCA3</td><td>HICP  Weights from 2001 onwards</td><td>4</td></td></tr><tr><td>DCSP_IPCATC1</td><td>HICP at constant tax rates - Monthly data from 2002 to 2015 (base 2005=100)</td><td>5</td></td></tr><tr><td>DCSP_IPCATC1B2015</td><td>HICP at constant tax rates - Monthly data from 2002 onwards (base 2015=100)</td><td>5</td></td></tr><tr><td>DCSP_IPCATC2</td><td>HICP at constant tax rates - Annual average from 2002 to 2015 (base 2005=100)</td><td>5</td></td></tr><tr><td>DCSP_IPCATC2B2015</td><td>HICP at constant tax rates - Annual average from 2002 onwards (base 2015=100)</td><td>5</td></td></tr><tr><td>DCSP_NIC1B2015</td><td>NIC - Monthly data from 2016 onwards</td><td>5</td></td></tr><tr><td>DCSP_NIC3B2015</td><td>NIC - Weights from 2016 onwards</td><td>4</td></td></tr><tr><td>DCSP_NICDUE</td><td>NIC  Annual average until 2010</td><td>5</td></td></tr><tr><td>DCSP_NICDUEB2010</td><td>NIC  Annual average from 2011 onwards</td><td>5</td></td></tr><tr><td>DCSP_NICTRE</td><td>NIC  Weights  until 2010</td><td>4</td></td></tr><tr><td>DCSP_NICTREB2010</td><td>NIC - Weights from 2011 to 2015</td><td>4</td></td></tr><tr><td>DCSP_NICUNOB</td><td>NIC  Monthly data until 2010</td><td>5</td></td></tr><tr><td>DCSP_NICUNOBB2010</td><td>NIC - Monthly data from 2011 to 2015</td><td>5</td></td></tr></table>
+
 
 
 List all dimension for dataset ``DCSP_IPAB`` (House price index)
@@ -113,16 +70,15 @@ List all dimension for dataset ``DCSP_IPAB`` (House price index)
 
     istat_dataset_name = 'DCSP_IPAB'
     istat_dataset = istat_area.dataset(istat_dataset_name)
-    istat_dataset.info_dimensions()
+    HTML(istat_dataset.info_dimensions_as_html())
 
 
-.. parsed-literal::
 
-    dim 0 'Territory' (1:'Italy')
-    dim 1 'Index type' (18:'house price index (base 2010=100) - quarterly data', 19:'house price index (base 2010=100) - annual average', 20:'house price index (base 2010=100) - weights')
-    dim 2 'Measure' (8:'annual average rate of change', 4:'index number', 22:'not applicable', 6:'percentage changes on the previous period', 7:'percentage changes on the same period of the previous year')
-    dim 3 'Purchases of dwellings' (4:'H1 - all items', 5:'H11 - new dwellings', 6:'H12 - existing dwellings')
-    dim 4 'Time and frequency' (2178:'Q3-2014', 2182:'Q4-2014', 2186:'2015', 2188:'Q1-2015', 2192:'Q2-2015', 2197:'Q3-2015', 2091:'2010', 2093:'Q1-2010', 2097:'Q2-2010', 2102:'Q3-2010', 2106:'Q4-2010', 2110:'2011', 2112:'Q1-2011', 2116:'Q2-2011', 2121:'Q3-2011', 2125:'Q4-2011', 2129:'2012', 2131:'Q1-2012', 2135:'Q2-2012', 2140:'Q3-2012', 2144:'Q4-2012', 2148:'2013', 2150:'Q1-2013', 2154:'Q2-2013', 2159:'Q3-2013', 2163:'Q4-2013', 2167:'2014', 2169:'Q1-2014', 2173:'Q2-2014')
+
+.. raw:: html
+
+    <table><tr><th>nr</th><th>name</th><th>values</th></tr><tr><td>0</td><td>Territory</td><td>(1:'Italy')</td></td></tr><tr><td>1</td><td>Index type</td><td>(18:'house price index (base 2010=100) - quarterly data', 19:'house price index (base 2010=100) - annual average', 20:'house price index (base 2010=100) - weights')</td></td></tr><tr><td>2</td><td>Measure</td><td>(8:'annual average rate of change', 4:'index number', 22:'not applicable', 6:'percentage changes on the previous period', 7:'percentage changes on the same period of the previous year')</td></td></tr><tr><td>3</td><td>Purchases of dwellings</td><td>(4:'H1 - all items', 5:'H11 - new dwellings', 6:'H12 - existing dwellings')</td></td></tr><tr><td>4</td><td>Time and frequency</td><td>(2112:'Q1-2011', 2178:'Q3-2014', 2116:'Q2-2011', 2182:'Q4-2014', 2121:'Q3-2011', 2186:'2015', 2188:'Q1-2015', 2125:'Q4-2011', 2192:'Q2-2015', 2129:'2012', 2131:'Q1-2012', 2197:'Q3-2015', 2135:'Q2-2012', 2140:'Q3-2012', 2144:'Q4-2012', 2148:'2013', 2150:'Q1-2013', 2154:'Q2-2013', 2091:'2010', 2093:'Q1-2010', 2159:'Q3-2013', 2097:'Q2-2010', 2163:'Q4-2013', 2102:'Q3-2010', 2167:'2014', 2169:'Q1-2014', 2106:'Q4-2010', 2173:'Q2-2014', 2110:'2011')</td></td></tr></table>
+
 
 
 Extract data from dataset ``DCSP_IPAB`` with dimension "1,18,0,0,0"
@@ -131,7 +87,7 @@ where the first dimension is Territory, etc. Below is the mapping:
 +------------------------+------+-------------------------------------------------------+
 | dimension              |      |                                                       |
 +========================+======+=======================================================+
-| Terrytory              | 1    | Italy                                                 |
+| Territory              | 1    | Italy                                                 |
 +------------------------+------+-------------------------------------------------------+
 | Type                   | 18   | house price index (base 2010=100) - quarterly data'   |
 +------------------------+------+-------------------------------------------------------+

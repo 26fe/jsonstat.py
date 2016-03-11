@@ -14,14 +14,16 @@ format.
     from __future__ import print_function
     import os
     import pandas as pd
-    import istat
-    
+    from IPython.core.display import HTML
     import matplotlib.pyplot as plt
     %matplotlib inline
+    
+    import istat
 
-Setting a cache dir where to store json files download by Istat api.
-Storing file on disk speed up development, and assures consistent
-results over time. Anyway you can delete file to donwload a fresh copy.
+Next step is to set a cache dir where to store json files downloaded
+from Istat. Storing file on disk speeds up development, and assures
+consistent results over time. Eventually, you can delete donwloaded
+files to get a fresh copy.
 
 .. code:: python
 
@@ -39,32 +41,15 @@ List all istat areas
 
 .. code:: python
 
-    for istat_area in istat.areas():
-        print(istat_area)
+    HTML(istat.areas_as_html())
 
 
-.. parsed-literal::
 
-    CEN:2011 Population and housing census
-    ENT:Enterprises
-    ENV:Environment and Energy
-    POP:Population and Households
-    HOU:Households Economic Conditions and Disparities
-    HEA:Health statistics
-    WEL:Social Security and Welfare
-    EDU:Education and training
-    COM:Communication, culture and leisure
-    JUS:Justice and Security
-    OPI:Citizens' opinions and satisfaction with life
-    SOC:Social participation
-    ACC:National Accounts
-    AGR:Agriculture
-    IND:Industry and Construction
-    SER:Services
-    PUB:Public Administrations and Private Institutions
-    EXT:External Trade and Internationalisation
-    PRI:Prices
-    LAB:Labour
+
+.. raw:: html
+
+    <table><tr><th>id</th><th>desc</th></tr><tr><td>3</td><td>2011 Population and housing census</td></td></tr><tr><td>4</td><td>Enterprises</td></td></tr><tr><td>7</td><td>Environment and Energy</td></td></tr><tr><td>8</td><td>Population and Households</td></td></tr><tr><td>9</td><td>Households Economic Conditions and Disparities</td></td></tr><tr><td>10</td><td>Health statistics</td></td></tr><tr><td>11</td><td>Social Security and Welfare</td></td></tr><tr><td>12</td><td>Education and training</td></td></tr><tr><td>13</td><td>Communication, culture and leisure</td></td></tr><tr><td>14</td><td>Justice and Security</td></td></tr><tr><td>15</td><td>Citizens' opinions and satisfaction with life</td></td></tr><tr><td>16</td><td>Social participation</td></td></tr><tr><td>17</td><td>National Accounts</td></td></tr><tr><td>19</td><td>Agriculture</td></td></tr><tr><td>20</td><td>Industry and Construction</td></td></tr><tr><td>21</td><td>Services</td></td></tr><tr><td>22</td><td>Public Administrations and Private Institutions</td></td></tr><tr><td>24</td><td>External Trade and Internationalisation</td></td></tr><tr><td>25</td><td>Prices</td></td></tr><tr><td>26</td><td>Labour</td></td></tr></table>
+
 
 
 List all datasets contained into area ``LAB`` (Labour)
@@ -74,55 +59,15 @@ List all datasets contained into area ``LAB`` (Labour)
     istat_area_name = 'LAB'
     istat_area = istat.area(istat_area_name)
     
-    for istat_dataset in istat_area.datasets():
-        print(u"{}({}):{}".format(istat_dataset.cod(), istat_dataset.nrdim(), istat_dataset.name()))
+    HTML(istat_area.datasets_as_html())
 
 
-.. parsed-literal::
 
-    DCCV_DISOCCUPTMENS(8):Unemployed - monthly data
-    DCSC_ORE10_1(5):Hours worked in enterprises with at least 10 employees - quarterly data
-    DCSC_OROS_1(5):Number of payroll jobs index - quarterly data
-    DCSC_RETRULAOROS_1(5):Gross earnings per full time equivalent unit index - quarterly data
-    DCCV_FORZLVDE(7):Labour force - seasonally adjusted data
-    DCCV_TAXOCCUDE(7):Employment rate - seasonally adjusted data
-    DCSC_COSTLAVULAOROS_1(5):Labour cost per full time equivalent unit indicators - quarterly data
-    DCCV_TAXATVTMENS(8):Activity rate - monthly data
-    DCCV_DISOCCUPT(10):Unemployment
-    DCCV_ORELAVMED(12):Employment by number of actual weekly hours and average number of actual weekly hours
-    DCSC_RETRCONTR1C(6):Wages according to collective labour agreements by agreement  - monthly and annual data               .
-    DCSC_GI_ORE(6):Hours worked in enterprises with more than 500 employees - monthly data
-    DCCV_TAXDISOCCU(9):Unemployment rate
-    DCSC_GI_COS(6):Labour cost in enterprises with more than 500 employees - monthly data
-    DCCV_TAXDISOCCUDE(7):Unemployment rate - seasonally adjusted data
-    DCSC_COSTLAVSTRUT_1(6):Labour cost survey (four-yearly survey)
-    DCSC_GI_OCC(6):Employment, inflow and outflow rates in enterprises with more than 500 employees - monthly data
-    DCCV_TAXDISOCCUMENS(8):Unemployment rate - monthly data
-    DCSC_RETRCONTR1T(6):Indicators of bargaining tension - monthly and annual data
-    DCCV_DISOCCUPTDE(7):Unemployed - seasonally adjusted data
-    DCCV_TAXATVTDE(7):Activity rate - seasonally adjusted data
-    DCCV_OCCUPATIMENS(8):Employed - monthly data
-    DCCV_INATTIVMENS(8):Inactive population - monthly data
-    DCSC_RETRCASSCOMPPA(7):Cash and accrual wages according to collective labour agreements per public administration employee per agreement - annual data -  euros
-    DCCV_FORZLV(8):Labour force
-    DCIS_RICSTAT(6):New series of estimates on the resident population at NUTS-2 level for the 1/1/2002-1/1/2014 period
-    DCCV_OCCUPATIT(14): Employment                                
-    DCCV_NEET(10):Young people not in employment, education or training
-    DCCV_TAXOCCU(8):Employment rate
-    DCCV_TAXATVT(8):Activity rate
-    DCCV_TAXOCCUMENS(8):Employment rate - monthly data
-    DCCV_OCCUPATITDE(8):Employed - seasonally adjusted data
-    DCSC_RETRATECO1(6):Wages according to collective labour agreements by Nace rev.2
-    DCCV_FORZLVMENS(8):Labour force - monthly data
-    DCSC_GI_RE(6):Gross earnings in enterprises with more than 500 employees - monthly data
-    DCCV_COMPL(12):Supplementary indicators to unemployment
-    DCCV_TAXINATT(8):Inactivity rate
-    DCCV_TAXINATTDE(7):Inactivity rate - seasonally adjusted data
-    DCCV_INATTIV(11):Inactive population
-    DCSC_POSTIVAC_1(5):Job vacancy rate - quarterly data
-    DCCV_INATTIVDE(7):Inactive population - seasonally adjusted data
-    DCSC_RETRCONTR1O(6):Annual gross, net hours, holiday pay and other hours reduction according to collective labour agreements
-    DCCV_TAXINATTMENS(8):Inactivity rate - monthly data
+
+.. raw:: html
+
+    <table><tr><th>cod</th><th>name</th><th>dim</th></tr><tr><td>DCCV_COMPL</td><td>Supplementary indicators to unemployment</td><td>12</td></td></tr><tr><td>DCCV_DISOCCUPT</td><td>Unemployment</td><td>10</td></td></tr><tr><td>DCCV_DISOCCUPTDE</td><td>Unemployed - seasonally adjusted data</td><td>7</td></td></tr><tr><td>DCCV_DISOCCUPTMENS</td><td>Unemployed - monthly data</td><td>8</td></td></tr><tr><td>DCCV_FORZLV</td><td>Labour force</td><td>8</td></td></tr><tr><td>DCCV_FORZLVDE</td><td>Labour force - seasonally adjusted data</td><td>7</td></td></tr><tr><td>DCCV_FORZLVMENS</td><td>Labour force - monthly data</td><td>8</td></td></tr><tr><td>DCCV_INATTIV</td><td>Inactive population</td><td>11</td></td></tr><tr><td>DCCV_INATTIVDE</td><td>Inactive population - seasonally adjusted data</td><td>7</td></td></tr><tr><td>DCCV_INATTIVMENS</td><td>Inactive population - monthly data</td><td>8</td></td></tr><tr><td>DCCV_NEET</td><td>Young people not in employment, education or training</td><td>10</td></td></tr><tr><td>DCCV_OCCUPATIMENS</td><td>Employed - monthly data</td><td>8</td></td></tr><tr><td>DCCV_OCCUPATIT</td><td> Employment                                </td><td>14</td></td></tr><tr><td>DCCV_OCCUPATITDE</td><td>Employed - seasonally adjusted data</td><td>8</td></td></tr><tr><td>DCCV_ORELAVMED</td><td>Employment by number of actual weekly hours and average number of actual weekly hours</td><td>12</td></td></tr><tr><td>DCCV_TAXATVT</td><td>Activity rate</td><td>8</td></td></tr><tr><td>DCCV_TAXATVTDE</td><td>Activity rate - seasonally adjusted data</td><td>7</td></td></tr><tr><td>DCCV_TAXATVTMENS</td><td>Activity rate - monthly data</td><td>8</td></td></tr><tr><td>DCCV_TAXDISOCCU</td><td>Unemployment rate</td><td>9</td></td></tr><tr><td>DCCV_TAXDISOCCUDE</td><td>Unemployment rate - seasonally adjusted data</td><td>7</td></td></tr><tr><td>DCCV_TAXDISOCCUMENS</td><td>Unemployment rate - monthly data</td><td>8</td></td></tr><tr><td>DCCV_TAXINATT</td><td>Inactivity rate</td><td>8</td></td></tr><tr><td>DCCV_TAXINATTDE</td><td>Inactivity rate - seasonally adjusted data</td><td>7</td></td></tr><tr><td>DCCV_TAXINATTMENS</td><td>Inactivity rate - monthly data</td><td>8</td></td></tr><tr><td>DCCV_TAXOCCU</td><td>Employment rate</td><td>8</td></td></tr><tr><td>DCCV_TAXOCCUDE</td><td>Employment rate - seasonally adjusted data</td><td>7</td></td></tr><tr><td>DCCV_TAXOCCUMENS</td><td>Employment rate - monthly data</td><td>8</td></td></tr><tr><td>DCIS_RICSTAT</td><td>New series of estimates on the resident population at NUTS-2 level for the 1/1/2002-1/1/2014 period</td><td>6</td></td></tr><tr><td>DCSC_COSTLAVSTRUT_1</td><td>Labour cost survey (four-yearly survey)</td><td>6</td></td></tr><tr><td>DCSC_COSTLAVULAOROS_1</td><td>Labour cost per full time equivalent unit indicators - quarterly data</td><td>5</td></td></tr><tr><td>DCSC_GI_COS</td><td>Labour cost in enterprises with more than 500 employees - monthly data</td><td>6</td></td></tr><tr><td>DCSC_GI_OCC</td><td>Employment, inflow and outflow rates in enterprises with more than 500 employees - monthly data</td><td>6</td></td></tr><tr><td>DCSC_GI_ORE</td><td>Hours worked in enterprises with more than 500 employees - monthly data</td><td>6</td></td></tr><tr><td>DCSC_GI_RE</td><td>Gross earnings in enterprises with more than 500 employees - monthly data</td><td>6</td></td></tr><tr><td>DCSC_ORE10_1</td><td>Hours worked in enterprises with at least 10 employees - quarterly data</td><td>5</td></td></tr><tr><td>DCSC_OROS_1</td><td>Number of payroll jobs index - quarterly data</td><td>5</td></td></tr><tr><td>DCSC_POSTIVAC_1</td><td>Job vacancy rate - quarterly data</td><td>5</td></td></tr><tr><td>DCSC_RETRATECO1</td><td>Wages according to collective labour agreements by Nace rev.2</td><td>6</td></td></tr><tr><td>DCSC_RETRCASSCOMPPA</td><td>Cash and accrual wages according to collective labour agreements per public administration employee per agreement - annual data -  euros</td><td>7</td></td></tr><tr><td>DCSC_RETRCONTR1C</td><td>Wages according to collective labour agreements by agreement  - monthly and annual data               .</td><td>6</td></td></tr><tr><td>DCSC_RETRCONTR1O</td><td>Annual gross, net hours, holiday pay and other hours reduction according to collective labour agreements</td><td>6</td></td></tr><tr><td>DCSC_RETRCONTR1T</td><td>Indicators of bargaining tension - monthly and annual data</td><td>6</td></td></tr><tr><td>DCSC_RETRULAOROS_1</td><td>Gross earnings per full time equivalent unit index - quarterly data</td><td>5</td></td></tr></table>
+
 
 
 List all dimension for dataset ``DCCV_TAXDISOCCU`` (Unemployment rate)
@@ -131,20 +76,15 @@ List all dimension for dataset ``DCCV_TAXDISOCCU`` (Unemployment rate)
 
     istat_dataset_name = 'DCCV_TAXDISOCCU'
     istat_dataset = istat_area.dataset(istat_dataset_name)
-    istat_dataset.info_dimensions()
+    HTML(istat_dataset.info_dimensions_as_html())
 
 
-.. parsed-literal::
 
-    dim 0 'Territory' (1:'Italy', 3:'Nord', 4:'Nord-ovest', 5:'Piemonte', 6:'Torino', 7:'Vercelli', 8:'Biella', 9:'Verbano-Cusio-Ossola', 10:'Novara', 11:'Cuneo', 12:'Asti', 13:'Alessandria', 14:'Valle d'Aosta / Vallée d'Aoste', 15:'Valle d'Aosta / Vallée d'Aoste', 16:'Liguria', 17:'Imperia', 18:'Savona', 19:'Genova', 20:'La Spezia', 21:'Lombardia', 22:'Varese', 23:'Como', 24:'Lecco', 25:'Sondrio', 26:'Milano', 27:'Bergamo', 28:'Brescia', 29:'Pavia', 30:'Lodi', 31:'Cremona', 32:'Mantova', 33:'Nord-est', 34:'Trentino Alto Adige / Südtirol', 35:'Provincia Autonoma Bolzano / Bozen', 37:'Provincia Autonoma Trento', 39:'Veneto', 40:'Verona', 41:'Vicenza', 42:'Belluno', 43:'Treviso', 44:'Venezia', 45:'Padova', 46:'Rovigo', 47:'Friuli-Venezia Giulia', 48:'Pordenone', 49:'Udine', 50:'Gorizia', 51:'Trieste', 52:'Emilia-Romagna', 53:'Piacenza', 54:'Parma', 55:'Reggio nell'Emilia', 56:'Modena', 57:'Bologna', 58:'Ferrara', 59:'Ravenna', 60:'Forlì-Cesena', 61:'Rimini', 62:'Centro (I)', 63:'Toscana', 64:'Massa-Carrara', 65:'Lucca', 66:'Pistoia', 67:'Firenze', 68:'Prato', 69:'Livorno', 70:'Pisa', 71:'Arezzo', 72:'Siena', 73:'Grosseto', 74:'Umbria', 75:'Perugia', 76:'Terni', 77:'Marche', 78:'Pesaro e Urbino', 79:'Ancona', 80:'Macerata', 81:'Ascoli Piceno', 82:'Lazio', 83:'Viterbo', 84:'Rieti', 85:'Roma', 86:'Latina', 87:'Frosinone', 88:'Mezzogiorno', 90:'Abruzzo', 91:'L'Aquila', 92:'Teramo', 93:'Pescara', 94:'Chieti', 95:'Molise', 96:'Isernia', 97:'Campobasso', 98:'Campania', 99:'Caserta', 100:'Benevento', 101:'Napoli', 102:'Avellino', 103:'Salerno', 104:'Puglia', 105:'Foggia', 106:'Bari', 107:'Taranto', 108:'Brindisi', 109:'Lecce', 110:'Basilicata', 111:'Potenza', 112:'Matera', 113:'Calabria', 114:'Cosenza', 115:'Crotone', 116:'Catanzaro', 117:'Vibo Valentia', 118:'Reggio di Calabria', 120:'Sicilia', 121:'Trapani', 122:'Palermo', 123:'Messina', 124:'Agrigento', 125:'Caltanissetta', 126:'Enna', 127:'Catania', 128:'Ragusa', 129:'Siracusa', 130:'Sardegna', 131:'Sassari', 132:'Nuoro', 133:'Cagliari', 134:'Oristano', 135:'Olbia-Tempio', 136:'Ogliastra', 137:'Medio Campidano', 138:'Carbonia-Iglesias', 146:'Monza e della Brianza', 147:'Fermo', 148:'Barletta-Andria-Trani')
-    dim 1 'Data type' (6:'unemployment rate')
-    dim 2 'Measure' (1:'percentage values')
-    dim 3 'Gender' (1:'males', 2:'females', 3:'total')
-    dim 4 'Age class' (32:'18-29 years', 3:'20-24 years', 4:'15-24 years', 8:'25-34 years', 9:'35-54 years', 11:'35 years and over', 14:'35-44 years', 17:'45-54 years', 19:'55 years and over', 21:'55-64 years', 22:'15-64 years', 28:'15 years and over', 30:'15-29 years', 31:'15-74 years')
-    dim 5 'Highest level of education attained' (11:'tertiary (university, doctoral and specialization courses)', 12:'total', 3:'primary school certificate, no educational degree', 4:'lower secondary school certificate', 7:'upper and post secondary')
-    dim 6 'Citizenship' (1:'italian', 2:'foreign', 3:'total')
-    dim 7 'Duration of unemployment' (2:'12 months and more', 3:'total')
-    dim 8 'Time and frequency' (1536:'Q4-1980', 2049:'Q4-2007', 1540:'1981', 2053:'2008', 1542:'Q1-1981', 2055:'Q1-2008', 1546:'Q2-1981', 2059:'Q2-2008', 1551:'Q3-1981', 2064:'Q3-2008', 1555:'Q4-1981', 2068:'Q4-2008', 1559:'1982', 2072:'2009', 1561:'Q1-1982', 2074:'Q1-2009', 1565:'Q2-1982', 2078:'Q2-2009', 1570:'Q3-1982', 2083:'Q3-2009', 1574:'Q4-1982', 2087:'Q4-2009', 1578:'1983', 2091:'2010', 1580:'Q1-1983', 2093:'Q1-2010', 1584:'Q2-1983', 2097:'Q2-2010', 1589:'Q3-1983', 2102:'Q3-2010', 1593:'Q4-1983', 2106:'Q4-2010', 1597:'1984', 2110:'2011', 1599:'Q1-1984', 2112:'Q1-2011', 1603:'Q2-1984', 2116:'Q2-2011', 1608:'Q3-1984', 2121:'Q3-2011', 1612:'Q4-1984', 2125:'Q4-2011', 1616:'1985', 2129:'2012', 1618:'Q1-1985', 2131:'Q1-2012', 1622:'Q2-1985', 2135:'Q2-2012', 1627:'Q3-1985', 2140:'Q3-2012', 1631:'Q4-1985', 2144:'Q4-2012', 1635:'1986', 2148:'2013', 1637:'Q1-1986', 2150:'Q1-2013', 1641:'Q2-1986', 2154:'Q2-2013', 1646:'Q3-1986', 2159:'Q3-2013', 1650:'Q4-1986', 2163:'Q4-2013', 1654:'1987', 2167:'2014', 1656:'Q1-1987', 2169:'Q1-2014', 1660:'Q2-1987', 2173:'Q2-2014', 1665:'Q3-1987', 2178:'Q3-2014', 1669:'Q4-1987', 2182:'Q4-2014', 1673:'1988', 1675:'Q1-1988', 2188:'Q1-2015', 1679:'Q2-1988', 2192:'Q2-2015', 1684:'Q3-1988', 2197:'Q3-2015', 1688:'Q4-1988', 1692:'1989', 1694:'Q1-1989', 1698:'Q2-1989', 1703:'Q3-1989', 1707:'Q4-1989', 1711:'1990', 1713:'Q1-1990', 1717:'Q2-1990', 1722:'Q3-1990', 1726:'Q4-1990', 1730:'1991', 1732:'Q1-1991', 1736:'Q2-1991', 1741:'Q3-1991', 1745:'Q4-1991', 1749:'1992', 1751:'Q1-1992', 1755:'Q2-1992', 1760:'Q3-1992', 1764:'Q4-1992', 1768:'1993', 1770:'Q1-1993', 1774:'Q2-1993', 1779:'Q3-1993', 1783:'Q4-1993', 1787:'1994', 1789:'Q1-1994', 1793:'Q2-1994', 1798:'Q3-1994', 1802:'Q4-1994', 1806:'1995', 1808:'Q1-1995', 1812:'Q2-1995', 1817:'Q3-1995', 1821:'Q4-1995', 1825:'1996', 1827:'Q1-1996', 1831:'Q2-1996', 1836:'Q3-1996', 1840:'Q4-1996', 1844:'1997', 1846:'Q1-1997', 1850:'Q2-1997', 1855:'Q3-1997', 1859:'Q4-1997', 1863:'1998', 1865:'Q1-1998', 1869:'Q2-1998', 1874:'Q3-1998', 1878:'Q4-1998', 1882:'1999', 1884:'Q1-1999', 1888:'Q2-1999', 1893:'Q3-1999', 1897:'Q4-1999', 1901:'2000', 1903:'Q1-2000', 1907:'Q2-2000', 1912:'Q3-2000', 1916:'Q4-2000', 1920:'2001', 1922:'Q1-2001', 1926:'Q2-2001', 1931:'Q3-2001', 1935:'Q4-2001', 1939:'2002', 1941:'Q1-2002', 1945:'Q2-2002', 1950:'Q3-2002', 1954:'Q4-2002', 1958:'2003', 1960:'Q1-2003', 1964:'Q2-2003', 1969:'Q3-2003', 1973:'Q4-2003', 1464:'1977', 1977:'2004', 1466:'Q1-1977', 1979:'Q1-2004', 1470:'Q2-1977', 1983:'Q2-2004', 1475:'Q3-1977', 1988:'Q3-2004', 1479:'Q4-1977', 1992:'Q4-2004', 1483:'1978', 1996:'2005', 1485:'Q1-1978', 1998:'Q1-2005', 1489:'Q2-1978', 2002:'Q2-2005', 1494:'Q3-1978', 2007:'Q3-2005', 1498:'Q4-1978', 2011:'Q4-2005', 1502:'1979', 2015:'2006', 1504:'Q1-1979', 2017:'Q1-2006', 1508:'Q2-1979', 2021:'Q2-2006', 1513:'Q3-1979', 2026:'Q3-2006', 1517:'Q4-1979', 2030:'Q4-2006', 1521:'1980', 2034:'2007', 1523:'Q1-1980', 2036:'Q1-2007', 1527:'Q2-1980', 2040:'Q2-2007', 1532:'Q3-1980', 2045:'Q3-2007')
+
+.. raw:: html
+
+    <table><tr><th>nr</th><th>name</th><th>nr. values</th><th>values</th></tr><tr><td>0</td><td>Territory</td><td>136</td><td>1:'Italy', 3:'Nord', 4:'Nord-ovest'</td></td></tr><tr><td>1</td><td>Data type</td><td>1</td><td>6:'unemployment rate'</td></td></tr><tr><td>2</td><td>Measure</td><td>1</td><td>1:'percentage values'</td></td></tr><tr><td>3</td><td>Gender</td><td>3</td><td>1:'males', 2:'females', 3:'total'</td></td></tr><tr><td>4</td><td>Age class</td><td>14</td><td>32:'18-29 years', 3:'20-24 years', 4:'15-24 years'</td></td></tr><tr><td>5</td><td>Highest level of education attained</td><td>5</td><td>11:'tertiary (university, doctoral and specialization courses)', 12:'total', 3:'primary school certificate, no educational degree'</td></td></tr><tr><td>6</td><td>Citizenship</td><td>3</td><td>1:'italian', 2:'foreign', 3:'total'</td></td></tr><tr><td>7</td><td>Duration of unemployment</td><td>2</td><td>2:'12 months and more', 3:'total'</td></td></tr><tr><td>8</td><td>Time and frequency</td><td>193</td><td>1536:'Q4-1980', 2049:'Q4-2007', 1540:'1981'</td></td></tr></table>
+
 
 
 Extract data from dataset ``DCCV_TAXDISOCCU``
@@ -152,33 +92,15 @@ Extract data from dataset ``DCCV_TAXDISOCCU``
 .. code:: python
 
     spec = { 
-        "Territory": 0, # 1 Italy
-        "Data type": 6, # 
-        'Measure': 1,
-        'Gender': 3,
-        'Age class':31, # (32:'18-29 years', 
-                        # 3:'20-24 years', 
-                        # 4:'15-24 years', 
-                        # 8:'25-34 years', 
-                        # 9:'35-54 years', 
-                        # 11:'35 years and over', 
-                        # 14:'35-44 years', 
-                        # 17:'45-54 years', 
-                        # 19:'55 years and over', 
-                        # 21:'55-64 years', 
-                        # 22:'15-64 years', 
-                        # 28:'15 years and over', 
-                        # 30:'15-29 years', 
-                        # 31:'15-74 years')
-        'Highest level of education attained': 12,
-                        #(11:'tertiary (university, doctoral and specialization courses)', 
-                        # 12:'total', 
-                        # 3:'primary school certificate, no educational degree', 
-                        # 4:'lower secondary school certificate', 
-                        # 7:'upper and post secondary')
-        'Citizenship': 3, # (1:'italian', 2:'foreign', 3:'total')
-        'Duration of unemployment': 3, # (2:'12 months and more', 3:'total')
-        'Time and frequency': 0 # All
+        "Territory": 0,                            # 1 Italy
+        "Data type": 6,                            # (6:'unemployment rate')
+        'Measure': 1,                              # 1 : 'percentage values'
+        'Gender': 3,                               # 3 total
+        'Age class':31,                            # 31:'15-74 years'
+        'Highest level of education attained': 12, # 12:'total', 
+        'Citizenship': 3,                          # 3:'total')
+        'Duration of unemployment': 3,             # 3:'total'
+        'Time and frequency': 0                    # All
     }
     
     # convert istat dataset into jsonstat collection and print some info
@@ -192,7 +114,7 @@ Extract data from dataset ``DCCV_TAXDISOCCU``
     
 
 
-Print some info of one dataset contained into the above jsonstat
+Print some info of the only dataset contained into the above jsonstat
 collection
 
 .. code:: python
@@ -463,33 +385,15 @@ collection
 .. code:: python
 
     spec = { 
-        "Territory": 1, # 1 Italy
-        "Data type": 6, # 
+        "Territory": 1,                            # 1 Italy
+        "Data type": 6,                            # (6:'unemployment rate')
         'Measure': 1,
         'Gender': 3,
-        'Age class':0, # (32:'18-29 years', 
-                        # 3:'20-24 years', 
-                        # 4:'15-24 years', 
-                        # 8:'25-34 years', 
-                        # 9:'35-54 years', 
-                        # 11:'35 years and over', 
-                        # 14:'35-44 years', 
-                        # 17:'45-54 years', 
-                        # 19:'55 years and over', 
-                        # 21:'55-64 years', 
-                        # 22:'15-64 years', 
-                        # 28:'15 years and over', 
-                        # 30:'15-29 years', 
-                        # 31:'15-74 years')
-        'Highest level of education attained': 12,
-                        #(11:'tertiary (university, doctoral and specialization courses)', 
-                        # 12:'total', 
-                        # 3:'primary school certificate, no educational degree', 
-                        # 4:'lower secondary school certificate', 
-                        # 7:'upper and post secondary')
-        'Citizenship': 3, # (1:'italian', 2:'foreign', 3:'total')
-        'Duration of unemployment': 3, # (2:'12 months and more', 3:'total')
-        'Time and frequency': 0 # All
+        'Age class':0,                             # all classes
+        'Highest level of education attained': 12, # 12:'total', 
+        'Citizenship': 3,                          # 3:'total')
+        'Duration of unemployment': 3,             #  3:'total')
+        'Time and frequency': 0                    # All
     }
     
     # convert istat dataset into jsonstat collection and print some info
@@ -641,14 +545,14 @@ collection
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x1182d9c18>
+    <matplotlib.axes._subplots.AxesSubplot at 0x1181fd128>
 
 
 
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x1182c1f28>
+    <matplotlib.figure.Figure at 0x11825e0b8>
 
 
 
@@ -660,15 +564,16 @@ collection
     fig = plt.figure(figsize=(16,12))
     ax = fig.add_subplot(111)
     plt.grid(True)
-    df.plot(x='Time and frequency',y='Value', ax=ax, grid=True) # kind='barh', , alpha=a, legend=False, color=customcmap,
-                          # edgecolor='w', xlim=(0,max(df['population'])), title=ttl)
+    df.plot(x='Time and frequency',y='Value', ax=ax, grid=True) 
+    # kind='barh', , alpha=a, legend=False, color=customcmap,
+    # edgecolor='w', xlim=(0,max(df['population'])), title=ttl)
 
 
 
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x11a648b00>
+    <matplotlib.axes._subplots.AxesSubplot at 0x11a5c96a0>
 
 
 
@@ -688,3 +593,176 @@ collection
     # plt.xlabel('index')
     # plt.ylabel('value')
     # plt.title('a simple plot')
+
+.. code:: python
+
+    # forza lavoro
+    istat_forzlv = istat.dataset('LAB', 'DCCV_FORZLV')
+    
+    spec = { 
+        "Territory": 'Italy',                            
+        "Data type": 'number of labour force 15 years and more (thousands)',                            # 
+        'Measure':   'absolute values',               
+        'Gender':    'total',                               
+        'Age class': '15 years and over',                            
+        'Highest level of education attained': 'total', 
+        'Citizenship': 'total',                         
+        'Time and frequency': 0                    
+    }
+    
+    df_forzlv = istat_forzlv.getvalues(spec).dataset(0).to_table(rtype=pd.DataFrame)
+    df_forzlv = df_forzlv.dropna()
+    df_forzlv = df_forzlv[df_forzlv['Time and frequency'].str.contains(r'^Q.*')]
+    df_forzlv.tail(6)
+
+
+
+
+.. raw:: html
+
+    <div>
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th></th>
+          <th>Time and frequency</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>187</th>
+          <td>Q2-2014</td>
+          <td>25419.15</td>
+        </tr>
+        <tr>
+          <th>188</th>
+          <td>Q3-2014</td>
+          <td>25373.70</td>
+        </tr>
+        <tr>
+          <th>189</th>
+          <td>Q4-2014</td>
+          <td>25794.44</td>
+        </tr>
+        <tr>
+          <th>190</th>
+          <td>Q1-2015</td>
+          <td>25460.25</td>
+        </tr>
+        <tr>
+          <th>191</th>
+          <td>Q2-2015</td>
+          <td>25598.29</td>
+        </tr>
+        <tr>
+          <th>192</th>
+          <td>Q3-2015</td>
+          <td>25321.61</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+
+
+.. code:: python
+
+    istat_inattiv = istat.dataset('LAB', 'DCCV_INATTIV')
+    # HTML(istat_inattiv.info_dimensions_as_html())
+
+.. code:: python
+
+    spec = { 
+        "Territory": 'Italy',                            
+        "Data type": 'number of inactive persons',                           
+        'Measure':   'absolute values',               
+        'Gender':    'total',                               
+        'Age class': '15 years and over',                            
+        'Highest level of education attained': 'total', 
+        'Time and frequency': 0                    
+    }
+    
+    df_inattiv = istat_inattiv.getvalues(spec).dataset(0).to_table(rtype=pd.DataFrame)
+    df_inattiv = df_inattiv.dropna()
+    df_inattiv = df_inattiv[df_inattiv['Time and frequency'].str.contains(r'^Q.*')]
+    df_inattiv.tail(6)
+
+
+
+
+.. raw:: html
+
+    <div>
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th></th>
+          <th>citizenship</th>
+          <th>Labour status</th>
+          <th>Inactivity reasons</th>
+          <th>Main status</th>
+          <th>Time and frequency</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>24756</th>
+          <td>total</td>
+          <td>total</td>
+          <td>total</td>
+          <td>total</td>
+          <td>Q2-2014</td>
+          <td>26594.57</td>
+        </tr>
+        <tr>
+          <th>24757</th>
+          <td>total</td>
+          <td>total</td>
+          <td>total</td>
+          <td>total</td>
+          <td>Q3-2014</td>
+          <td>26646.90</td>
+        </tr>
+        <tr>
+          <th>24758</th>
+          <td>total</td>
+          <td>total</td>
+          <td>total</td>
+          <td>total</td>
+          <td>Q4-2014</td>
+          <td>26257.15</td>
+        </tr>
+        <tr>
+          <th>24759</th>
+          <td>total</td>
+          <td>total</td>
+          <td>total</td>
+          <td>total</td>
+          <td>Q1-2015</td>
+          <td>26608.07</td>
+        </tr>
+        <tr>
+          <th>24760</th>
+          <td>total</td>
+          <td>total</td>
+          <td>total</td>
+          <td>total</td>
+          <td>Q2-2015</td>
+          <td>26487.67</td>
+        </tr>
+        <tr>
+          <th>24761</th>
+          <td>total</td>
+          <td>total</td>
+          <td>total</td>
+          <td>total</td>
+          <td>Q3-2015</td>
+          <td>26746.26</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+

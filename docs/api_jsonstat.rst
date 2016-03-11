@@ -5,8 +5,8 @@ Jsonstat Module
 .. automodule:: jsonstat
     :members:
 
-Parsing function
-================
+Utility functions
+=================
 
 .. autofunction:: jsonstat.from_file
 
@@ -14,10 +14,15 @@ Parsing function
 
 .. autofunction:: jsonstat.from_string
 
+.. autofunction:: jsonstat.cache_dir
+
 .. autofunction:: jsonstat.from_url
 
-Class hirarchy
-==============
+.. autofunction:: jsonstat.download
+
+
+Class hierarchy
+===============
 
 JsonStatCollection
 ==================
@@ -30,16 +35,22 @@ JsonStatDataSet
 ===============
 
 .. autoclass:: JsonStatDataSet
-    :members:
+
+    .. automethod:: JsonStatDataSet.info
+    .. automethod:: JsonStatDataSet.to_table
 
 JsonStatDimension
 =================
 
 .. autoclass:: JsonStatDimension
-    :members:
+
+    .. automethod:: JsonStatDimension.info
+    .. automethod:: JsonStatDimension.idx2pos
 
 Downloader helper
 =================
 
 .. autoclass:: Downloader
-    :members:
+
+    .. automethod:: Downloader.cache_dir
+    .. automethod:: Downloader.download
