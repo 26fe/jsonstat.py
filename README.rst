@@ -27,7 +27,7 @@ One of the objectives is to be helpful in exploring dataset
 using ipython notebook.
 
 For a fast overview of the feature you can start from this example notebook
-`oecd-canada-jsonstat_v1.html <http://jsonstatpy.readthedocs.org/en/latest/notebooks/oecd-canada-jsonstat_v1.html>`
+`oecd-canada-jsonstat_v1.html <http://jsonstatpy.readthedocs.org/en/latest/notebooks/oecd-canada-jsonstat_v1.html>`_
 
 You can also check out some of the jupyter example notebook from the
 `example directory on github <https://github.com/26fe/jsonstat.py/tree/master/examples-notebooks>`_
@@ -62,7 +62,16 @@ Usage
 Simple Usage
 ************
 
-simple usage::
+There is a simple command line interface, so you can experiment to parse jsonstat file without write code::
+
+    jsonstat --cache_dir /tmp http://json-stat.org/samples/oecd-canada.json
+    downloaded file(s) are stored into '/tmp'
+    download 'http://json-stat.org/samples/oecd-canada.json'
+    JsonstatCollection contains the following JsonStatDataSet:
+    0: dataset 'oecd'
+    1: dataset 'canada'
+
+code example::
 
     url = 'http://json-stat.org/samples/oecd-canada.json'
     collection = jsonstat.from_url(json_string)
