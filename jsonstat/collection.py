@@ -55,7 +55,7 @@ class JsonStatCollection:
         raise ValueError()
 
     def __str__(self):
-        out = ""
+        out = "JsonstatCollection contains the following JsonStatDataSet:\n"
         for i, dataset in enumerate(self.__pos2dataset):
             out += "{}: dataset '{}'\n".format(i, dataset.name())
         return out
