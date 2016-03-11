@@ -15,6 +15,7 @@ import jsonstat
 
 
 class TestCollection(unittest.TestCase):
+
     def setUp(self):
         self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures")
 
