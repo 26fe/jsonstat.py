@@ -5,7 +5,8 @@
 
 # stdlib
 from __future__ import print_function
-from __future__ import unicode_literals
+# from __future__ import unicode_literals
+import sys
 import unittest
 
 # external packages
@@ -19,6 +20,7 @@ class TestCollection(unittest.TestCase):
     def setUp(self):
         pass
 
+    # @unittest.skipIf(sys.version_info < (3,), "unicode issue (how sad)")
     def test_cli(self):
         # TODO: download from a local webserver, eliminate network dipendence
         runner = CliRunner()
@@ -27,10 +29,10 @@ class TestCollection(unittest.TestCase):
 
         # print("#{}#".format(result.output))
         expected = (
-            "downloaded file(s) are stored into './data'\n"
-            "download 'http://json-stat.org/samples/oecd-canada.json'\n"
-            "JsonstatCollection contains the following JsonStatDataSet:\n"
-            "0: dataset 'oecd'\n"
-            "1: dataset 'canada'\n\n"
+            u"downloaded file(s) are stored into './data'\n"
+            u"download 'http://json-stat.org/samples/oecd-canada.json'\n"
+            u"JsonstatCollection contains the following JsonStatDataSet:\n"
+            u"0: dataset 'oecd'\n"
+            u"1: dataset 'canada'\n\n"
         )
         self.assertEqual(result.output, expected)
