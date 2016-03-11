@@ -25,6 +25,8 @@ except ImportError:
 @click.option('--cache_dir', default='./data', help='where to store downloaded files')
 @click.argument('urls', nargs=-1)
 def jsonstat_cli(cache_dir, urls):
+    # this function name will go into the setup.py,
+    # if you rename it check setup.py
     if len(urls) == 0:
         urls = ['http://json-stat.org/samples/oecd-canada.json']
 
