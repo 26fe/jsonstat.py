@@ -28,6 +28,9 @@ def convert_notebook_to_rst(dir):
 
 JSONSTAT_HOME = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 docs_notebooks = os.path.join(JSONSTAT_HOME, "docs", "notebooks")
+if not os.path.exists(docs_notebooks):
+    os.mkdir(docs_notebooks)
+
 os.chdir(docs_notebooks)
 dirs = ["examples-notebooks", "istat-notebooks"]
 for d in dirs:

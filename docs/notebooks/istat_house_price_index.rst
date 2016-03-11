@@ -77,7 +77,7 @@ List all dimension for dataset ``DCSP_IPAB`` (House price index)
 
 .. raw:: html
 
-    <table><tr><th>nr</th><th>name</th><th>values</th></tr><tr><td>0</td><td>Territory</td><td>(1:'Italy')</td></td></tr><tr><td>1</td><td>Index type</td><td>(18:'house price index (base 2010=100) - quarterly data', 19:'house price index (base 2010=100) - annual average', 20:'house price index (base 2010=100) - weights')</td></td></tr><tr><td>2</td><td>Measure</td><td>(8:'annual average rate of change', 4:'index number', 22:'not applicable', 6:'percentage changes on the previous period', 7:'percentage changes on the same period of the previous year')</td></td></tr><tr><td>3</td><td>Purchases of dwellings</td><td>(4:'H1 - all items', 5:'H11 - new dwellings', 6:'H12 - existing dwellings')</td></td></tr><tr><td>4</td><td>Time and frequency</td><td>(2112:'Q1-2011', 2178:'Q3-2014', 2116:'Q2-2011', 2182:'Q4-2014', 2121:'Q3-2011', 2186:'2015', 2188:'Q1-2015', 2125:'Q4-2011', 2192:'Q2-2015', 2129:'2012', 2131:'Q1-2012', 2197:'Q3-2015', 2135:'Q2-2012', 2140:'Q3-2012', 2144:'Q4-2012', 2148:'2013', 2150:'Q1-2013', 2154:'Q2-2013', 2091:'2010', 2093:'Q1-2010', 2159:'Q3-2013', 2097:'Q2-2010', 2163:'Q4-2013', 2102:'Q3-2010', 2167:'2014', 2169:'Q1-2014', 2106:'Q4-2010', 2173:'Q2-2014', 2110:'2011')</td></td></tr></table>
+    <table><tr><th>nr</th><th>name</th><th>nr. values</th><th>values (first 3 values)</th></tr><tr><td>0</td><td>Territory</td><td>1</td><td>1:'Italy'</td></td></tr><tr><td>1</td><td>Index type</td><td>3</td><td>18:'house price index (base 2010=100) - quarterly data', 19:'house price index (base 2010=100) - annual average', 20:'house price index (base 2010=100) - weights' ...</td></td></tr><tr><td>2</td><td>Measure</td><td>5</td><td>8:'annual average rate of change', 4:'index number', 22:'not applicable' ...</td></td></tr><tr><td>3</td><td>Purchases of dwellings</td><td>3</td><td>4:'H1 - all items', 5:'H11 - new dwellings', 6:'H12 - existing dwellings' ...</td></td></tr><tr><td>4</td><td>Time and frequency</td><td>29</td><td>2112:'Q1-2011', 2178:'Q3-2014', 2116:'Q2-2011' ...</td></td></tr></table>
 
 
 
@@ -111,6 +111,7 @@ where the first dimension is Territory, etc. Below is the mapping:
 
 .. parsed-literal::
 
+    JsonstatCollection contains the following JsonStatDataSet:
     0: dataset 'IDMISURA1*IDTYPPURCH*IDTIME'
     
 
@@ -219,6 +220,7 @@ collection
 
 .. parsed-literal::
 
+    JsonstatCollection contains the following JsonStatDataSet:
     0: dataset 'IDTIME'
 
 

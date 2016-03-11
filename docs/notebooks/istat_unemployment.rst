@@ -83,7 +83,7 @@ List all dimension for dataset ``DCCV_TAXDISOCCU`` (Unemployment rate)
 
 .. raw:: html
 
-    <table><tr><th>nr</th><th>name</th><th>nr. values</th><th>values</th></tr><tr><td>0</td><td>Territory</td><td>136</td><td>1:'Italy', 3:'Nord', 4:'Nord-ovest'</td></td></tr><tr><td>1</td><td>Data type</td><td>1</td><td>6:'unemployment rate'</td></td></tr><tr><td>2</td><td>Measure</td><td>1</td><td>1:'percentage values'</td></td></tr><tr><td>3</td><td>Gender</td><td>3</td><td>1:'males', 2:'females', 3:'total'</td></td></tr><tr><td>4</td><td>Age class</td><td>14</td><td>32:'18-29 years', 3:'20-24 years', 4:'15-24 years'</td></td></tr><tr><td>5</td><td>Highest level of education attained</td><td>5</td><td>11:'tertiary (university, doctoral and specialization courses)', 12:'total', 3:'primary school certificate, no educational degree'</td></td></tr><tr><td>6</td><td>Citizenship</td><td>3</td><td>1:'italian', 2:'foreign', 3:'total'</td></td></tr><tr><td>7</td><td>Duration of unemployment</td><td>2</td><td>2:'12 months and more', 3:'total'</td></td></tr><tr><td>8</td><td>Time and frequency</td><td>193</td><td>1536:'Q4-1980', 2049:'Q4-2007', 1540:'1981'</td></td></tr></table>
+    <table><tr><th>nr</th><th>name</th><th>nr. values</th><th>values (first 3 values)</th></tr><tr><td>0</td><td>Territory</td><td>136</td><td>1:'Italy', 3:'Nord', 4:'Nord-ovest' ...</td></td></tr><tr><td>1</td><td>Data type</td><td>1</td><td>6:'unemployment rate'</td></td></tr><tr><td>2</td><td>Measure</td><td>1</td><td>1:'percentage values'</td></td></tr><tr><td>3</td><td>Gender</td><td>3</td><td>1:'males', 2:'females', 3:'total' ...</td></td></tr><tr><td>4</td><td>Age class</td><td>14</td><td>32:'18-29 years', 3:'20-24 years', 4:'15-24 years' ...</td></td></tr><tr><td>5</td><td>Highest level of education attained</td><td>5</td><td>11:'tertiary (university, doctoral and specialization courses)', 12:'total', 3:'primary school certificate, no educational degree' ...</td></td></tr><tr><td>6</td><td>Citizenship</td><td>3</td><td>1:'italian', 2:'foreign', 3:'total' ...</td></td></tr><tr><td>7</td><td>Duration of unemployment</td><td>2</td><td>2:'12 months and more', 3:'total'</td></td></tr><tr><td>8</td><td>Time and frequency</td><td>193</td><td>1536:'Q4-1980', 2049:'Q4-2007', 1540:'1981' ...</td></td></tr></table>
 
 
 
@@ -110,6 +110,7 @@ Extract data from dataset ``DCCV_TAXDISOCCU``
 
 .. parsed-literal::
 
+    JsonstatCollection contains the following JsonStatDataSet:
     0: dataset 'IDITTER107*IDTIME'
     
 
@@ -403,6 +404,7 @@ collection
 
 .. parsed-literal::
 
+    JsonstatCollection contains the following JsonStatDataSet:
     0: dataset 'IDCLASETA28*IDTIME'
     
 
@@ -545,14 +547,14 @@ collection
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x1181fd128>
+    <matplotlib.axes._subplots.AxesSubplot at 0x117972f28>
 
 
 
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x11825e0b8>
+    <matplotlib.figure.Figure at 0x117972cf8>
 
 
 
@@ -573,7 +575,7 @@ collection
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x11a5c96a0>
+    <matplotlib.axes._subplots.AxesSubplot at 0x119cc82b0>
 
 
 

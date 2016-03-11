@@ -6,12 +6,13 @@ This Jupyter notebook shows the python library
 `jsonstat.py <http://github.com/26fe/jsonstat.py>`__ in action. The
 `JSON-stat <https://json-stat.org/>`__ is a simple lightweight JSON
 dissemination format. For more information about the format see the
-`official site <https://json-stat.org/>`__. This example shows how to
-explore the example data file
-`oecd-canada <http://json-stat.org/samples/oecd-canada.json>`__ from
-json-stat.org site. This file is complaint to the version 2 of jsonstat.
-This notebook is equal to version 1. The only thing that change is the
-datasource.
+`official site <https://json-stat.org/>`__.
+
+In this notebook it is used the example data file
+`oecd-canada-col.json <http://json-stat.org/samples/oecd-canada-col.json>`__
+from json-stat.org site. This file is complaint to the version 2 of
+jsonstat. This notebook is equal to version 1. The only difference is
+the datasource.
 
 .. code:: python
 
@@ -22,13 +23,10 @@ datasource.
     import jsonstat     # import jsonstat.py package
     
     import matplotlib as plt  # for plotting 
-
-.. code:: python
-
     %matplotlib inline
 
-Download or use cached file oecd-canada.json. Caching file on disk
-permits to work off-line and to speed up the explortion of data
+Download or use cached file oecd-canada-col.json. Caching file on disk
+permits to work off-line and to speed up the exploration of the data.
 
 .. code:: python
 
@@ -389,7 +387,7 @@ specific country (Canada)
 
 
 
-.. image:: oecd-canada-jsonstat_v2_files/oecd-canada-jsonstat_v2_21_1.png
+.. image:: oecd-canada-jsonstat_v2_files/oecd-canada-jsonstat_v2_20_1.png
 
 
 Trasforming a dataset into a python list
