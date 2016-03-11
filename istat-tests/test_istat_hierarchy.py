@@ -22,7 +22,7 @@ class TestIstat(unittest.TestCase):
         self.downloader = jsonstat.Downloader(self.fixture_dir)
         self.i_en = istat.IstatRoot(self.downloader, lang=1)
 
-    def test_cache_dir(self):
+    def test_istat_root(self):
         i_it = istat.IstatRoot(self.downloader, lang=0)
         self.assertEquals(i_it.cache_dir(), self.fixture_dir)
 

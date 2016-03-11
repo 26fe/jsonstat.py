@@ -13,17 +13,17 @@ from istat.istat_root import IstatRoot
 __istat__ = None
 
 
-def cache_dir(cached_dir='', time_to_live=None):
+def cache_dir(cache_dir='', time_to_live=None):
     """Manage the directory ``cached_dir`` where to store downloaded files
 
     without parameter get the directory
     with a parameter set the directory
     :param time_to_live:
-    :param cached_dir:
+    :param cache_dir:
     """
     global __istat__
 
-    if cached_dir == '':
+    if cache_dir == '':
         if __istat__ is None:
             __istat__ = IstatRoot()
         return __istat__.cache_dir()
