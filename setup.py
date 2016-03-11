@@ -8,7 +8,7 @@ from setuptools import setup
 # version_file = open(os.path.join(mypackage_root_dir, 'VERSION'))
 # version = version_file.read().strip()
 
-exec (open('jsonstat/version.py').read())
+exec(open('jsonstat/version.py').read())
 
 
 # execfile is only python 2
@@ -30,19 +30,22 @@ def read(fname):
 
 setup(
     name="jsonstat.py",
-    description=("Library for reading JSON-stat format data."),
+    description='Library for reading JSON-stat format data.',
     long_description=read('README.rst'),
     keywords="jsonstat json statistics",
 
     # https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
 
         'Intended Audience :: Developers',
-        'Topic :: Software Development :: Build Tools',
-        "Topic :: Software Development :: Libraries",
+        'Topic :: Software Development :: Libraries',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+
+        'Environment :: Console',
 
         'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
+
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.5',
     ],
