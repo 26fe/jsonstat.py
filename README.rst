@@ -45,6 +45,11 @@ This library is in beta status.
 I am actively working on it and hope to improve this project.
 For every comment feel free to contact me gf@26fe.com
 
+You can find source at `github <https://github.com/26fe/jsonstat.py>`_ ,
+where you can open a `ticket <https://github.com/26fe/jsonstat.py/issues>`_, if you wish.
+
+You can find the generated documentation at `readthedocs <http://jsonstatpy.readthedocs.org/en/latest/>`_.
+
 .. [1] http://json-stat.org/ for JSON-stat information
 
 ************
@@ -64,12 +69,27 @@ Simple Usage
 
 There is a simple command line interface, so you can experiment to parse jsonstat file without write code::
 
-    jsonstat --cache_dir /tmp http://json-stat.org/samples/oecd-canada.json
+    # parsing collection
+    $ jsonstat --cache_dir /tmp http://json-stat.org/samples/oecd-canada.json
     downloaded file(s) are stored into '/tmp'
     download 'http://json-stat.org/samples/oecd-canada.json'
     JsonstatCollection contains the following JsonStatDataSet:
     0: dataset 'oecd'
     1: dataset 'canada'
+
+    # parsing dataset
+    $ jsonstat --cache_dir /tmp  "http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tesem120?sex=T&precision=1&age=TOTAL&s_adj=NSA"
+    downloaded file(s) are stored into '/tmp'
+    download 'http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tesem120?sex=T&precision=1&age=TOTAL&s_adj=NSA'
+    name:   'Unemployment rate'
+    label:  'Unemployment rate'
+    size: 461
+    5 dimensions:
+      0: dim id: 's_adj' label: 's_adj' size: '1' role: 'None'
+      1: dim id: 'age' label: 'age' size: '1' role: 'None'
+      2: dim id: 'sex' label: 'sex' size: '1' role: 'None'
+      3: dim id: 'geo' label: 'geo' size: '39' role: 'None'
+      4: dim id: 'time' label: 'time' size: '12' role: 'None'
 
 code example::
 
