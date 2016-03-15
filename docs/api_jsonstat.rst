@@ -36,8 +36,15 @@ JsonStatDataSet
 
 .. autoclass:: JsonStatDataSet
 
+    .. automethod:: JsonStatDataSet.__init__
+    .. automethod:: JsonStatDataSet.__len__
     .. automethod:: JsonStatDataSet.info
+    .. automethod:: JsonStatDataSet.dimension
+    .. automethod:: JsonStatDataSet.dimensions
+    .. automethod:: JsonStatDataSet.value
+    .. automethod:: JsonStatDataSet.status
     .. automethod:: JsonStatDataSet.to_table
+    .. automethod:: JsonStatDataSet.to_data_frame
 
 JsonStatDimension
 =================
