@@ -34,6 +34,8 @@ class Downloader:
             msg = "cache_dir '{}' is not a directory".format(cache_dir)
             raise JsonStatException(msg)
 
+        self.__session = requests.session()
+
     def cache_dir(self):
         return self.__cache_dir
 
@@ -53,7 +55,7 @@ class Downloader:
         pathname = self.__build_pathname(filename, url)
         # note: html must be a str type not byte type
         if time_to_live == 0 or not self.__is_cached(pathname):
-            html = requests.get(url).text
+            html = self.__session.get(url).text
             self.__write_page_from_cache(pathname, html)
         else:
             html = self.__read_cached_page(pathname)
@@ -82,7 +84,8 @@ class Downloader:
         # print("last modified: %s" % time.ctime(mtime))
         return cur - mtime < self.__time_to_live
 
-    def __write_page_from_cache(self, pathname, content):
+    @staticmethod
+    def __write_page_from_cache(pathname, content):
         """write content to pathname
         :param pathname:
         :param content:
@@ -95,7 +98,8 @@ class Downloader:
         f.write(content)
         f.close()
 
-    def __read_cached_page(self, pathname):
+    @staticmethod
+    def __read_cached_page(pathname):
         """it reads content from pathname
         :param pathname:
         """

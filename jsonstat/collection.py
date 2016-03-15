@@ -158,5 +158,5 @@ class JsonStatCollection:
         self.__pos2dataset = len(json_data_ds) * [None]
         for pos, ds in enumerate(json_data_ds):
             dataset = JsonStatDataSet()
-            dataset.from_json_v2(ds)
+            dataset._from_json_v2(ds)
             self.__pos2dataset[pos] = dataset

@@ -51,7 +51,7 @@ class TestDataSetToTable(unittest.TestCase):
 
         order = [i.name() for i in dataset.dimensions()]
         order = order[::-1]  # reverse list
-        order = dataset.from_vec_idx_to_vec_dim(order)
+        order = dataset._from_aidx_to_adim(order)
         table = dataset.to_table(order=order)
 
         # table len is the size of dataset + 1 for headers
@@ -72,6 +72,7 @@ class TestDataSetToTable(unittest.TestCase):
         collection = jsonstat.JsonStatCollection()
         collection.from_file(json_pathname)
         gdp_c = collection.dataset('nama_gdp_c')
+
         table = gdp_c.to_table()
 
         # read generate table by jsonstat js module

@@ -64,12 +64,12 @@ def from_json(json_data):
                 o.from_json_v2(json_data)
             elif json_data["class"] == "dataset":
                 o = JsonStatDataSet()
-                o.from_json_v2(json_data)
+                o._from_json_v2(json_data)
             elif json_data["class"] == "dimension":
                 o = JsonStatDimension()
                 o.from_json(json_data)
             else:
-                msg = "unknow class {}".format(json_data["class"])
+                msg = "unknown class {}".format(json_data["class"])
                 raise JsonStatMalformedJson(msg)
 
     else:

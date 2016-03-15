@@ -42,3 +42,7 @@ class TestCollection(unittest.TestCase):
         ]
         expected = ''.join(expected)
         self.assertEqual(result.output, expected)
+
+
+if __name__ == '__main__':
+    unittest.main()
