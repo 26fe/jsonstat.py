@@ -52,12 +52,12 @@ class JsonStatDimension:
         """label of this dimension"""
         return self.__label
 
-    def size(self):
-        """size of this dimension"""
-        return self.__size
+    # def size(self):
+    #     """size of this dimension"""
+    #     return self.__size
 
     def __len__(self):
-        """len of this dimension (the same of the size)"""
+        """size of this dimension"""
         return self.__size
 
     def pos(self):
@@ -92,9 +92,10 @@ class JsonStatDimension:
             raise JsonStatException("dimension '{}': do not have label {}".format(self.__name, lbl))
         return self.__lbl2pos[lbl]
 
-    def idx_or_lbl_2pos(self,idx_or_lbl):
+    def idx_or_lbl_2pos(self, idx_or_lbl):
         """
         from index to position
+        :param idx_or_lbl:
         :param idx: index for ex.: "2013"
         :return: integer
         """

@@ -110,7 +110,7 @@ class JsonStatDataSet:
         out = "{} dimensions:\n".format(len(self.__pos2iid))
         for i, dname in enumerate(self.__pos2iid):
             d = self.__iid2dim[dname]
-            out += "  {}: dim id: '{}' label: '{}' size: '{}' role: '{}'\n".format(i, d.name(), d.label(), d.size(), d.role())
+            out += "  {}: dim id: '{}' label: '{}' size: '{}' role: '{}'\n".format(i, d.name(), d.label(), len(d), d.role())
         return out
 
     def info_dimensions(self):
@@ -161,7 +161,7 @@ class JsonStatDataSet:
         if isinstance(self.__status, str):
             return self.__status
 
-        if isinstance(self.__status, list) and len(self__status) == 1:
+        if isinstance(self.__status, list) and len(self.__status) == 1:
             return self.__status[0]
 
         if len(args) == 1:

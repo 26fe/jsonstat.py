@@ -77,7 +77,7 @@ class TestDimension(unittest.TestCase):
     def test_getters(self):
         dim = jsonstat.JsonStatDimension("test_dim", 10, 0, 'role')
         self.assertEqual(dim.name(), "test_dim")
-        self.assertEqual(dim.size(), 10)
+        self.assertEqual(len(dim), 10)
         self.assertEqual(dim.pos(), 0)
         self.assertEqual(dim.role(), "role")
 
