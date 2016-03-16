@@ -36,8 +36,8 @@ class TestEurostat(unittest.TestCase):
         self.assertEqual(69, len(time))
 
         # show some values
-        v = ds.value(geo="IT", time="2011")
-        self.assertEqual(26000, v)
+        data = ds.data(geo="IT", time="2011")
+        self.assertEqual(26000, data.value)
 
         # for r in ds.to_table():
         #     print(r)
@@ -60,11 +60,11 @@ class TestEurostat(unittest.TestCase):
         self.assertEqual(69, len(time))
 
         # show some values
-        v = ds.value(geo="IT", time="2011")
-        self.assertEqual(26000, v)
+        data = ds.data(geo="IT", time="2011")
+        self.assertEqual(26000, data.value)
 
-        v = ds.value(geo="FR", time="2011")
-        self.assertEqual(30700, v)
+        data = ds.data(geo="FR", time="2011")
+        self.assertEqual(30700, data.value)
 
         # for r in ds.to_table():
         #     print(r)

@@ -33,8 +33,8 @@ class TestSsbNo(unittest.TestCase):
         # v = ds.value(PKoder="Basic chemicals", Tid="2013M07")
         # self.assertEqual(112.2, v)
 
-        v = ds.value(PKoder="P1111", Tid="2013M07")
-        self.assertEqual(112.2, v)
+        data = ds.data(PKoder="P1111", Tid="2013M07")
+        self.assertEqual(112.2, data.value)
 
 
 if __name__ == '__main__':

@@ -64,7 +64,7 @@ class TestDataSet(unittest.TestCase):
     def test_exception_not_valid(self):
         dataset = jsonstat.JsonStatDataSet("canada")
         with self.assertRaises(jsonstat.JsonStatException):
-            dataset.value(year="2003", area="CA")
+            dataset.data(year="2003", area="CA")
 
     def test_empty_value(self):
         dataset = jsonstat.JsonStatDataSet("canada")
@@ -95,7 +95,7 @@ class TestDataSet(unittest.TestCase):
         with self.assertRaises(jsonstat.JsonStatException) as cm:
             dataset.from_string(self.json_incorrect_data_size)
         e = cm.exception
-        # expected e il primo valore dell'assert (giusto per ricordare!)
+        # expected is the first params of assert method
         expected = "dataset 'canada': size 4 is different from calculate size 48 by dimension"
         self.assertEqual(expected, e.value)
 
@@ -150,40 +150,40 @@ class TestDataSet(unittest.TestCase):
         dataset = jsonstat.JsonStatDataSet()
         dataset.from_file(json_pathname)
 
-        value = dataset.value(one="one_1", two="two_1", three="three_1")
-        self.assertEqual(value, 111)
+        data = dataset.data(one="one_1", two="two_1", three="three_1")
+        self.assertEqual(data.value, 111)
 
-        value = dataset.value(one="one_2", two="two_2", three="three_2")
-        self.assertEqual(value, 222)
+        data = dataset.data(one="one_2", two="two_2", three="three_2")
+        self.assertEqual(data.value, 222)
 
         # status
-        status = dataset.status(one="one_1", two="two_1", three="three_1")
-        self.assertIsNone(status)
+        data = dataset.data(one="one_1", two="two_1", three="three_1")
+        self.assertIsNone(data.status)
 
     def test_value_and_status_with_unemployment(self):
         json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(json_pathname)
 
-        value = dataset.value(area="AU", year="2012")
-        self.assertEqual(value, 11)
+        data = dataset.data(area="AU", year="2012")
+        self.assertEqual(data.value, 11)
 
         # using label Australia instead of index AU
-        value = dataset.value(area="Australia", year="2012")
-        self.assertEqual(value, 11)
+        data = dataset.data(area="Australia", year="2012")
+        self.assertEqual(data.value, 11)
 
         # using dictionary
-        value = dataset.value({'area': "Australia", 'year': "2012"})
-        self.assertEqual(value, 11)
+        data = dataset.data({'area': "Australia", 'year': "2012"})
+        self.assertEqual(data.value, 11)
 
-        value = dataset.value({'area': "AU", 'year': "2012"})
-        self.assertEqual(value, 11)
+        data = dataset.data({'area': "AU", 'year': "2012"})
+        self.assertEqual(data.value, 11)
 
-        value = dataset.value({"OECD countries, EU15 and total": "AU", 'year': '2012'})
-        self.assertEqual(value, 11)
+        data = dataset.data({"OECD countries, EU15 and total": "AU", 'year': '2012'})
+        self.assertEqual(data.value, 11)
 
-        value = dataset.value(area="BE", year="2014")
-        self.assertEqual(value, 33)
+        data = dataset.data(area="BE", year="2014")
+        self.assertEqual(data.value, 33)
 
         # status
         status = dataset.status(area="BE", year="2014")
@@ -195,12 +195,12 @@ class TestDataSet(unittest.TestCase):
         collection.from_file(json_pathname)
         oecd = collection.dataset('oecd')
 
-        value = oecd.value(concept='UNR', area='AU', year='2004')
-        self.assertEqual(5.39663128, value)
+        data = oecd.data(concept='UNR', area='AU', year='2004')
+        self.assertEqual(5.39663128, data.value)
 
         # status
-        status = oecd.status(concept='UNR', area='AU', year='2004')
-        self.assertIsNone(status)
+        data = oecd.data(concept='UNR', area='AU', year='2004')
+        self.assertIsNone(data.status)
 
         # first position with status 10
         adim = {'concept': 'UNR', 'area': 'AU', 'year': '2013'}

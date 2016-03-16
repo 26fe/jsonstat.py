@@ -7,6 +7,7 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 from functools import reduce
+from collections import namedtuple
 import json
 
 # packages
@@ -17,6 +18,8 @@ import pandas as pd
 from jsonstat.dimension import JsonStatDimension
 from jsonstat.exceptions import JsonStatException
 from jsonstat.exceptions import JsonStatMalformedJson
+
+JsonStatValue = namedtuple('JsonStatValue', ['value', 'status'])
 
 
 class JsonStatDataSet:
@@ -121,6 +124,36 @@ class JsonStatDataSet:
     # value/status
     #
 
+    def data(self, *args, **kargs):
+        if not self.__valid:
+            raise JsonStatException('dataset not initialized')
+
+        #
+        # value
+        #
+        if len(args) == 1:
+            dims = args[0]
+        else:
+            dims = kargs
+        apos = self._from_adim_to_apos(dims)
+        idx = self._from_apos_to_idx(apos)
+        value = self.__value[idx]
+
+        #
+        # status
+        #
+        if self.__status is None:
+            status = None
+        elif isinstance(self.__status, str):
+            status = self.__status
+        elif isinstance(self.__status, list) and len(self.__status) == 1:
+            status = self.__status[0]
+        elif isinstance(self.__status, dict) and idx not in self.__status:
+            status = None
+        else:
+            status = self.__status[idx]
+        return JsonStatValue(value, status)
+
     def value(self, *args, **kargs):
         """get a value
 
@@ -140,7 +173,8 @@ class JsonStatDataSet:
             dims = kargs
         apos = self._from_adim_to_apos(dims)
         idx = self._from_apos_to_idx(apos)
-        return self.__value[idx]
+        value = self.__value[idx]
+        return value
 
     def status(self, *args, **kargs):
         """get a status
@@ -156,26 +190,24 @@ class JsonStatDataSet:
             raise JsonStatException('dataset not initialized')
 
         if self.__status is None:
-            return None
-
-        if isinstance(self.__status, str):
-            return self.__status
-
-        if isinstance(self.__status, list) and len(self.__status) == 1:
-            return self.__status[0]
-
-        if len(args) == 1:
-            dims = args[0]
+            status = None
+        elif isinstance(self.__status, str):
+            status = self.__status
+        elif isinstance(self.__status, list) and len(self.__status) == 1:
+            status = self.__status[0]
         else:
-            dims = kargs
-        apos = self._from_adim_to_apos(dims)
-        idx = self._from_apos_to_idx(apos)
+            if len(args) == 1:
+                dims = args[0]
+            else:
+                dims = kargs
+            apos = self._from_adim_to_apos(dims)
+            idx = self._from_apos_to_idx(apos)
 
-        if isinstance(self.__status, dict):
-            if idx not in self.__status:
-                return None
-
-        return self.__status[idx]
+            if isinstance(self.__status, dict) and idx not in self.__status:
+                status = None
+            else:
+                status = self.__status[idx]
+        return status
 
     def __value_from_vec_pos(self, lst):
         """
