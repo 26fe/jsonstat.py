@@ -20,6 +20,9 @@ format.
     
     import istat
 
+Using istat api
+^^^^^^^^^^^^^^^
+
 Next step is to set a cache dir where to store json files downloaded
 from Istat. Storing file on disk speeds up development, and assures
 consistent results over time. Eventually, you can delete donwloaded
@@ -56,10 +59,8 @@ List all datasets contained into area ``LAB`` (Labour)
 
 .. code:: python
 
-    istat_area_name = 'LAB'
-    istat_area = istat.area(istat_area_name)
-    
-    HTML(istat_area.datasets_as_html())
+    istat_area_lab = istat.area('LAB')
+    HTML(istat_area_lab.datasets_as_html())
 
 
 
@@ -74,9 +75,8 @@ List all dimension for dataset ``DCCV_TAXDISOCCU`` (Unemployment rate)
 
 .. code:: python
 
-    istat_dataset_name = 'DCCV_TAXDISOCCU'
-    istat_dataset = istat_area.dataset(istat_dataset_name)
-    HTML(istat_dataset.info_dimensions_as_html())
+    istat_dataset_taxdisoccu = istat_area_lab.dataset('DCCV_TAXDISOCCU')
+    HTML(istat_dataset_taxdisoccu.info_dimensions_as_html())
 
 
 
@@ -104,7 +104,7 @@ Extract data from dataset ``DCCV_TAXDISOCCU``
     }
     
     # convert istat dataset into jsonstat collection and print some info
-    collection = istat_dataset.getvalues(spec)
+    collection = istat_dataset_taxdisoccu.getvalues(spec)
     collection.info()
 
 
@@ -398,7 +398,7 @@ collection
     }
     
     # convert istat dataset into jsonstat collection and print some info
-    collection_2 = istat_dataset.getvalues(spec)
+    collection_2 = istat_dataset_taxdisoccu.getvalues(spec)
     collection_2.info()
 
 
@@ -547,14 +547,14 @@ collection
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x117972f28>
+    <matplotlib.axes._subplots.AxesSubplot at 0x11829b8d0>
 
 
 
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x117972cf8>
+    <matplotlib.figure.Figure at 0x1182a7d30>
 
 
 
@@ -575,7 +575,7 @@ collection
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x119cc82b0>
+    <matplotlib.axes._subplots.AxesSubplot at 0x1182a7fd0>
 
 
 

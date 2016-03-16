@@ -40,15 +40,13 @@ download dataset from Istat
     
     cache_dir = os.path.abspath(os.path.join("..", "tmp", "istat_cached"))
     istat.cache_dir(cache_dir)
-    istat.lang(0)  #italian
+    istat.lang(0)  # set italian language
     print("cache_dir is '{}'".format(istat.cache_dir()))
 
 
 .. parsed-literal::
 
     cache_dir is '/Users/26fe_nas/gioprj.on_mac/prj.python/jsonstat.py/tmp/istat_cached'
-
-
 
 
 .. code:: python
@@ -65,11 +63,11 @@ download dataset from Istat
 
 
 
-Download - nroccupati - nrdisoccupati - forza lavoro controllare che
-nroccupati + nrdisoccupati = forza lavoro
+Download - numero occupati - numero disoccupati - forza lavoro -
+controllare che nroccupati + nrdisoccupati = forza lavoro
 
-Occupati
-~~~~~~~~
+Download Occupati
+~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -166,8 +164,8 @@ Occupati
 
 
 
-Disoccupati
-~~~~~~~~~~~
+Download disoccupati
+~~~~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -254,8 +252,8 @@ Disoccupati
 
 
 
-Forza Lavoro
-~~~~~~~~~~~~
+Download forza Lavoro
+~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -344,8 +342,8 @@ Forza Lavoro
 
 
 
-Inattivi
-~~~~~~~~
+Download inattivi
+~~~~~~~~~~~~~~~~~
 
 .. code:: python
 

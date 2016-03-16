@@ -60,6 +60,7 @@ dataset contained into the collection.
 
 .. parsed-literal::
 
+    JsonstatCollection contains the following JsonStatDataSet:
     0: dataset 'Unemployment rate in the OECD countries 2003-2014'
     1: dataset 'Population by sex and age group. Canada. 2012'
 
@@ -283,7 +284,7 @@ Trasforming dataset into pandas DataFrame
 
     count     432
     unique     36
-    top        PL
+    top        IL
     freq       12
     Name: area, dtype: object
 
@@ -382,7 +383,7 @@ specific country (Canada)
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x10cdba290>
+    <matplotlib.axes._subplots.AxesSubplot at 0x11395a668>
 
 
 
@@ -402,11 +403,11 @@ Trasforming a dataset into a python list
 
 .. parsed-literal::
 
-    [[u'indicator', u'OECD countries, EU15 and total', u'2003-2014', u'Value'],
-     [u'unemployment rate', u'Australia', u'2003', 5.943826289],
-     [u'unemployment rate', u'Australia', u'2004', 5.39663128],
-     [u'unemployment rate', u'Australia', u'2005', 5.044790587],
-     [u'unemployment rate', u'Australia', u'2006', 4.789362794]]
+    [['indicator', 'OECD countries, EU15 and total', '2003-2014', 'Value'],
+     ['unemployment rate', 'Australia', '2003', 5.943826289],
+     ['unemployment rate', 'Australia', '2004', 5.39663128],
+     ['unemployment rate', 'Australia', '2005', 5.044790587],
+     ['unemployment rate', 'Australia', '2006', 4.789362794]]
 
 
 
@@ -416,7 +417,7 @@ It is possible to trasform jsonstat data into table in different order
 
     order = [i.name() for i in oecd.dimensions()]
     order = order[::-1]  # reverse list
-    order = oecd.from_vec_idx_to_vec_dim(order)
+    order = oecd._from_aidx_to_adim(order)
     table = oecd.to_table(order=order)
     table[:5]
 
@@ -425,10 +426,10 @@ It is possible to trasform jsonstat data into table in different order
 
 .. parsed-literal::
 
-    [[u'indicator', u'OECD countries, EU15 and total', u'2003-2014', u'Value'],
-     [u'unemployment rate', u'Australia', u'2003', 5.943826289],
-     [u'unemployment rate', u'Austria', u'2003', 4.278559338],
-     [u'unemployment rate', u'Belgium', u'2003', 8.158333333],
-     [u'unemployment rate', u'Canada', u'2003', 7.594616751]]
+    [['indicator', 'OECD countries, EU15 and total', '2003-2014', 'Value'],
+     ['unemployment rate', 'Australia', '2003', 5.943826289],
+     ['unemployment rate', 'Austria', '2003', 4.278559338],
+     ['unemployment rate', 'Belgium', '2003', 8.158333333],
+     ['unemployment rate', 'Canada', '2003', 7.594616751]]
 
 

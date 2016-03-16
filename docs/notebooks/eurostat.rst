@@ -65,6 +65,7 @@ about the collection.
 
 .. parsed-literal::
 
+    JsonstatCollection contains the following JsonStatDataSet:
     0: dataset 'nama_gdp_c'
 
 
@@ -277,18 +278,12 @@ Adding a simple plot
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x10c974250>
+    <matplotlib.axes._subplots.AxesSubplot at 0x1127c1160>
 
 
 
-.. parsed-literal::
 
-    /extra/opt/anaconda/envs/python27/lib/python2.7/site-packages/matplotlib/font_manager.py:273: UserWarning: Matplotlib is building the font cache using fc-list. This may take a moment.
-      warnings.warn('Matplotlib is building the font cache using fc-list. This may take a moment.')
-
-
-
-.. image:: eurostat_files/eurostat_15_2.png
+.. image:: eurostat_files/eurostat_15_1.png
 
 
 Exploring data with two dimensions (geo, time) with size > 1
@@ -462,7 +457,7 @@ faster. You can see the raw data
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x10d1e8a50>
+    <matplotlib.axes._subplots.AxesSubplot at 0x112d7a6d8>
 
 
 
@@ -481,7 +476,7 @@ faster. You can see the raw data
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x10d1f1850>
+    <matplotlib.axes._subplots.AxesSubplot at 0x112da0fd0>
 
 
 
@@ -500,7 +495,7 @@ faster. You can see the raw data
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x10cf17190>
+    <matplotlib.axes._subplots.AxesSubplot at 0x112eed518>
 
 
 

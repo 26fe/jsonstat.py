@@ -8,6 +8,8 @@ explore Istat data. `Istat <http://www.istat.it/en/about-istat>`__ is
 Italian National Institute of Statistics. It publishs a rest api for
 querying italian statistics.
 
+We starts importing some modules.
+
 .. code:: python
 
     from __future__ import print_function
@@ -15,9 +17,13 @@ querying italian statistics.
     import istat
     from IPython.core.display import HTML
 
-Setting a cache dir where to store json files download by Istat api.
-Storing file on disk speed up development, and assures consistent
-results over time. Anyway you can delete file to donwload a fresh copy.
+Step 1: using istat module to get a jsonstat collection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Following code sets a cache dir where to store json files download by
+Istat api. Storing file on disk speed up development, and assures
+consistent results over time. Anyway you can delete file to donwload a
+fresh copy.
 
 .. code:: python
 
@@ -31,7 +37,8 @@ results over time. Anyway you can delete file to donwload a fresh copy.
     cache_dir is '/Users/26fe_nas/gioprj.on_mac/prj.python/jsonstat.py/tmp/istat_cached'
 
 
-List all istat areas
+Using istat api, we can shows the istat areas used to categorize the
+datasets
 
 .. code:: python
 
@@ -46,14 +53,12 @@ List all istat areas
 
 
 
-List all datasets contained into area ``Prices``
+Following code list all datasets contained into area ``Prices``.
 
 .. code:: python
 
-    istat_area_name = 'Prices'
-    istat_area = istat.area(istat_area_name)
-    
-    HTML(istat_area.datasets_as_html())
+    istat_area_prices = istat.area('Prices')
+    HTML(istat_area_prices.datasets_as_html())
 
 
 
@@ -68,9 +73,8 @@ List all dimension for dataset ``DCSP_IPAB`` (House price index)
 
 .. code:: python
 
-    istat_dataset_name = 'DCSP_IPAB'
-    istat_dataset = istat_area.dataset(istat_dataset_name)
-    HTML(istat_dataset.info_dimensions_as_html())
+    istat_dataset_dcsp_ipab = istat_area_prices.dataset('DCSP_IPAB')
+    HTML(istat_dataset_dcsp_ipab.info_dimensions_as_html())
 
 
 
@@ -81,8 +85,31 @@ List all dimension for dataset ``DCSP_IPAB`` (House price index)
 
 
 
-Extract data from dataset ``DCSP_IPAB`` with dimension "1,18,0,0,0"
-where the first dimension is Territory, etc. Below is the mapping:
+Finally from istat dataset we extracts data in jsonstat format by
+specifying dimensions we are interested.
+
+.. code:: python
+
+    spec = { 
+        "Territory": 1, "Index type": 18, 
+        # "Measure": 0, # "Purchases of dwelling": 0, # "Time and frequency": 0
+    }
+    # convert istat dataset into jsonstat collection and print some info
+    collection = istat_dataset_dcsp_ipab.getvalues(spec)
+    collection
+
+
+
+
+.. parsed-literal::
+
+    JsonstatCollection contains the following JsonStatDataSet:
+    0: dataset 'IDMISURA1*IDTYPPURCH*IDTIME'
+
+
+
+The previous call is equivalent to call istat api with a "1,18,0,0,0"
+string of number. Below is the mapping from the number and dimensions:
 
 +------------------------+------+-------------------------------------------------------+
 | dimension              |      |                                                       |
@@ -100,21 +127,24 @@ where the first dimension is Territory, etc. Below is the mapping:
 
 .. code:: python
 
-    spec = { 
-        "Territory": 1, "Index type": 18, 
-        # "Measure": 0, # "Purchases of dwelling": 0, # "Time and frequency": 0
-    }
-    # convert istat dataset into jsonstat collection and print some info
-    collection = istat_dataset.getvalues(spec)
-    collection.info()
+    json_stat_data = istat_dataset_dcsp_ipab.getvalues("1,18,0,0,0")
+    json_stat_data
+
+
 
 
 .. parsed-literal::
 
     JsonstatCollection contains the following JsonStatDataSet:
     0: dataset 'IDMISURA1*IDTYPPURCH*IDTIME'
-    
 
+
+
+step2: using jsonstat.py api.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Now we have a jsonstat collection, let expore it with the api of
+jsonstat.py
 
 Print some info of one dataset contained into the above jsonstat
 collection
@@ -138,6 +168,8 @@ collection
       2: dim id: 'IDTIME' label: 'Time and frequency' size: '23' role: 'None'
 
 
+
+Print info about the dimensions to get an idea about the data
 
 .. code:: python
 
@@ -207,21 +239,6 @@ collection
        20 '2188'   'Q1-2015'
        21 '2192'   'Q2-2015'
        22 '2197'   'Q3-2015'
-
-
-
-.. code:: python
-
-    json_stat_data = istat_dataset.getvalues("1,18,4,4,0")
-    json_stat_data
-
-
-
-
-.. parsed-literal::
-
-    JsonstatCollection contains the following JsonStatDataSet:
-    0: dataset 'IDTIME'
 
 
 
@@ -437,5 +454,5 @@ collection
 
 
 
-.. image:: istat_house_price_index_files/istat_house_price_index_20_0.png
+.. image:: istat_house_price_index_files/istat_house_price_index_25_0.png
 
