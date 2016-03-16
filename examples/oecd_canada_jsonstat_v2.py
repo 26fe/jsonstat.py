@@ -40,7 +40,7 @@ def test(uri, cache_dir):
         print("\n*** info for dimensions '{}'".format(d.name()))
         d.info()
 
-    print("\n*** value oecd(area:IT,year:2012): {}".format(oecd.value(area='IT', year='2012')))
+    print("\n*** value oecd(area:IT,year:2012): {}".format(oecd.data(area='IT', year='2012')))
 
     print("\ngenerate all vec")
     oecd.generate_all_vec(area='CA')

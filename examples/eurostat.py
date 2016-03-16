@@ -29,7 +29,7 @@ def test(uri, cache_dir, filename):
     ds.info_dimensions()
 
     # show some values
-    v = ds.value(geo="IT", time="2011")
+    v = ds.data(geo="IT", time="2011")
     print("IT gdp in 2011 was {}".format(v))
 
 
