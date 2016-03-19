@@ -23,32 +23,27 @@ var JSONstat = require('jsonstat');
 // csv library http://csv.adaltas.com/csv/examples/
 var csv       = require('csv');
 
+var common = require("./common");
+
 var fixtures_dir      = path.join(__dirname, "..", "tests", "fixtures")
-var json_pathname     = path.join(fixtures_dir, "collection", "oecd-canada.json");
+var json_pathname     = path.join(fixtures_dir, "json-stat.org", "oecd-canada.json");
 var to_table_pathname = path.join(fixtures_dir, "output_from_nodejs", "oecd-canada-to_table.csv");
 
-function jsonstat_to_table(json_string) {
-    var json_data = JSON.parse(json_string);
-    var J         = JSONstat(json_data);
-    var oecd   = J.Dataset(0);
-    var canada = J.Dataset(1);
-
-    var ret = oecd.toTable();
-    console.log("write oecd dataset in file '" + to_table_pathname + "'")
-
-    csv.stringify(ret, function(err, output){
-    var fd = fs.openSync(to_table_pathname, "w");
-      fs.writeSync(fd, output);
-      fs.closeSync(fd);
-    });
-}
 
 if(! fs.existsSync(json_pathname)) {
     console.log("file not exists");
 } else {
     console.log("reading file '" + json_pathname + "'")
     var json_string = fs.readFileSync(json_pathname).toString();
-    jsonstat_to_table(json_string);
+
+    var json_data = JSON.parse(json_string);
+    var J         = JSONstat(json_data);
+    var oecd   = J.Dataset(0);
+    var canada = J.Dataset(1);
+
+    console.log("category: " + J.Dataset(0).Dimension(0).label);
+
+    common.jsonstat_to_table(json_string, to_table_pathname);
 }
 
 // var http     = require('http');
