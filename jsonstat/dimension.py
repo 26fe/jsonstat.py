@@ -6,12 +6,14 @@
 # stdlib
 from __future__ import print_function
 from __future__ import unicode_literals
+from collections import namedtuple
 import json
 
 # jsonstat
 from jsonstat.exceptions import JsonStatException
 from jsonstat.exceptions import JsonStatMalformedJson
 
+JsonStatCategory = namedtuple('JsonStatCategory', ['label', 'idx'])
 
 class JsonStatDimension:
     """
@@ -67,6 +69,14 @@ class JsonStatDimension:
     def role(self):
         """role of this dimension (time, geo or metric)"""
         return self.__role
+
+    def category(self, pos):
+        idx = self.__pos2idx[pos]
+        label = None
+        if self.__pos2lbl is not None:
+            label = self.__pos2lbl[pos]
+        cat = JsonStatCategory(label=label, idx=idx)
+        return cat
 
     def idx2pos(self, idx):
         """
@@ -163,21 +173,41 @@ class JsonStatDimension:
     #
 
     def from_string(self, json_string):
-        """
-        Parse a json string
+        """Parse a json string
+
         :param json_string:
-        :return itself to chain call
+        :returns itself to chain call
         """
         json_data = json.loads(json_string)
         self.from_json(json_data)
         return self
 
     def from_json(self, json_data):
-        """
-        Parse a json structure representing a dimensionid
-        https://json-stat.org/format/#dimensionid
+        """Parse a json structure representing a dimension id
+
+        From https://json-stat.org/format/#dimensionid
+        > It is used to describe a particular dimension.
+        > The name of this object must be one of the strings in the id array.
+        > There must be one and only one dimension ID object for every dimension in the id array.
+        :
+            "dimension" : {
+                "metric" : { … },
+                "time" : { … },
+                "geo" : { … },
+                "sex" : { … },
+                …
+        }
+
+
+        Parent: 'dimension'
+        Children:
+            - category
+            - label
+            - class
+
+
         :param json_data:
-        :return itself to chain call
+        :returns: itself to chain call
         """
         # children category, label, class
         if 'label' in json_data:
@@ -189,19 +219,32 @@ class JsonStatDimension:
                 raise JsonStatMalformedJson(msg)
 
         # parsing category
-        # category is required
-        # https://json-stat.org/format/#category
         if "category" not in json_data:
             msg = "dimension '{}': missing category key".format(self.__name)
             raise JsonStatMalformedJson(msg)
 
-        json_data_category = json_data['category']
+        self.__parse_category(json_data['category'])
 
-        # children of category index, label, child, coordinates, unit
-        # TODO: parse 'unit'
+        self.__valid = True
+        return self
+
+    def __parse_category(self, json_data_category):
+        """
+        It is used to describe the possible values of a dimension.
+
+        https://json-stat.org/format/#category
+        category is required
+        children of category:
+          - index
+          - label
+          - child
+          - coordinates
+          - unit
+        :param json_data_category:
+        :returns:
+        """
         if 'index' in json_data_category:
             self.__parse_json_index(json_data_category)
-
         if 'label' in json_data_category:
             self.__parse_json_label(json_data_category)
 
@@ -244,8 +287,20 @@ class JsonStatDimension:
             msg = 'hole in index'
             raise JsonStatMalformedJson(msg)
 
-        self.__valid = True
-        return self
+        # TODO: parse 'unit'
+        # "unit" : {
+        # 	 "exp" : {
+        # 			"decimals": 1,
+        # 			"label" : "millions",
+        # 			"symbol" : "$",
+        # 			"position" : "start"
+        # 	 }
+        # }
+        if 'unit' in json_data_category:
+            if self.__role != "metric":
+                msg = "dimension {}: 'unit' are used but dimension role must be 'metric'"
+                JsonStatException(msg)
+            self.__unit = json_data_category['unit']
 
     def __parse_json_index(self, json_data):
         """

@@ -16,7 +16,7 @@ import jsonstat
 class TestDimension(unittest.TestCase):
 
     def setUp(self):
-        self.json_str_only_index= '''
+        self.json_str_only_index = '''
         {
             "label" : "2003-2014",
             "category" : {
@@ -38,7 +38,7 @@ class TestDimension(unittest.TestCase):
         }
         '''
 
-        self.json_str_hole_in_index= '''
+        self.json_str_hole_in_index = '''
         {
             "label" : "2003-2014",
             "category" : {
@@ -56,15 +56,14 @@ class TestDimension(unittest.TestCase):
         }
         '''
 
-        self.json_str_size_one= '''
+        self.json_str_size_one = '''
             {
                 "label" : "country",
                 "category" : {"label" : { "CA" : "Canada" }}
             }
         '''
 
-
-        self.json_str_label_and_index= '''
+        self.json_str_label_and_index = '''
             {
                 "label" : "OECD countries, EU15 and total",
                 "category" : {
@@ -73,6 +72,10 @@ class TestDimension(unittest.TestCase):
                 }
             }
         '''
+
+    #
+    # building and parsing
+    #
 
     def test_getters(self):
         dim = jsonstat.JsonStatDimension("test_dim", 10, 0, 'role')
@@ -115,24 +118,48 @@ class TestDimension(unittest.TestCase):
         self.assertEqual(u'country', dim.label())
         self.assertEqual(1, len(dim))
 
+    def test_exception_mismatch_index_and_label(self):
+        dim = jsonstat.JsonStatDimension("year", 4, 0, None)
+        with self.assertRaises(jsonstat.JsonStatMalformedJson) as cm:
+            dim.from_string(self.json_str_label_and_index)
+
+        e = cm.exception
+        expected = "dimension 'year': label 'Canada' is associated with index 'CA' that not exists!"
+        self.assertEqual(e.value, expected)
+
+    #
+    # queries methods
+    #  JsonstatDimension.category()
+    #
+
     def test_idx2pos(self):
         dim = jsonstat.JsonStatDimension("year", 12, 0, None)
         dim.from_string(self.json_str_only_index)
+
         self.assertEqual(dim.idx2pos("2003"), 0)
         self.assertEqual(dim.idx2pos("2014"), 11)
 
     def test_pos2idx(self):
         dim = jsonstat.JsonStatDimension("year", 12, 0, None)
         dim.from_string(self.json_str_only_index)
+
         self.assertEqual(dim.pos2idx(0), "2003")
         self.assertEqual(dim.pos2idx(11), "2014")
+        self.assertEqual(dim.category(0).idx, "2003")
+        self.assertIsNone(dim.category(0).label)
 
     def test_get_index(self):
         dim = jsonstat.JsonStatDimension("year", 12, 0, None)
         dim.from_string(self.json_str_only_index)
+
         expected = ['2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014']
         result = dim.get_index()
         self.assertEqual(expected, result)
+
+
+    #
+    # print/info/external representation
+    #
 
     def test_info(self):
         dim = jsonstat.JsonStatDimension("year", 12, 0, None)
@@ -167,14 +194,6 @@ class TestDimension(unittest.TestCase):
         self.maxDiff = None
         self.assertEqual(expected, dim.__str__())
 
-    def test_exception_mismatch_index_and_label(self):
-        dim = jsonstat.JsonStatDimension("year", 4, 0, None)
-        with self.assertRaises(jsonstat.JsonStatMalformedJson) as cm:
-            dim.from_string(self.json_str_label_and_index)
-
-        e = cm.exception
-        expected = "dimension 'year': label 'Canada' is associated with index 'CA' that not exists!"
-        self.assertEqual(e.value, expected)
 
 if __name__ == '__main__':
     unittest.main()
