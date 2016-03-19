@@ -30,14 +30,15 @@ JsonStatCollection
 .. autoclass:: JsonStatCollection
 
     .. automethod:: JsonStatCollection.dataset
+    .. special-members:: JsonStatCollection.__len__
 
 JsonStatDataSet
 ===============
 
 .. autoclass:: JsonStatDataSet
+    :special-members: JsonStatDataSet.__len__
 
     .. automethod:: JsonStatDataSet.__init__
-    .. automethod:: JsonStatDataSet.__len__
     .. automethod:: JsonStatDataSet.info
     .. automethod:: JsonStatDataSet.dimension
     .. automethod:: JsonStatDataSet.dimensions
@@ -52,7 +53,14 @@ JsonStatDimension
 .. autoclass:: JsonStatDimension
 
     .. automethod:: JsonStatDimension.info
+
+    .. automethod:: JsonStatDimension.category
     .. automethod:: JsonStatDimension.idx2pos
+    
+parsing
+^^^^^^^
+    .. automethod:: JsonStatDimension.from_string
+    .. automethod:: JsonStatDimension.from_json
 
 Downloader helper
 =================
