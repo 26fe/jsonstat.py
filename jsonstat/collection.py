@@ -116,10 +116,7 @@ class JsonStatCollection:
         #   dataset1 : {...}
         #   dataset2 : {...}
         # }
-        for ds in json_data.items():
-            dataset_name = ds[0]
-            dataset_json = ds[1]
-
+        for dataset_name, dataset_json in json_data.items():
             dataset = JsonStatDataSet(dataset_name)
             dataset.from_json(dataset_json)
             self.__name2dataset[dataset_name] = dataset

@@ -87,7 +87,7 @@ class TestDimension(unittest.TestCase):
     def test_exception_not_valid(self):
         dim = jsonstat.JsonStatDimension("year", 10, 0, None)
         with self.assertRaises(jsonstat.JsonStatException):
-            r = dim.idx2pos('2013')
+            r = dim._idx2pos('2013')
 
     def test_exception_size(self):
         dim = jsonstat.JsonStatDimension("year", 10, 0, None)
@@ -136,25 +136,25 @@ class TestDimension(unittest.TestCase):
         dim = jsonstat.JsonStatDimension("year", 12, 0, None)
         dim.from_string(self.json_str_only_index)
 
-        self.assertEqual(dim.idx2pos("2003"), 0)
-        self.assertEqual(dim.idx2pos("2014"), 11)
+        self.assertEqual(dim._idx2pos("2003"), 0)
+        self.assertEqual(dim._idx2pos("2014"), 11)
 
     def test_pos2idx(self):
         dim = jsonstat.JsonStatDimension("year", 12, 0, None)
         dim.from_string(self.json_str_only_index)
 
-        self.assertEqual(dim.pos2idx(0), "2003")
-        self.assertEqual(dim.pos2idx(11), "2014")
-        self.assertEqual(dim.category(0).idx, "2003")
+        self.assertEqual(dim._pos2idx(0), "2003")
+        self.assertEqual(dim._pos2idx(11), "2014")
+        self.assertEqual(dim.category(0).index, "2003")
         self.assertIsNone(dim.category(0).label)
 
-    def test_get_index(self):
-        dim = jsonstat.JsonStatDimension("year", 12, 0, None)
-        dim.from_string(self.json_str_only_index)
-
-        expected = ['2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014']
-        result = dim.get_index()
-        self.assertEqual(expected, result)
+    # def test_get_index(self):
+    #     dim = jsonstat.JsonStatDimension("year", 12, 0, None)
+    #     dim.from_string(self.json_str_only_index)
+    #
+    #     expected = ['2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014']
+    #     result = dim.get_index()
+    #     self.assertEqual(expected, result)
 
 
     #

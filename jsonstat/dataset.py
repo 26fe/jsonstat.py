@@ -264,7 +264,7 @@ class JsonStatDataSet:
                 msg = msg.format(self.__name, cat, allowed_categories)
                 raise JsonStatException(msg)
 
-            apos[dim.pos()] = dim.idx_or_lbl_2pos(val)
+            apos[dim.pos()] = dim._idx_or_lbl_2pos(val)
         return apos
 
     def _from_apos_to_idx(self, lst):
@@ -293,31 +293,31 @@ class JsonStatDataSet:
             dim = self.__iid2dim[dim_iid]
             # vec_idx[i] = dim.pos2idx(vec_pos[i])
             if not(without_one_dimension and len(dim) == 1):
-                vec_idx.append(dim.pos2idx(vec_pos[pos]))
+                vec_idx.append(dim._pos2idx(vec_pos[pos]))
         return vec_idx
 
-    def _from_apos_to_alabel(self, vec_pos, without_one_dimension=False):
+    def _from_apos_to_alabel(self, apos, without_one_dimension=False):
         """transforms on array of dim into an array of label
 
-        :param vec_pos:  [0,3,4]
+        :param apos:  [0,3,4]
         :returns: ['dimension 1 label or index', 'dimension 2 label  or index', 'dimension 3 label  or index']
         """
 
         # vec_idx = len(vec_pos) * [None]
-        vec_idx = []
-        for pos in range(len(vec_pos)):
+        aidx = []
+        for pos in range(len(apos)):
             dim_iid = self.__pos2iid[pos]
             dim = self.__iid2dim[dim_iid]
 
-            lbl = dim.pos2label(vec_pos[pos])
+            lbl = dim._pos2label(apos[pos])
             if lbl is None:
-                lbl = dim.pos2idx(vec_pos[pos])
+                lbl = dim._pos2idx(apos[pos])
 
             # vec_idx[i] = lbl
             if not(without_one_dimension and len(dim) == 1):
-                vec_idx.append(lbl)
+                aidx.append(lbl)
 
-        return vec_idx
+        return aidx
 
     def _from_aidx_to_adim(self, lst_iids):
         """From a list of dimension name to a list of numerical dimension position
@@ -353,7 +353,7 @@ class JsonStatDataSet:
         for (cat,idx) in blocked_dims.items():
             d = self.dimension(cat)
             vec_pos_blocked[d.pos()] = True
-            vec_pos[d.pos()] = d.idx2pos(idx)
+            vec_pos[d.pos()] = d._idx2pos(idx)
 
         pos2size = self.__pos2size
 
@@ -426,12 +426,12 @@ class JsonStatDataSet:
 
         # data
         table.append(header)
-        for vec_pos in self.all_pos(order=order,blocked_dims=blocked_dims):
-            value = self.__value_from_vec_pos(vec_pos)
+        for apos in self.all_pos(order=order, blocked_dims=blocked_dims):
+            value = self.__value_from_vec_pos(apos)
             if content == "label":
-                row = self._from_apos_to_alabel(vec_pos, without_one_dimension=without_one_dimensions)
+                row = self._from_apos_to_alabel(apos, without_one_dimension=without_one_dimensions)
             else:
-                row = self._from_apos_to_aidx(vec_pos, without_one_dimension=without_one_dimensions)
+                row = self._from_apos_to_aidx(apos, without_one_dimension=without_one_dimensions)
             row.append(value)
             table.append(row)
 
