@@ -23,6 +23,7 @@ except ImportError:
     sys.path.append(JSONSTAT_HOME)
     import jsonstat
 
+
 def test(uri, cache_dir):
     # main
     pathname = os.path.join(cache_dir, "oecd-canada-col.json")
@@ -44,7 +45,7 @@ def test(uri, cache_dir):
 
     print("\ngenerate all vec")
     oecd.generate_all_vec(area='CA')
-    df = oecd.to_data_frame('year', content='id', blocked_dims={'area':'CA'})
+    df = oecd.to_data_frame('year', content='id', blocked_dims={'area': 'CA'})
     print(df)
 
 
@@ -54,6 +55,6 @@ if __name__ == "__main__":
     json_filename = "oecd-canada-col.json"
 
     JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
-    cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "examples"))
+    cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "json-stat.org"))
     cache_dir = os.path.abspath(cache_dir)
     test(uri, cache_dir)
