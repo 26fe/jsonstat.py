@@ -56,10 +56,6 @@ class JsonStatDimension:
             },
         }
 
-    >>> import os
-    >>> u = os.path.join(os.getcwd(), "..", "tests", "fixtures", "json-stat.org")
-    >>> os.path.exists(u)
-    True
     >>> json_string = '''{
     ...                    "label" : "concepts",
     ...                    "category" : {
@@ -71,14 +67,12 @@ class JsonStatDimension:
     >>> dim = JsonStatDimension(name="concept", role="metric").from_string(json_string)
     >>> len(dim)
     2
-    >>> dim.category(0)
-    JsonStatCategory(label='population', index='POP', pos=0)
-    >>> dim.category('POP')
-    JsonStatCategory(label='population', index='POP', pos=0)
-    >>> dim.category('population')
-    JsonStatCategory(label='population', index='POP', pos=0)
-    >>> dim.category(1)
-    JsonStatCategory(label='weight of age group in the population', index='PERCENT', pos=1)
+    >>> dim.category(0).index == 'POP'
+    True
+    >>> dim.category('POP').label == 'population'
+    True
+    >>> dim.category(1).index == 'PERCENT'
+    True
     """
 
     def __init__(self, name=None, size=None, pos=None, role=None):
