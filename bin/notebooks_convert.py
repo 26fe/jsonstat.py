@@ -3,8 +3,10 @@
 # Copyright (C) 2016 gf <gf@26fe.com>
 # See LICENSE file
 
+# stdlib
 import os
 from subprocess import Popen, PIPE
+import shutil
 
 
 def convert_notebook_to_rst(dir):
@@ -23,16 +25,22 @@ def convert_notebook_to_rst(dir):
             output, err = p.communicate()
             status = p.returncode
             if status != 0:
-                 print("ERROR!")
-                 print(err)
+                print("ERROR!")
+                print(err)
+
 
 JSONSTAT_HOME = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
 docs_notebooks = os.path.join(JSONSTAT_HOME, "docs", "notebooks")
+
+print("remove output directory")
+shutil.rmtree(docs_notebooks)
+
 if not os.path.exists(docs_notebooks):
     os.mkdir(docs_notebooks)
 
 os.chdir(docs_notebooks)
 dirs = ["examples-notebooks", "istat-notebooks"]
 for d in dirs:
-     dd = os.path.join(JSONSTAT_HOME, d)
-     convert_notebook_to_rst(dd)
+    dd = os.path.join(JSONSTAT_HOME, d)
+    convert_notebook_to_rst(dd)
