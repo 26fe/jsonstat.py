@@ -17,7 +17,69 @@ JsonStatCategory = namedtuple('JsonStatCategory', ['label', 'index', 'pos'])
 
 
 class JsonStatDimension:
-    """Represents a JsonStat Dimension. It is contained into a JsonStat Dataset."""
+    """Represents a JsonStat Dimension. It is contained into a JsonStat Dataset.
+
+    example::
+
+        "dimension" : {
+            "concept" : {
+                "label" : "concepts",
+                "category" : {
+                    "index" : {
+                        "POP" : 0,
+                        "PERCENT" : 1
+                    },
+                    "label" : {
+                        "POP" : "population",
+                        "PERCENT" : "weight of age group in the population"
+                    },
+                    "unit" : {
+                        "POP" : {
+                            "label": "thousands of persons",
+                            "decimals": 1,
+                            "type" : "count",
+                            "base" : "people",
+                            "multiplier" : 3
+                        },
+                        "PERCENT" : {
+                            "label" : "%",
+                            "decimals": 1,
+                            "type" : "ratio",
+                            "base" : "per cent",
+                            "multiplier" : 0
+                        }
+                    }
+                }
+            },
+            "dim": {
+            ...
+            },
+        }
+
+    >>> import os
+    >>> u = os.path.join(os.getcwd(), "..", "tests", "fixtures", "json-stat.org")
+    >>> os.path.exists(u)
+    True
+    >>> json_string = '''{
+    ...                    "label" : "concepts",
+    ...                    "category" : {
+    ...                       "index" : { "POP" : 0, "PERCENT" : 1 },
+    ...                       "label" : { "POP" : "population", "PERCENT" : "weight of age group in the population" }
+    ...                    }
+    ...                  }
+    ... '''
+    >>> dim = JsonStatDimension(name="concept", role="metric").from_string(json_string)
+    >>> len(dim)
+    2
+    >>> dim.category(0)
+    JsonStatCategory(label='population', index='POP', pos=0)
+    >>> dim.category('POP')
+    JsonStatCategory(label='population', index='POP', pos=0)
+    >>> dim.category('population')
+    JsonStatCategory(label='population', index='POP', pos=0)
+    >>> dim.category(1)
+    JsonStatCategory(label='weight of age group in the population', index='PERCENT', pos=1)
+    """
 
     def __init__(self, name=None, size=None, pos=None, role=None):
         """initialize a dimension
@@ -28,7 +90,7 @@ class JsonStatDimension:
         :param role: of dimension
         """
 
-        # it is valid is correctly builded (f.e. it was parsed correctly)
+        # it is valid is correctly built (f.e. it was parsed correctly)
         self.__valid = False
 
         self.__name = name
@@ -55,19 +117,22 @@ class JsonStatDimension:
         """label of this dimension"""
         return self.__label
 
-    def __len__(self):
-        """size of this dimension"""
-        return self.__size
+    def role(self):
+        """role of this dimension (time, geo or metric)"""
+        return self.__role
 
     def pos(self):
         """position of this dimension respect to the dataset which dimension belongs to"""
         return self.__pos
 
-    def role(self):
-        """role of this dimension (time, geo or metric)"""
-        return self.__role
+    def __len__(self):
+        """size of this dimension"""
+        return self.__size
 
     def __str__(self):
+        if self.__pos2cat is None:
+            return ""
+
         out = "index\n"
         f = "{:>5} {:<8} {:<8}\n"
         out += f.format('pos', 'idx', 'label')
@@ -107,7 +172,7 @@ class JsonStatDimension:
         elif spec in self.__lbl2cat:
             cat = self.__lbl2cat[spec]
         else:
-            raise JsonStatException("dimension '{}': do not have index or label '{}'".format(self.__name, idx_or_lbl))
+            raise JsonStatException("dimension '{}': do not have index or label '{}'".format(self.__name, spec))
 
         return cat
 
@@ -185,18 +250,21 @@ class JsonStatDimension:
     def from_json(self, json_data):
         """Parse a json structure representing a dimension id
 
-        From https://json-stat.org/format/#dimensionid
-        > It is used to describe a particular dimension.
-        > The name of this object must be one of the strings in the id array.
-        > There must be one and only one dimension ID object for every dimension in the id array.
-        :
+        From `json-stat.org <https://json-stat.org/format/#dimensionid>`_
+
+            It is used to describe a particular dimension.
+            The name of this object must be one of the strings in the id array.
+            There must be one and only one dimension ID object for every dimension in the id array.
+
+        example::
+
             "dimension" : {
                 "metric" : { … },
                 "time" : { … },
                 "geo" : { … },
                 "sex" : { … },
                 …
-        }
+            }
 
 
         Parent: 'dimension'
@@ -376,3 +444,7 @@ class JsonStatDimension:
             self.__idx2cat[idx] = cat
             self.__lbl2cat[lbl] = cat
 
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
