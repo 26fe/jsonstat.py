@@ -2,6 +2,13 @@
 Jsonstat Module
 ===============
 
+Contents:
+
+.. toctree::
+   :maxdepth: 2
+
+   api_jsonstat_dimension
+
 .. automodule:: jsonstat
     :members:
 
@@ -32,6 +39,7 @@ JsonStatCollection
     .. automethod:: JsonStatCollection.dataset
     .. special-members:: JsonStatCollection.__len__
 
+
 JsonStatDataSet
 ===============
 
@@ -47,20 +55,6 @@ JsonStatDataSet
     .. automethod:: JsonStatDataSet.to_table
     .. automethod:: JsonStatDataSet.to_data_frame
 
-JsonStatDimension
-=================
-
-.. autoclass:: JsonStatDimension
-
-    .. automethod:: JsonStatDimension.info
-
-    .. automethod:: JsonStatDimension.category
-    .. automethod:: JsonStatDimension.idx2pos
-    
-parsing
-^^^^^^^
-    .. automethod:: JsonStatDimension.from_string
-    .. automethod:: JsonStatDimension.from_json
 
 Downloader helper
 =================
