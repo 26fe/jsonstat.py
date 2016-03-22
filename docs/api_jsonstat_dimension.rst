@@ -2,8 +2,6 @@
 JsonStatDimension
 =================
 
-Contents:
-
 .. toctree::
    :maxdepth: 2
 

@@ -2,34 +2,19 @@
 Istat Module
 ============
 
+Contents:
+
+.. toctree::
+   :maxdepth: 2
+
+   api_istat_utility
+   api_istat_area
+   api_istat_dataset
+   api_istat_dimension
+
 .. automodule:: istat
     :members:
 
-Utility Function
-================
 
-.. autofunction:: istat.cache_dir
 
-.. autofunction:: istat.areas
 
-.. autofunction:: istat.area
-
-.. autofunction:: istat.dataset
-
-IstatArea
-=========
-
-.. autoclass:: IstatArea
-    :members:
-
-IstatDataset
-============
-
-.. autoclass:: IstatDataset
-    :members:
-
-IstatDimension
-==============
-
-.. autoclass:: IstatDimension
-    :members:
