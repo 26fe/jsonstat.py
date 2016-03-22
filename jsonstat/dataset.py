@@ -42,7 +42,6 @@ class JsonStatDataSet:
         # dimensions
         self.__dim_nr = 0
         self.__pos2iid = None
-        self.__dimension_sizes = None
 
         self.__pos2dim = []   # array int -> dim
         self.__pos2size = []  # array int -> int (dimension size)
@@ -56,6 +55,10 @@ class JsonStatDataSet:
     def name(self):
         """Returns the name of the dataset"""
         return self.__name
+
+    def label(self):
+        """Returns the label of the dataset"""
+        return self.__label
 
     def __str__(self):
         out = ""
@@ -125,18 +128,26 @@ class JsonStatDataSet:
     #
 
     def data(self, *args, **kargs):
+        """
+
+        :param args:
+        :param kargs:
+        :returns:
+
+        >>> import os, jsonstat
+        >>> filename = os.path.join(jsonstat.__fixtures_dir, "json-stat.org", "oecd-canada-col.json")
+        >>> dataset = jsonstat.from_file(filename).dataset(0)
+        >>> dataset.label()
+        'Unemployment rate in the OECD countries 2003-2014'
+        >>> dataset.data(0)
+        JsonStatValue(value=5.943826289, status=None)
+
+        """
         if not self.__valid:
             raise JsonStatException('dataset not initialized')
 
-        #
-        # value
-        #
-        if len(args) == 1:
-            dims = args[0]
-        else:
-            dims = kargs
-        apos = self._from_adim_to_apos(dims)
-        idx = self._from_apos_to_idx(apos)
+        # decoding args
+        idx = self._2idx(*args, **kargs)
         value = self.__value[idx]
 
         #
@@ -164,17 +175,8 @@ class JsonStatDataSet:
 
         :returns: value (typically a number)
         """
-        if not self.__valid:
-            raise JsonStatException('dataset not initialized')
-
-        if len(args) == 1:
-            dims = args[0]
-        else:
-            dims = kargs
-        apos = self._from_adim_to_apos(dims)
-        idx = self._from_apos_to_idx(apos)
-        value = self.__value[idx]
-        return value
+        # TODO: add onlyvalue=true to extract only the value
+        return self.data(*args, **kargs).value
 
     def status(self, *args, **kargs):
         """get a status
@@ -186,28 +188,8 @@ class JsonStatDataSet:
 
         :returns: value (typically a number)
         """
-        if not self.__valid:
-            raise JsonStatException('dataset not initialized')
-
-        if self.__status is None:
-            status = None
-        elif isinstance(self.__status, str):
-            status = self.__status
-        elif isinstance(self.__status, list) and len(self.__status) == 1:
-            status = self.__status[0]
-        else:
-            if len(args) == 1:
-                dims = args[0]
-            else:
-                dims = kargs
-            apos = self._from_adim_to_apos(dims)
-            idx = self._from_apos_to_idx(apos)
-
-            if isinstance(self.__status, dict) and idx not in self.__status:
-                status = None
-            else:
-                status = self.__status[idx]
-        return status
+        # TODO: add onlystatus=true to extract only the value
+        return self.data(*args, **kargs).status
 
     def __value_from_vec_pos(self, lst):
         """
@@ -220,6 +202,7 @@ class JsonStatDataSet:
     #
     # transform function about dimensions indexes
     # this functions are only for library internal usage
+    #
 
     # def _from_vec_dimid_to_vec_pos(self, dims):
     #     """Transforms a dimension dict to dimension array
@@ -239,6 +222,29 @@ class JsonStatDataSet:
     #         dim = self.__iid2dim[cat]
     #         vec_pos[dim.pos()] = dim.idx2pos(val)
     #     return vec_pos
+
+    def _2idx(self, *args, **kargs):
+
+        if len(args) == 1:
+            # data({k1:v1, k2:v2})
+            if isinstance(args[0], dict):
+                dims = args[0]
+            # data(i)
+            elif isinstance(args[0], int):
+                return args[0]
+        elif len(args) == 0:
+            # data(k1:v1, k2:v2)
+            dims = kargs
+        else:
+            msg = "unexpected parameters"
+            raise JsonStatException(msg)
+
+        # print(dims)
+        apos = self._from_adim_to_apos(dims)
+        # print(apos)
+        idx = self._from_apos_to_idx(apos)
+        # print(idx)
+        return idx
 
     def _from_adim_to_apos(self, dims):
         """Transforms a dimension dict to dimension array
@@ -264,7 +270,7 @@ class JsonStatDataSet:
                 msg = msg.format(self.__name, cat, allowed_categories)
                 raise JsonStatException(msg)
 
-            apos[dim.pos()] = dim._idx_or_lbl_2pos(val)
+            apos[dim.pos()] = dim._2pos(val)
         return apos
 
     def _from_apos_to_idx(self, lst):
@@ -274,9 +280,20 @@ class JsonStatDataSet:
         :param lst: list of integer
         :returns: an integer index into values
         """
-        s = np.array(self.__acc_vector)
+        s = np.array(self.__pos2mult)
         r = s * lst
         return np.sum(r)
+
+    def _from_idx_to_apos(self, idx):
+        print(self.__pos2size)
+        print(self.__pos2mult)
+        apos = len(self.__pos2iid) * [0]
+        i = len(self.__pos2size) - 1
+        while idx > 0 and i != 0:
+            apos[i] = idx % self.__pos2size[i]
+            idx -= (apos[i] * self.__pos2mult[i])
+            i -= 1
+        print(apos)
 
     def _from_apos_to_aidx(self, vec_pos, without_one_dimension=False):
         """transforms an array of pos into ana arry of idc
@@ -293,7 +310,7 @@ class JsonStatDataSet:
             dim = self.__iid2dim[dim_iid]
             # vec_idx[i] = dim.pos2idx(vec_pos[i])
             if not(without_one_dimension and len(dim) == 1):
-                vec_idx.append(dim._pos2idx(vec_pos[pos]))
+                vec_idx.append(dim._pos2cat(vec_pos[pos]).index)
         return vec_idx
 
     def _from_apos_to_alabel(self, apos, without_one_dimension=False):
@@ -309,9 +326,9 @@ class JsonStatDataSet:
             dim_iid = self.__pos2iid[pos]
             dim = self.__iid2dim[dim_iid]
 
-            lbl = dim._pos2label(apos[pos])
+            lbl = dim._pos2cat(apos[pos]).label
             if lbl is None:
-                lbl = dim._pos2idx(apos[pos])
+                lbl = dim._pos2cat(apos[pos]).index
 
             # vec_idx[i] = lbl
             if not(without_one_dimension and len(dim) == 1):
@@ -342,15 +359,15 @@ class JsonStatDataSet:
         :returns:
         """
 
-        nrdim = len(self.__pos2iid)
-        if order is not None and len(order) != nrdim:
-            msg = "length of the order vector is different from number of dimension {}".format(nrdim)
+        nr_dim = len(self.__pos2iid)
+        if order is not None and len(order) != nr_dim:
+            msg = "length of the order vector is different from number of dimension {}".format(nr_dim)
             raise JsonStatException(msg)
 
-        vec_pos_blocked = nrdim * [False]
-        vec_pos = nrdim * [0]
+        vec_pos_blocked = nr_dim * [False]
+        vec_pos = nr_dim * [0]
 
-        for (cat,idx) in blocked_dims.items():
+        for (cat, idx) in blocked_dims.items():
             d = self.dimension(cat)
             vec_pos_blocked[d.pos()] = True
             vec_pos[d.pos()] = d._idx2pos(idx)
@@ -358,16 +375,16 @@ class JsonStatDataSet:
         pos2size = self.__pos2size
 
         if order is None:
-            vec_dimension_reorder = range(nrdim)
+            vec_dimension_reorder = range(nr_dim)
         else:
             vec_dimension_reorder = order
 
-        nrd = nrdim - 1
+        nrd = nr_dim - 1
         while nrd >= 0:
 
             yield list(vec_pos)  # make a shallow copy of vec_pos
 
-            nrd = nrdim - 1
+            nrd = nr_dim - 1
             cur_dim = vec_dimension_reorder[nrd]
             # se la posizione non e bloccata allora puoi far andare avanti la cifra
             if not vec_pos_blocked[cur_dim]:
@@ -722,9 +739,9 @@ class JsonStatDataSet:
 
     def __compute_acc_vector(self):
         acc = 1
-        self.__acc_vector = self.__dim_nr * [1]
+        self.__pos2mult = self.__dim_nr * [1]
         i = self.__dim_nr - 2
         while i >= 0:
             acc = acc * self.__pos2size[i + 1]
-            self.__acc_vector[i] = acc
+            self.__pos2mult[i] = acc
             i -= 1
