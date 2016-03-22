@@ -170,6 +170,34 @@ class JsonStatDimension:
 
         return cat
 
+    def _pos2cat(self, pos):
+        """get the category associated with the position (integer)
+
+        :param pos: integer
+        :returns: the label or None if the label not exists at position pos
+            JsonStatCategory(index='2013', label='2013', pos=pos)
+        """
+        if self.__pos2cat is None:
+            return None
+        else:
+            return self.__pos2cat[pos]
+
+    def _2pos(self, spec):
+        """from spec to position
+
+        :param spec: index or label or integer
+        :returns: integer
+        """
+        if not self.__valid:
+            raise JsonStatException("dimension {} is not initialized".format(self.__name))
+        if spec in self.__idx2cat:
+            return self.__idx2cat[spec].pos
+        if self.__lbl2cat is not None and spec in self.__lbl2cat:
+            return self.__lbl2cat[spec].pos
+        if isinstance(spec, int) and spec < len(self.__pos2cat):
+            return spec
+        raise JsonStatException("dimension '{}': do not have index or label '{}'".format(self.__name, spec))
+
     def _idx2pos(self, idx):
         """from index to position
 
@@ -193,39 +221,6 @@ class JsonStatDimension:
         if lbl not in self.__idx2cat:
             raise JsonStatException("dimension '{}': do not have label {}".format(self.__name, lbl))
         return self.__lbl2cat[lbl].pos
-
-    def _idx_or_lbl_2pos(self, idx_or_lbl):
-        """from index to position
-
-        :param idx_or_lbl:
-        :returns: integer
-        """
-        if not self.__valid:
-            raise JsonStatException("dimension {} is not initialized".format(self.__name))
-        if idx_or_lbl in self.__idx2cat:
-            return self.__idx2cat[idx_or_lbl].pos
-        if idx_or_lbl in self.__lbl2cat:
-            return self.__lbl2cat[idx_or_lbl].pos
-        raise JsonStatException("dimension '{}': do not have index or label '{}'".format(self.__name, idx_or_lbl))
-
-    def _pos2idx(self, pos):
-        """from position (integer) to index
-
-        :param pos: integer
-        :returns: index f.e. "2013"
-        """
-        return self.__pos2cat[pos].index
-
-    def _pos2label(self, pos):
-        """get the label associated with the position
-
-        :param pos: integer
-        :returns: the label or None if the label not exists at position pos
-        """
-        if self.__pos2cat is None:
-            return None
-        else:
-            return self.__pos2cat[pos].label
 
     #
     # parsing methods
@@ -260,13 +255,11 @@ class JsonStatDimension:
                 …
             }
 
-
         Parent: 'dimension'
         Children:
-            - category
-            - label
-            - class
-
+        - category
+        - label
+        - class
 
         :param json_data:
         :returns: itself to chain call
