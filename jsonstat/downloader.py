@@ -19,10 +19,12 @@ from jsonstat.exceptions import JsonStatException
 
 class Downloader:
     """Helper class to download json stat files.
+
     It has a very simple cache mechanism
     """
     def __init__(self, cache_dir="./data", time_to_live=None):
         """initialize downloader
+
         :param cache_dir: directory where to store downloaded files
         :param time_to_live: how many seconds to store file on disk, None is infinity, 0 for not to store
         """
@@ -44,12 +46,13 @@ class Downloader:
 
         Store the downloaded content into <cache_dir>/file.
         If <cache_dir>/file exists, it returns content from disk
+
         :param url: page to be downloaded
         :param filename: filename where to store the content of url, None if we want not store
         :param time_to_live: how many seconds to store file on disk,
                              None use default time_to_live,
                              0 don't use cached version if any
-        :return: the content of url (str type)
+        :returns: the content of url (str type)
         """
 
         pathname = self.__build_pathname(filename, url)
@@ -71,7 +74,7 @@ class Downloader:
         """check if pathname exists
 
         :param pathname:
-        :return: True if the file can be retrieved from the disk (cache)
+        :returns: True if the file can be retrieved from the disk (cache)
         """
         if not os.path.exists(pathname):
             return False
@@ -87,6 +90,7 @@ class Downloader:
     @staticmethod
     def __write_page_from_cache(pathname, content):
         """write content to pathname
+
         :param pathname:
         :param content:
         """
@@ -101,6 +105,7 @@ class Downloader:
     @staticmethod
     def __read_cached_page(pathname):
         """it reads content from pathname
+
         :param pathname:
         """
         f = open(pathname, 'r')
