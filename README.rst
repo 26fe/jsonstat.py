@@ -12,7 +12,7 @@ jsonstat.py
 .. image:: https://badge.fury.io/py/jsonstat.py.png
     :target: https://badge.fury.io/py/jsonstat.py
 
-**jsonstat.py** is a library for reading the **JSON-stat** [1]_ data format
+**jsonstat.py** is a library for reading the `**JSON-stat** <http://json-stat.org/>`_ data format
 maintained and promoted by `Xavier Badosa <https://xavierbadosa.com/>`_.
 The JSON-stat format is a JSON format for publishing dataset.
 JSON-stat is used by several institutions to publish statistical data.
@@ -49,8 +49,6 @@ You can find source at `github <https://github.com/26fe/jsonstat.py>`_ ,
 where you can open a `ticket <https://github.com/26fe/jsonstat.py/issues>`_, if you wish.
 
 You can find the generated documentation at `readthedocs <http://jsonstatpy.readthedocs.org/en/latest/>`_.
-
-.. [1] http://json-stat.org/ for JSON-stat information
 
 ************
 Installation
