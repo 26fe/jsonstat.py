@@ -28,8 +28,8 @@ def from_file(filename):
     >>> import os, jsonstat
     >>> filename = os.path.join(jsonstat.__fixtures_dir, "json-stat.org", "oecd-canada-col.json")
     >>> o = jsonstat.from_file(filename)
-    >>> type(o)
-    <class 'jsonstat.collection.JsonStatCollection'>
+    >>> isinstance(o, jsonstat.collection.JsonStatCollection)
+    True
     """
     with open(filename) as f:
         json_string = f.read()

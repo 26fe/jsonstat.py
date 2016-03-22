@@ -134,11 +134,11 @@ class JsonStatDataSet:
         :param kargs:
         :returns:
 
-        >>> import os, jsonstat
+        >>> import os, jsonstat  # doctest: +ELLIPSIS
         >>> filename = os.path.join(jsonstat.__fixtures_dir, "json-stat.org", "oecd-canada-col.json")
         >>> dataset = jsonstat.from_file(filename).dataset(0)
-        >>> dataset.label()
-        'Unemployment rate in the OECD countries 2003-2014'
+        >>> dataset.label() == 'Unemployment rate in the OECD countries 2003-2014'
+        True
         >>> dataset.data(0)
         JsonStatValue(value=5.943826289, status=None)
 
