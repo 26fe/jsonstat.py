@@ -139,12 +139,12 @@ class TestDimension(unittest.TestCase):
         self.assertEqual(dim._idx2pos("2003"), 0)
         self.assertEqual(dim._idx2pos("2014"), 11)
 
-    def test_pos2idx(self):
+    def test_pos2cat(self):
         dim = jsonstat.JsonStatDimension("year", 12, 0, None)
         dim.from_string(self.json_str_only_index)
 
-        self.assertEqual(dim._pos2idx(0), "2003")
-        self.assertEqual(dim._pos2idx(11), "2014")
+        self.assertEqual(dim._pos2cat(0).index, "2003")
+        self.assertEqual(dim._pos2cat(11).index, "2014")
         self.assertEqual(dim.category(0).index, "2003")
         self.assertIsNone(dim.category(0).label)
 
