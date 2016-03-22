@@ -23,11 +23,13 @@ def from_file(filename):
     :param filename: name containing a jsonstat
     :returns: a JsonStatCollection, JsonStatDataset or JsonStatDimension object
 
-    ::
+    example
 
-        filename = os.path.join(self.fixture_dir, "oecd-canada.json")
-        collection = jsonstat.from_file(filename)
-
+    >>> import os, jsonstat
+    >>> filename = os.path.join(jsonstat.__fixtures_dir, "json-stat.org", "oecd-canada-col.json")
+    >>> o = jsonstat.from_file(filename)
+    >>> type(o)
+    <class 'jsonstat.collection.JsonStatCollection'>
     """
     with open(filename) as f:
         json_string = f.read()

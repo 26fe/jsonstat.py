@@ -17,3 +17,6 @@ from jsonstat.collection import JsonStatCollection
 
 from jsonstat.downloader import Downloader
 from jsonstat.parse_functions import *
+
+import os
+__fixtures_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "tests", "fixtures"))

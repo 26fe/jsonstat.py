@@ -13,7 +13,9 @@ import jsonstat.dimension
 
 
 def load_tests(loader, tests, ignore):
+    tests.addTests(doctest.DocTestSuite(jsonstat.parse_functions))
     tests.addTests(doctest.DocTestSuite(jsonstat.dimension))
+    tests.addTests(doctest.DocTestSuite(jsonstat.dataset))
     return tests
 
 
