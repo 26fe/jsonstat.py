@@ -94,18 +94,18 @@ Shows some detailed info about dimensions.
 .. code:: python
 
     for d in oecd.dimensions():
-        print("*** info for dimensions '{}'".format(d.name()))
+        print("info for dimensions '{}'".format(d.name()))
         d.info()
 
 
 .. parsed-literal::
 
-    *** info for dimensions 'concept'
+    info for dimensions 'concept'
     index
       pos idx      label   
         0 'UNR'    'unemployment rate'
     
-    *** info for dimensions 'area'
+    info for dimensions 'area'
     index
       pos idx      label   
         0 'AU'     'Australia'
@@ -145,7 +145,7 @@ Shows some detailed info about dimensions.
        34 'EU15'   'Euro area (15 countries)'
        35 'OECD'   'total' 
     
-    *** info for dimensions 'year'
+    info for dimensions 'year'
     index
       pos idx      label   
         0 '2003'   ''      
@@ -284,7 +284,7 @@ Trasforming dataset into pandas DataFrame
 
     count     432
     unique     36
-    top        IL
+    top        AU
     freq       12
     Name: area, dtype: object
 
@@ -383,7 +383,7 @@ specific country (Canada)
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x11395a668>
+    <matplotlib.axes._subplots.AxesSubplot at 0x114b074e0>
 
 
 

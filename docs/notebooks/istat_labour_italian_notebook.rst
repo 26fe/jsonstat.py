@@ -1,6 +1,6 @@
 
 Notebook: using jsonstat.py to explore ISTAT data (unemployment)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+================================================================
 
 This Jupyter notebook shows how to use
 `jsonstat.py <http://github.com/26fe/jsonstat.py>`__ python library to
@@ -21,7 +21,7 @@ sopra i 15 anni e composta da forza lavoro ed inatttivi.
 Tasso disoccupazione = Disoccupati/Occupati
 
 download dataset from Istat
----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: python
 
@@ -67,7 +67,7 @@ Download - numero occupati - numero disoccupati - forza lavoro -
 controllare che nroccupati + nrdisoccupati = forza lavoro
 
 Download Occupati
-~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^
 
 .. code:: python
 
@@ -165,7 +165,7 @@ Download Occupati
 
 
 Download disoccupati
-~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^
 
 .. code:: python
 
@@ -253,7 +253,7 @@ Download disoccupati
 
 
 Download forza Lavoro
-~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: python
 
@@ -343,7 +343,7 @@ Download forza Lavoro
 
 
 Download inattivi
-~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^
 
 .. code:: python
 
