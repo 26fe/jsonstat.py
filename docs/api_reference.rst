@@ -2,10 +2,10 @@
 Api Reference
 =============
 
-Contents:
-
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
 
    api_jsonstat
    api_istat
+
+
