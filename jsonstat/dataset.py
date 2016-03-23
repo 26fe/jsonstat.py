@@ -25,29 +25,29 @@ JsonStatValue = namedtuple('JsonStatValue', ['value', 'status'])
 class JsonStatDataSet:
     """Represents a JsonStat dataset"""
 
-    def __init__(self, dataset_name=None):
+    def __init__(self, name=None):
         """Initialize an empty dataset.
 
-        Dataset could have a name if we parse a jsonstat format version 1.
-        :param dataset_name: dataset name (jsonstat v.1)
+        Dataset could have a name (key) if we parse a jsonstat format version 1.
+
+        :param name: dataset name (jsonstat v.1)
         """
         self.__valid = False
         self.__json_data = None
 
-        self.__name = dataset_name
+        self.__name = name
         self.__title = None
         self.__label = None
         self.__source = None
 
         # dimensions
-        self.__dim_nr = 0
-        self.__pos2iid = None
+        self.__dim_nr = 0  # len(self.__pos2dim)
+
+        self.__pos2size = []  # array int -> int (dimension size)
 
         self.__pos2dim = []   # array int -> dim
-        self.__pos2size = []  # array int -> int (dimension size)
-        self.__iid2dim = {}   # dict  id  -> pos
+        self.__iid2dim = {}   # dict  id  -> dim
         self.__lbl2dim = {}   # dict  lbl -> dim
-        self.__lbl2pos = {}   # dict  lbl -> pos
 
         self.__value = None
         self.__status = None
@@ -100,23 +100,26 @@ class JsonStatDataSet:
         return self.__pos2dim
 
     def dimension(self, spec):
-        """get a dimension by spec
+        """get a JsonStatDimension by spec
 
-        :param spec: name (string) or id of the dimension
+        :param spec: spec can be:
+         - (string) or id of the dimension
+         - int position of dimension
         :returns: a JsonStatDimension
         """
         if type(spec) is int:
             return self.__pos2dim[spec]
         if spec not in self.__iid2dim:
-            msg = "dataset '{}': unknown dimension '{}' know dimensions ids are: {}".format(self.__name, spec, ", ".join(self.__pos2iid))
+            msg = "dataset '{}': unknown dimension '{}' know dimensions ids are: {}"
+            msg = msg.format(self.__name, spec, ", ".join([dim.name() for dim in self.__pos2dim]))
             raise JsonStatException(msg)
         return self.__iid2dim[spec]
 
     def __str__dimensions(self):
-        out = "{} dimensions:\n".format(len(self.__pos2iid))
-        for i, dname in enumerate(self.__pos2iid):
-            d = self.__iid2dim[dname]
-            out += "  {}: dim id: '{}' label: '{}' size: '{}' role: '{}'\n".format(i, d.name(), d.label(), len(d), d.role())
+        out = "{} dimensions:\n".format(len(self.__pos2dim))
+        msg = "  {}: dim id: '{}' label: '{}' size: '{}' role: '{}'\n"
+        for i, dim in enumerate(self.__pos2dim):
+            out += msg.format(i, dim.name(), dim.label(), len(dim), dim.role())
         return out
 
     def info_dimensions(self):
@@ -204,25 +207,6 @@ class JsonStatDataSet:
     # this functions are only for library internal usage
     #
 
-    # def _from_vec_dimid_to_vec_pos(self, dims):
-    #     """Transforms a dimension dict to dimension array
-    #
-    #         key can be only ID
-    #         {"country":"AU", "year":2014} -> [1,2,3]
-    #     :param dims: {country:"AU", "year":2014}
-    #     :returns: [1,2,3]
-    #     """
-    #     vec_pos = len(self.__pos2iid) * [0]
-    #     for (cat, val) in dims.items():
-    #         if cat not in self.__iid2dim:
-    #             allowed_categories = ", ".join(self.__pos2iid)
-    #             msg = "dataset '{}': category '{}' don't exists allowed category are: {}"
-    #             msg = msg.format(self.__name, cat, allowed_categories)
-    #             raise JsonStatException(msg)
-    #         dim = self.__iid2dim[cat]
-    #         vec_pos[dim.pos()] = dim.idx2pos(val)
-    #     return vec_pos
-
     def _2idx(self, *args, **kargs):
 
         if len(args) == 1:
@@ -249,23 +233,26 @@ class JsonStatDataSet:
     def _from_adim_to_apos(self, dims):
         """Transforms a dimension dict to dimension array
 
+        ::
+
             {"country":"AU", "year":2014} -> [1,2,3]
+
         :param dims: keys are dimension (id or label), value are categories
              "country" is the id of dimension
              "AU" is the category of dimension
         :returns: a list of integer
         """
-        apos = len(self.__pos2iid) * [0]
+        apos = len(self.__pos2dim) * [0]
         for (cat, val) in dims.items():
             # key is id
             if cat in self.__iid2dim:
                 dim = self.__iid2dim[cat]
             # key is label
-            elif cat in self.__lbl2pos:
+            elif cat in self.__lbl2dim:
                 dim = self.__lbl2dim[cat]
             # key is not id or label so raise error
             else:
-                allowed_categories = ", ".join(self.__pos2iid)
+                allowed_categories = ", ".join([dim.iid() for dim in self.__pos2dim])
                 msg = "dataset '{}': category '{}' don't exists allowed category are: {}"
                 msg = msg.format(self.__name, cat, allowed_categories)
                 raise JsonStatException(msg)
@@ -287,7 +274,7 @@ class JsonStatDataSet:
     def _from_idx_to_apos(self, idx):
         print(self.__pos2size)
         print(self.__pos2mult)
-        apos = len(self.__pos2iid) * [0]
+        apos = len(self.__pos2cat) * [0]
         i = len(self.__pos2size) - 1
         while idx > 0 and i != 0:
             apos[i] = idx % self.__pos2size[i]
@@ -306,9 +293,7 @@ class JsonStatDataSet:
         # vec_idx = len(vec_pos) * [None]
         vec_idx = []
         for pos in range(len(vec_pos)):
-            dim_iid = self.__pos2iid[pos]
-            dim = self.__iid2dim[dim_iid]
-            # vec_idx[i] = dim.pos2idx(vec_pos[i])
+            dim = self.__pos2dim[pos]
             if not(without_one_dimension and len(dim) == 1):
                 vec_idx.append(dim._pos2cat(vec_pos[pos]).index)
         return vec_idx
@@ -323,9 +308,7 @@ class JsonStatDataSet:
         # vec_idx = len(vec_pos) * [None]
         aidx = []
         for pos in range(len(apos)):
-            dim_iid = self.__pos2iid[pos]
-            dim = self.__iid2dim[dim_iid]
-
+            dim = self.__pos2dim[pos]
             lbl = dim._pos2cat(apos[pos]).label
             if lbl is None:
                 lbl = dim._pos2cat(apos[pos]).index
@@ -359,7 +342,7 @@ class JsonStatDataSet:
         :returns:
         """
 
-        nr_dim = len(self.__pos2iid)
+        nr_dim = len(self.__pos2dim)
         if order is not None and len(order) != nr_dim:
             msg = "length of the order vector is different from number of dimension {}".format(nr_dim)
             raise JsonStatException(msg)
@@ -432,12 +415,10 @@ class JsonStatDataSet:
         table = []
 
         # header
-        header = []
         if content == "label":
-            for dname in self.__pos2iid:
-                header.append(self.__iid2dim[dname].label())
+            header = [dim.label() for dim in self.__pos2dim]
         else:
-            header = list(self.__pos2iid)
+            header = [dim.name() for dim in self.__pos2dim]
 
         header.append(value_column)
 
@@ -491,7 +472,7 @@ class JsonStatDataSet:
     #
 
     def from_file(self, filename):
-        """read a jsonstat from a file and parse it to initialize this (empty) dataset
+        """read a jsonstat from a file and parse it to initialize this dataset
 
         :param filename: path of the file.
         :returns: itself to chain call
@@ -507,27 +488,29 @@ class JsonStatDataSet:
         :param json_string:
         :returns: itself to chain call
         """
-        # TODO: try to determinate the json-stat version
         json_data = json.loads(json_string)
         self.from_json(json_data)
         return self
 
-    def from_json(self, json_data, version=1):
-        """parse a json structure to initialize this (empty) dataset
+    def from_json(self, json_data):
+        """parse a json structure and initialize this dataset
 
         :param json_data: json structure
-        :param version: json stat version
         :returns: itself to chain call
         """
-        if version == 2:
+        if "version" in json_data:
+            # assume version 2
             self._from_json_v2(json_data)
         else:
             self._from_json_v1(json_data)
         return self
 
-    # TODO: this is meant to be an internal function of jsonstat it is not public api
     def _from_json_v1(self, json_data):
-        """parse a json structure in accordance (?) to jsonstat format version 1.x
+        """parse a json structure according to jsonstat format version 1.x
+
+        .. warning::
+
+            this is an internal library function (it is not public api)
 
         :param json_data: json structure
         """
@@ -596,19 +579,19 @@ class JsonStatDataSet:
             msg = "dataset '{}': missing 'dimension.size' key".format(self.__name)
             raise JsonStatMalformedJson(msg)
 
-        self.__pos2iid = json_data_dimension['id']
+        pos2iid = json_data_dimension['id']
         self.__pos2size = json_data_dimension['size']
-        self.__dim_nr = len(self.__pos2iid)
+        self.__dim_nr = len(pos2iid)
 
         # validate dimension
-        if len(self.__pos2iid) != len(self.__pos2size):
+        if len(pos2iid) != len(self.__pos2size):
             msg = "dataset '{}': dataset_id is different of dataset_size".format(self.__name)
             raise JsonStatMalformedJson(msg)
 
         json_data_roles = None
         if 'role' in json_data_dimension:
             json_data_roles = json_data_dimension['role']
-        self.__parse_dimensions(json_data_dimension, json_data_roles)
+        self.__parse_dimensions(json_data_dimension, json_data_roles, pos2iid)
 
         # validate
         size_total = reduce(lambda x, y: x * y, self.__pos2size)
@@ -617,32 +600,40 @@ class JsonStatDataSet:
             msg = msg.format(self.__name, len(self.__value), size_total)
             raise JsonStatMalformedJson(msg)
 
-        self.__compute_acc_vector()
+        self.__compute_pos2mult()
         self.__valid = True
 
-    # TODO: this is meant to be an internal function of jsonstat it is not public api
     def _from_json_v2(self, json_data):
         """parse a jsonstat structure complaint to jsonstat format version 2.x
 
-        :param json_data: json structure
-        """
+        .. warning::
 
-        #
-        # list of keys to be parsed
-        # version
-        # class
-        # id
-        # size
-        # role
-        # value
-        # status
-        # dimension
-        # link
-        # {
-        #	"class" : "dataset",
-        #	"href" : "http://json-stat.org/samples/oecd.json",
-        #	"label" : "Unemployment rate in the OECD countries 2003-2014"
-        # }
+            this is an internal library function (it is not public api)
+
+        :param json_data: json structure
+
+        keys to be parsed
+        - version
+        - class: "dataset"
+        - href: url
+        - label: "..."
+        - id: <list of dimension id>
+        - size: <list of integer, size of dimension>
+        - role: roles of dimension
+        - value: <list of values>
+        - status
+        - dimension
+        - link
+
+        ::
+
+            {
+                "class" : "dataset",
+                "href" : "http://json-stat.org/samples/oecd.json",
+                "label" : "Unemployment rate in the OECD countries 2003-2014"
+             }
+
+        """
 
         if "href" in json_data:
             self.__href = json_data["href"]
@@ -666,13 +657,12 @@ class JsonStatDataSet:
             msg = "dataset '{}': field 'value' is empty".format(self.__name)
             raise JsonStatMalformedJson(msg)
 
-        # parsing when values are presents
-        self.__pos2iid = json_data['id']
+        pos2iid = json_data['id']
         self.__pos2size = json_data['size']
-        self.__dim_nr = len(self.__pos2iid)
+        self.__dim_nr = len(pos2iid)
 
         # validate len(ids) == len(sizes)
-        if len(self.__pos2iid) != len(self.__pos2size):
+        if len(pos2iid) != len(self.__pos2size):
             msg = "dataset '{}': dataset_id is different of dataset_size".format(self.__name)
             raise JsonStatMalformedJson(msg)
 
@@ -693,14 +683,14 @@ class JsonStatDataSet:
         if 'role' in json_data:
             json_data_roles = json_data['role']
         json_data_dimension = json_data["dimension"]
-        self.__parse_dimensions(json_data_dimension, json_data_roles)
+        self.__parse_dimensions(json_data_dimension, json_data_roles, pos2iid)
 
         # TODO: parsing link
 
-        self.__compute_acc_vector()
+        self.__compute_pos2mult()
         self.__valid = True
 
-    def __parse_dimensions(self, json_data_dimension, json_data_roles):
+    def __parse_dimensions(self, json_data_dimension, json_data_roles, pos2iid):
         """Parse dimension in json stat
 
         it used for format v1 and v2
@@ -720,9 +710,8 @@ class JsonStatDataSet:
                     roles[dname] = role
 
         # parsing each dimensions
-        self.__pos2dim = len(self.__pos2iid) * [None]
-        for dpos in range(len(self.__pos2iid)):
-            dname = self.__pos2iid[dpos]
+        self.__pos2dim = self.__dim_nr * [None]
+        for dpos, dname in enumerate(pos2iid):
             dsize = self.__pos2size[dpos]
 
             if dname not in json_data_dimension:
@@ -735,9 +724,8 @@ class JsonStatDataSet:
             self.__pos2dim[dpos] = dimension
             if dimension.label() is not None:
                 self.__lbl2dim[dimension.label()] = dimension
-                self.__lbl2pos[dimension.label()] = dpos
 
-    def __compute_acc_vector(self):
+    def __compute_pos2mult(self):
         acc = 1
         self.__pos2mult = self.__dim_nr * [1]
         i = self.__dim_nr - 2
