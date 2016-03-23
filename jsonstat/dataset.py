@@ -13,6 +13,7 @@ import json
 # packages
 import numpy as np
 import pandas as pd
+import terminaltables
 
 # jsonstat
 from jsonstat.dimension import JsonStatDimension
@@ -23,17 +24,81 @@ JsonStatValue = namedtuple('JsonStatValue', ['value', 'status'])
 
 
 class JsonStatDataSet:
-    """Represents a JsonStat dataset"""
+    """Represents a JsonStat dataset
+
+
+        >>> import os, jsonstat  # doctest: +ELLIPSIS
+        >>> filename = os.path.join(jsonstat.__fixtures_dir, "json-stat.org", "oecd-canada-col.json")
+        >>> dataset = jsonstat.from_file(filename).dataset(0)
+        >>> dataset.label()
+        'Unemployment rate in the OECD countries 2003-2014'
+        >>> dataset.info()
+        name:   'Unemployment rate in the OECD countries 2003-2014'
+        label:  'Unemployment rate in the OECD countries 2003-2014'
+        size: 432
+        +-----+---------+--------------------------------+------+--------+
+        | pos | id      | label                          | size | role   |
+        +-----+---------+--------------------------------+------+--------+
+        | 0   | concept | indicator                      | 1    | metric |
+        | 1   | area    | OECD countries, EU15 and total | 36   | geo    |
+        | 2   | year    | 2003-2014                      | 12   | time   |
+        +-----+---------+--------------------------------+------+--------+
+        >>> dataset.dimension(1)
+        +-----+--------+----------------------------+
+        | pos | idx    | label                      |
+        +-----+--------+----------------------------+
+        | 0   | 'AU'   | 'Australia'                |
+        | 1   | 'AT'   | 'Austria'                  |
+        | 2   | 'BE'   | 'Belgium'                  |
+        | 3   | 'CA'   | 'Canada'                   |
+        | 4   | 'CL'   | 'Chile'                    |
+        | 5   | 'CZ'   | 'Czech Republic'           |
+        | 6   | 'DK'   | 'Denmark'                  |
+        | 7   | 'EE'   | 'Estonia'                  |
+        | 8   | 'FI'   | 'Finland'                  |
+        | 9   | 'FR'   | 'France'                   |
+        | 10  | 'DE'   | 'Germany'                  |
+        | 11  | 'GR'   | 'Greece'                   |
+        | 12  | 'HU'   | 'Hungary'                  |
+        | 13  | 'IS'   | 'Iceland'                  |
+        | 14  | 'IE'   | 'Ireland'                  |
+        | 15  | 'IL'   | 'Israel'                   |
+        | 16  | 'IT'   | 'Italy'                    |
+        | 17  | 'JP'   | 'Japan'                    |
+        | 18  | 'KR'   | 'Korea'                    |
+        | 19  | 'LU'   | 'Luxembourg'               |
+        | 20  | 'MX'   | 'Mexico'                   |
+        | 21  | 'NL'   | 'Netherlands'              |
+        | 22  | 'NZ'   | 'New Zealand'              |
+        | 23  | 'NO'   | 'Norway'                   |
+        | 24  | 'PL'   | 'Poland'                   |
+        | 25  | 'PT'   | 'Portugal'                 |
+        | 26  | 'SK'   | 'Slovak Republic'          |
+        | 27  | 'SI'   | 'Slovenia'                 |
+        | 28  | 'ES'   | 'Spain'                    |
+        | 29  | 'SE'   | 'Sweden'                   |
+        | 30  | 'CH'   | 'Switzerland'              |
+        | 31  | 'TR'   | 'Turkey'                   |
+        | 32  | 'UK'   | 'United Kingdom'           |
+        | 33  | 'US'   | 'United States'            |
+        | 34  | 'EU15' | 'Euro area (15 countries)' |
+        | 35  | 'OECD' | 'total'                    |
+        +-----+--------+----------------------------+
+
+        >>> dataset.data(0)
+        JsonStatValue(value=5.943826289, status=None)
+
+
+    """
 
     def __init__(self, name=None):
         """Initialize an empty dataset.
 
         Dataset could have a name (key) if we parse a jsonstat format version 1.
 
-        :param name: dataset name (jsonstat v.1)
+        :param name: dataset name (for jsonstat v.1)
         """
         self.__valid = False
-        self.__json_data = None
 
         self.__name = name
         self.__title = None
@@ -43,7 +108,8 @@ class JsonStatDataSet:
         # dimensions
         self.__dim_nr = 0  # len(self.__pos2dim)
 
-        self.__pos2size = []  # array int -> int (dimension size)
+        self.__pos2size = []    # array int -> int (dimension size)
+        self.__pos2mult = None  # array int -> multiplicative factor
 
         self.__pos2dim = []   # array int -> dim
         self.__iid2dim = {}   # dict  id  -> dim
@@ -116,18 +182,31 @@ class JsonStatDataSet:
         return self.__iid2dim[spec]
 
     def __str__dimensions(self):
-        out = "{} dimensions:\n".format(len(self.__pos2dim))
-        msg = "  {}: dim id: '{}' label: '{}' size: '{}' role: '{}'\n"
+        lst = [["pos", "id", "label", "size", "role"]]
         for i, dim in enumerate(self.__pos2dim):
-            out += msg.format(i, dim.name(), dim.label(), len(dim), dim.role())
+            row = [str(i), dim.name(), dim.label(), str(len(dim)), dim.role()]
+            row = list(map(lambda x: "" if x is None else x, row))
+            lst.append(row)
+        table = terminaltables.AsciiTable(lst)
+        # table.justify_columns = {2: "right", 4: "right"}
+        # print(table.table)
+        out = table.table
+
+        # out = "{} dimensions:\n".format(len(self.__pos2dim))
+        # msg = "  {}: dim id: '{}' label: '{}' size: '{}' role: '{}'\n"
+        # for i, dim in enumerate(self.__pos2dim):
+        #     out += msg.format(i, dim.name(), dim.label(), len(dim), dim.role())
         return out
 
     def info_dimensions(self):
         """print same info on dimensions on stdout"""
         print(self.__str__dimensions())
 
+    def _repr_html_(self):
+        out ="in ipython"
+        return out
     #
-    # value/status
+    # querying value/status
     #
 
     def data(self, *args, **kargs):

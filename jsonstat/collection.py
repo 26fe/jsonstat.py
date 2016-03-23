@@ -7,8 +7,11 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 from collections import OrderedDict
-import sys
+import dateutil.parser
 import json
+
+# packages
+import terminaltables
 
 # jsonstat
 from jsonstat.dataset import JsonStatDataSet
@@ -16,16 +19,31 @@ from jsonstat.dataset import JsonStatDataSet
 
 class JsonStatCollection:
     """Represents a jsonstat collection.
-    It contain one or more dataset.
+
+    It contain one or more datasets.
+
+    >>> import os, jsonstat  # doctest: +ELLIPSIS
+    >>> filename = os.path.join(jsonstat.__fixtures_dir, "json-stat.org", "oecd-canada-col.json")
+    >>> collection = jsonstat.from_file(filename)
+    >>> len(collection)
+    2
+    >>> collection.info()
+    JsonstatCollection contains the following JsonStatDataSet:
+    +-----+-----------------------------------------------------+
+    | pos | dataset                                             |
+    +-----+-----------------------------------------------------+
+    | 0   | 'Unemployment rate in the OECD countries 2003-2014' |
+    | 1   | 'Population by sex and age group. Canada. 2012'     |
+    +-----+-----------------------------------------------------+
+
     """
     def __init__(self):
-
         self.__href = None
         self.__label = None
         self.__updated = None
 
-        self.__name2dataset = {}
-        self.__pos2dataset = []
+        self.__name2dataset = {}   # str -> dataset
+        self.__pos2dataset = []    # int -> dataset
 
     def __len__(self):
         """the number of dataset contained in this collection"""
@@ -34,10 +52,12 @@ class JsonStatCollection:
     def dataset(self, spec):
         """select a dataset belonging to the collection
 
-        :param spec: can be:
+        :param spec: can be
+
             - the name of collection (string) for jsonstat v1
-            - an integer (for jsonstat v2)
-        :returns: a dataset
+            - an integer (for jsonstat v1 and v2)
+
+        :returns: a JsonStatDataSet object
         """
 
         # In Python2, str == bytes.
@@ -45,19 +65,19 @@ class JsonStatCollection:
         #             while unicode is not defined anymore
 
         # for python3 str == unicode
-        if type(spec) is str:
-            return self.__name2dataset[spec]
-        # python2 has also unicode string type and native string 'str' type
-        elif sys.version_info < (3,) and type(spec) is unicode:
-            return self.__name2dataset[spec]
-        elif type(spec) is int:
+        if type(spec) is int:
             return self.__pos2dataset[spec]
-        raise ValueError()
+        return self.__name2dataset[spec]
 
     def __str__(self):
         out = "JsonstatCollection contains the following JsonStatDataSet:\n"
+        lst = [["pos", "dataset"]]
         for i, dataset in enumerate(self.__pos2dataset):
-            out += "{}: dataset '{}'\n".format(i, dataset.name())
+            row = [str(i), "'" + dataset.name() + "'"]
+            lst.append(row)
+
+        table = terminaltables.AsciiTable(lst)
+        out += table.table
         return out
 
     def __repr__(self):
@@ -100,15 +120,18 @@ class JsonStatCollection:
         """
 
         if "version" in json_data:
-            self.from_json_v2(json_data)
+            self._from_json_v2(json_data)
         else:
             # jsonstat version 1.0
-            self.from_json_v1(json_data)
+            self._from_json_v1(json_data)
         return self
 
-    # TODO: this is meant of internal function of jsonstat not public api
-    def from_json_v1(self, json_data):
+    def _from_json_v1(self, json_data):
         """parse a jsonstat version 1
+
+        .. warning::
+
+            this is an internal library function (it is not public api)
 
         :param json_data: json structure
         """
@@ -122,9 +145,12 @@ class JsonStatCollection:
             self.__name2dataset[dataset_name] = dataset
             self.__pos2dataset.append(dataset)
 
-    # TODO: this is meant of internal function of jsonstat not public api
-    def from_json_v2(self, json_data):
+    def _from_json_v2(self, json_data):
         """parse a jsonstat version 2
+
+        .. warning::
+
+            this is an internal library function (it is not public api)
 
         :param json_data: json structure
         """
@@ -149,7 +175,7 @@ class JsonStatCollection:
 
         # TODO: parsing "updated" field as date
         if "updated" in json_data:
-            self.__updated = json_data["updated"]
+            self.__updated = dateutil.parser.parse(json_data["updated"])
 
         json_data_ds = json_data["link"]["item"]
         self.__pos2dataset = len(json_data_ds) * [None]

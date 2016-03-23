@@ -165,20 +165,22 @@ class TestDimension(unittest.TestCase):
         dim = jsonstat.JsonStatDimension("year", 12, 0, None)
         dim.from_string(self.json_str_only_index)
         expected = (
-            "index\n"
-            "  pos idx      label   \n"
-            "    0 '2003'   ''      \n"
-            "    1 '2004'   ''      \n"
-            "    2 '2005'   ''      \n"
-            "    3 '2006'   ''      \n"
-            "    4 '2007'   ''      \n"
-            "    5 '2008'   ''      \n"
-            "    6 '2009'   ''      \n"
-            "    7 '2010'   ''      \n"
-            "    8 '2011'   ''      \n"
-            "    9 '2012'   ''      \n"
-            "   10 '2013'   ''      \n"
-            "   11 '2014'   ''      \n"
+            "+-----+--------+-------+\n"
+            "| pos | idx    | label |\n"
+            "+-----+--------+-------+\n"
+            "| 0   | '2003' | ''    |\n"
+            "| 1   | '2004' | ''    |\n"
+            "| 2   | '2005' | ''    |\n"
+            "| 3   | '2006' | ''    |\n"
+            "| 4   | '2007' | ''    |\n"
+            "| 5   | '2008' | ''    |\n"
+            "| 6   | '2009' | ''    |\n"
+            "| 7   | '2010' | ''    |\n"
+            "| 8   | '2011' | ''    |\n"
+            "| 9   | '2012' | ''    |\n"
+            "| 10  | '2013' | ''    |\n"
+            "| 11  | '2014' | ''    |\n"
+            "+-----+--------+-------+"
         )
         self.maxDiff = None
         self.assertEqual(expected, dim.__str__())
@@ -187,9 +189,11 @@ class TestDimension(unittest.TestCase):
         dim = jsonstat.JsonStatDimension("concept", 1, 0, None)
         dim.from_string(self.json_str_size_one)
         expected = (
-            "index\n"
-            "  pos idx      label   \n"
-            "    0 'CA'     'Canada'\n"
+            "+-----+------+----------+\n"
+            "| pos | idx  | label    |\n"
+            "+-----+------+----------+\n"
+            "| 0   | 'CA' | 'Canada' |\n"
+            "+-----+------+----------+"
         )
         self.maxDiff = None
         self.assertEqual(expected, dim.__str__())

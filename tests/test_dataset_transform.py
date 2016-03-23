@@ -11,7 +11,6 @@ import os
 
 # external packages
 import pandas as pd
-import numpy.testing as npt
 import pandas.util.testing as pdt
 
 # jsonstat

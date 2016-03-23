@@ -6,7 +6,6 @@
 # stdlib
 from __future__ import print_function
 # from __future__ import unicode_literals
-import sys
 import os
 import unittest
 
@@ -37,8 +36,12 @@ class TestCollection(unittest.TestCase):
             u"downloaded file(s) are stored into '{}'\n".format(cache_dir),
             u"download 'http://json-stat.org/samples/oecd-canada.json'\n",
             u"JsonstatCollection contains the following JsonStatDataSet:\n",
-            u"0: dataset 'oecd'\n",
-            u"1: dataset 'canada'\n\n"
+            u"+-----+----------+\n",
+            u"| pos | dataset  |\n",
+            u"+-----+----------+\n",
+            u"| 0   | 'oecd'   |\n",
+            u"| 1   | 'canada' |\n",
+            u"+-----+----------+\n"
         ]
         expected = ''.join(expected)
         self.assertEqual(result.output, expected)

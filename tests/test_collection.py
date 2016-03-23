@@ -58,7 +58,15 @@ class TestCollection(unittest.TestCase):
         collection.from_string(self.json_string_v1_one_dataset)
         out = StringIO()
         print(collection.__str__(), file=out, end="")
-        expected = "JsonstatCollection contains the following JsonStatDataSet:\n0: dataset 'oecd'\n"
+        expected = [
+            "JsonstatCollection contains the following JsonStatDataSet:\n",
+            "+-----+---------+\n",
+            "| pos | dataset |\n",
+            "+-----+---------+\n",
+            "| 0   | 'oecd'  |\n",
+            "+-----+---------+"
+        ]
+        expected = ''.join(expected)
         self.assertEqual(expected, out.getvalue())
 
     def test_two_datasets_to_str(self):
@@ -68,7 +76,12 @@ class TestCollection(unittest.TestCase):
         print(collection.__str__(), file=out, end="")
         expected = (
             "JsonstatCollection contains the following JsonStatDataSet:\n"
-            "0: dataset 'oecd'\n1: dataset 'canada'\n"
+            "+-----+----------+\n"
+            "| pos | dataset  |\n"
+            "+-----+----------+\n"
+            "| 0   | 'oecd'   |\n"
+            "| 1   | 'canada' |\n"
+            "+-----+----------+"
         )
         self.assertEqual(expected, out.getvalue())
 
@@ -90,9 +103,11 @@ class TestCollection(unittest.TestCase):
         oecd = collection.dataset("oecd")
         dim = oecd.dimension("concept")
         expected = (
-            "index\n"
-            "  pos idx      label   \n"
-            "    0 'UNR'    'unemployment rate'\n"
+            "+-----+-------+---------------------+\n"
+            "| pos | idx   | label               |\n"
+            "+-----+-------+---------------------+\n"
+            "| 0   | 'UNR' | 'unemployment rate' |\n"
+            "+-----+-------+---------------------+"
         )
         self.assertEqual(expected, dim.__str__())
 

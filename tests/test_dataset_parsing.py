@@ -127,16 +127,32 @@ class TestDataSet(unittest.TestCase):
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(json_pathname)
 
+        # expected =(
+        #     "name:   'canada'\n"
+        #     "label:  'Unemployment rate in the OECD countries'\n"
+        #     "source: 'Unemployment rate in the OECD countries'\n"
+        #     "size: 12\n"
+        #     "3 dimensions:\n"
+        #     "  0: dim id: 'serie' label: 'serie' size: '1' role: 'None'\n"
+        #     "  1: dim id: 'year' label: '2012-2014' size: '3' role: 'time'\n"
+        #     "  2: dim id: 'area' label: 'OECD countries, EU15 and total' size: '4' role: 'geo'\n"
+        # )
+
         expected =(
             "name:   'canada'\n"
             "label:  'Unemployment rate in the OECD countries'\n"
             "source: 'Unemployment rate in the OECD countries'\n"
             "size: 12\n"
-            "3 dimensions:\n"
-            "  0: dim id: 'serie' label: 'serie' size: '1' role: 'None'\n"
-            "  1: dim id: 'year' label: '2012-2014' size: '3' role: 'time'\n"
-            "  2: dim id: 'area' label: 'OECD countries, EU15 and total' size: '4' role: 'geo'\n"
+            "+-----+-------+--------------------------------+------+------+\n"
+            "| pos | id    | label                          | size | role |\n"
+            "+-----+-------+--------------------------------+------+------+\n"
+            "| 0   | serie | serie                          | 1    |      |\n"
+            "| 1   | year  | 2012-2014                      | 3    | time |\n"
+            "| 2   | area  | OECD countries, EU15 and total | 4    | geo  |\n"
+            "+-----+-------+--------------------------------+------+------+"
         )
+        #self.maxDiff=None
+        #print(dataset)
         self.assertEqual(expected, dataset.__str__())
 
     #

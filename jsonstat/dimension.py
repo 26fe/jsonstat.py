@@ -3,11 +3,20 @@
 # Copyright (C) 2016 gf <gf@26fe.com>
 # See LICENSE file
 
+
+"""
+Documentazione!!!
+"""
+
+
 # stdlib
 from __future__ import print_function
 from __future__ import unicode_literals
 from collections import namedtuple
 import json
+
+# packages
+import terminaltables
 
 # jsonstat
 from jsonstat.exceptions import JsonStatException
@@ -67,12 +76,19 @@ class JsonStatDimension:
     >>> dim = JsonStatDimension(name="concept", role="metric").from_string(json_string)
     >>> len(dim)
     2
-    >>> dim.category(0).index == 'POP'
-    True
-    >>> dim.category('POP').label == 'population'
-    True
-    >>> dim.category(1).index == 'PERCENT'
-    True
+    >>> dim.category(0).index
+    'POP'
+    >>> dim.category('POP').label
+    'population'
+    >>> dim.category(1)
+    JsonStatCategory(label='weight of age group in the population', index='PERCENT', pos=1)
+    >>> dim.info()
+    +-----+-----------+-----------------------------------------+
+    | pos | idx       | label                                   |
+    +-----+-----------+-----------------------------------------+
+    | 0   | 'POP'     | 'population'                            |
+    | 1   | 'PERCENT' | 'weight of age group in the population' |
+    +-----+-----------+-----------------------------------------+
     """
 
     def __init__(self, name=None, size=None, pos=None, role=None):
@@ -127,16 +143,29 @@ class JsonStatDimension:
         if self.__pos2cat is None:
             return ""
 
-        out = "index\n"
-        f = "{:>5} {:<8} {:<8}\n"
-        out += f.format('pos', 'idx', 'label')
+        lst = [["pos", "idx", "label"]]
         for cat in self.__pos2cat:
             idx = cat.index
             lbl = cat.label
             if idx is None: idx = ""
             if lbl is None: lbl = ""
+            row = [str(cat.pos), "'" + idx + "'", "'" + lbl + "'"]
+            row = list(map(lambda x: "" if x is None else x, row))
+            lst.append(row)
 
-            out += f.format(cat.pos, "'" + idx + "'", "'" + lbl + "'")
+        table = terminaltables.AsciiTable(lst)
+        out = table.table
+
+        # out = "index\n"
+        # f = "{:>5} {:<8} {:<8}\n"
+        # out += f.format('pos', 'idx', 'label')
+        # for cat in self.__pos2cat:
+        #     idx = cat.index
+        #     lbl = cat.label
+        #     if idx is None: idx = ""
+        #     if lbl is None: lbl = ""
+        #
+        #     out += f.format(cat.pos, "'" + idx + "'", "'" + lbl + "'")
         return out
 
     def __repr__(self):

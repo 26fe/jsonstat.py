@@ -63,7 +63,7 @@ def from_json(json_data):
         if "class" in json_data:
             if json_data["class"] == "collection":
                 o = JsonStatCollection()
-                o.from_json_v2(json_data)
+                o._from_json_v2(json_data)
             elif json_data["class"] == "dataset":
                 o = JsonStatDataSet()
                 o._from_json_v2(json_data)
@@ -77,7 +77,7 @@ def from_json(json_data):
     else:
         # if version is not present assuming version 1.0 of jsonstat format
         o = JsonStatCollection()
-        o.from_json_v1(json_data)
+        o._from_json_v1(json_data)
     return o
 
 
