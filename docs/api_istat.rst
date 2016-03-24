@@ -2,7 +2,7 @@
 Istat Module
 ============
 
-Contents:
+This module contains helper class useful exploring the Italian Statistics Institute.
 
 .. toctree::
    :maxdepth: 2

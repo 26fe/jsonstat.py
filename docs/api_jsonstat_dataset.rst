@@ -36,4 +36,3 @@ parsing
     .. automethod:: JsonStatDataSet.from_file
     .. automethod:: JsonStatDataSet.from_string
     .. automethod:: JsonStatDataSet.from_json
-    .. automethod:: JsonStatDataSet._from_json_v2

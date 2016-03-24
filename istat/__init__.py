@@ -3,9 +3,6 @@
 # Copyright (C) 2016 gf <gf@26fe.com>
 # See LICENSE file
 
-"""
-This module contains helper class useful exploring the Italian Statistics Institute.
-"""
 from istat.istat_exception import IstatException
 from istat.istat_helper import IstatHelper
 from istat.istat_area import IstatArea

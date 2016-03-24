@@ -20,7 +20,7 @@ from jsonstat.dataset import JsonStatDataSet
 class JsonStatCollection:
     """Represents a jsonstat collection.
 
-    It contain one or more datasets.
+    It contains one or more datasets.
 
     >>> import os, jsonstat  # doctest: +ELLIPSIS
     >>> filename = os.path.join(jsonstat.__fixtures_dir, "json-stat.org", "oecd-canada-col.json")
@@ -93,6 +93,7 @@ class JsonStatCollection:
     #
     def from_file(self, filename):
         """initialize this collection from a file
+        It is better to use :py:meth:`jsonstat.from_file`
 
         :param filename: name containing a jsonstat
         :returns: itself to chain call
@@ -104,6 +105,7 @@ class JsonStatCollection:
 
     def from_string(self, json_string):
         """Initialize this collection from a string
+        It is better to use :py:meth:`jsonstat.from_string`
 
         :param json_string: string containing a json
         :returns: itself to chain call
@@ -114,6 +116,7 @@ class JsonStatCollection:
 
     def from_json(self, json_data):
         """initialize this collection from a json structure
+        It is better to use :py:meth:`jsonstat.from_json`
 
         :param json_data: data structure (dictionary) representing a json
         :returns: itself to chain call

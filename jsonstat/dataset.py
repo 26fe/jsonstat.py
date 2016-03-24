@@ -84,7 +84,6 @@ class JsonStatDataSet:
         | 34  | 'EU15' | 'Euro area (15 countries)' |
         | 35  | 'OECD' | 'total'                    |
         +-----+--------+----------------------------+
-
         >>> dataset.data(0)
         JsonStatValue(value=5.943826289, status=None)
 
@@ -210,20 +209,36 @@ class JsonStatDataSet:
     #
 
     def data(self, *args, **kargs):
-        """
+        """Returns a JsonStatValue containings value and status about a datapoint
+        The datapoint will be retrieved according the parameters
 
         :param args:
+            - data(<int>)  where i is index into the
+            - data(<list>) where lst = [i1,i2,i3,...]) each i indicate the dimension len(lst) == number of dimension
+            - data(<dict>) where dict is {k1:v1, k2:v2, ...} dimension of size 1 can be ommitted
+
         :param kargs:
-        :returns:
+            - data(k1=v1,k2=v2,...) where **ki** are the id or label of dimension
+              **vi** are the index or label of the category dimension of size 1 can be ommitted
+
+        :returns: a JsonStatValue object
+
+        kargs { cat1:value1, ..., cati:valuei, ... }
+        cati can be the id of the dimension or the label of dimension
+        valuei can be the index or label of category
+        ex.:{country:"AU", "year":"2014"}
 
         >>> import os, jsonstat  # doctest: +ELLIPSIS
         >>> filename = os.path.join(jsonstat.__fixtures_dir, "json-stat.org", "oecd-canada-col.json")
         >>> dataset = jsonstat.from_file(filename).dataset(0)
-        >>> dataset.label() == 'Unemployment rate in the OECD countries 2003-2014'
-        True
         >>> dataset.data(0)
         JsonStatValue(value=5.943826289, status=None)
-
+        >>> dataset.data(concept='UNR', area='AU', year='2003')
+        JsonStatValue(value=5.943826289, status=None)
+        >>> dataset.data(area='AU', year='2003')
+        JsonStatValue(value=5.943826289, status=None)
+        >>> dataset.data({'area':'AU', 'year':'2003'})
+        JsonStatValue(value=5.943826289, status=None)
         """
         if not self.__valid:
             raise JsonStatException('dataset not initialized')
@@ -249,11 +264,7 @@ class JsonStatDataSet:
 
     def value(self, *args, **kargs):
         """get a value
-
-        :param kargs: { cat1:value1, ..., cati:valuei, ... }
-            cati can be the id of the dimension or the label of dimension
-            valuei can be the index or label of category
-            ex.:{country:"AU", "year":"2014"}
+        For the parameters see py:meth:`jsonstat.JsonStatDataSet.data`.
 
         :returns: value (typically a number)
         """
@@ -263,12 +274,9 @@ class JsonStatDataSet:
     def status(self, *args, **kargs):
         """get a status
 
-        :param kargs: { cat1:value1, ..., cati:valuei, ... }
-            cati can be the id of the dimension or the label of dimension
-            valuei can be the index or label of category
-            ex.:{country:"AU", "year":"2014"}
+        For the parameters see py:meth:`jsonstat.JsonStatDataSet.data`.
 
-        :returns: value (typically a number)
+        :returns: status (typically a string)
         """
         # TODO: add onlystatus=true to extract only the value
         return self.data(*args, **kargs).status
@@ -552,6 +560,7 @@ class JsonStatDataSet:
 
     def from_file(self, filename):
         """read a jsonstat from a file and parse it to initialize this dataset
+        It is better to use :py:meth:`jsonstat.from_file`
 
         :param filename: path of the file.
         :returns: itself to chain call
@@ -563,6 +572,7 @@ class JsonStatDataSet:
 
     def from_string(self, json_string):
         """parse a string to initialize this (empty) dataset
+        It is better to use :py:meth:`jsonstat.from_string`
 
         :param json_string:
         :returns: itself to chain call
@@ -573,6 +583,7 @@ class JsonStatDataSet:
 
     def from_json(self, json_data):
         """parse a json structure and initialize this dataset
+        It is better to use py:meth:`jsonstat.from_json`
 
         :param json_data: json structure
         :returns: itself to chain call

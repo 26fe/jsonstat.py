@@ -2,9 +2,6 @@
 JsonStatDimension
 =================
 
-.. toctree::
-   :maxdepth: 2
-
 .. automodule:: jsonstat
 
 .. autoclass:: JsonStatDimension

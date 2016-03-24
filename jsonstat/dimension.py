@@ -69,7 +69,8 @@ class JsonStatDimension:
     ...                    "label" : "concepts",
     ...                    "category" : {
     ...                       "index" : { "POP" : 0, "PERCENT" : 1 },
-    ...                       "label" : { "POP" : "population", "PERCENT" : "weight of age group in the population" }
+    ...                       "label" : { "POP" : "population",
+    ...                                   "PERCENT" : "weight of age group in the population" }
     ...                    }
     ...                  }
     ... '''

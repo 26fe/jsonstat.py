@@ -18,9 +18,9 @@ from jsonstat.dimension import JsonStatDimension
 
 
 def from_file(filename):
-    """read a file containing a jsonstat format and returns the appropriate object
+    """read a file containing a jsonstat format and return the appropriate object
 
-    :param filename: name containing a jsonstat
+    :param filename: file containing a jsonstat
     :returns: a JsonStatCollection, JsonStatDataset or JsonStatDimension object
 
     example
@@ -28,8 +28,8 @@ def from_file(filename):
     >>> import os, jsonstat
     >>> filename = os.path.join(jsonstat.__fixtures_dir, "json-stat.org", "oecd-canada-col.json")
     >>> o = jsonstat.from_file(filename)
-    >>> isinstance(o, jsonstat.collection.JsonStatCollection)
-    True
+    >>> type(o)
+    <class 'jsonstat.collection.JsonStatCollection'>
     """
     with open(filename) as f:
         json_string = f.read()
@@ -37,7 +37,7 @@ def from_file(filename):
 
 
 def from_string(json_string):
-    """parse a jsonstat string and returns the appropriate object
+    """parse a jsonstat string and return the appropriate object
 
     :param json_string: string containing a json
     :returns: a JsonStatCollection, JsonStatDataset or JsonStatDimension object
@@ -52,10 +52,26 @@ def from_json(json_data):
     :param json_data: data structure (dictionary) representing a json
     :returns: a JsonStatCollection, JsonStatDataset or JsonStatDimension object
 
-    ::
+    >>> import jsonstat
+    >>> json_string_v1 = '''{
+    ...                       "oecd" : {
+    ...                         "value": [1],
+    ...                         "dimension" : {
+    ...                           "id": ["one"],
+    ...                           "size": [1],
+    ...                           "one": { "category": { "index":{"2010":0 } } }
+    ...                         }
+    ...                       }
+    ...                     }'''
+    >>> json_data = json.loads(json_string_v1, object_pairs_hook=OrderedDict)
+    >>> jsonstat.from_json(json_data)
+    JsonstatCollection contains the following JsonStatDataSet:
+    +-----+---------+
+    | pos | dataset |
+    +-----+---------+
+    | 0   | 'oecd'  |
+    +-----+---------+
 
-        json_data = json.loads(json_string, object_pairs_hook=OrderedDict)
-        jsonstat.from_json(json_data)
     """
     o = None
     if "version" in json_data:
@@ -122,12 +138,40 @@ def download(url, pathname=None):
 
 
 # TODO: pathname could be None so don't save on disk
-def from_url(url, pathname=None):
-    """download a url into a file ``pathname`` and returns the content of the url
+def from_url(url, filename=None):
+    """download a url and return the content of the url.
+
+    If ``pathname`` is defined the contents of the url
+    will be stored into the file ``<cache_dir>/pathname``
+    If ``filename`` is None the filename will be automatic generated.
+
+    To set dir where to store downloaded file
+    see :py:meth:`jsonstat.cache_dir`.
+    Cache expiration policy can be customized
 
     :param url:
-    :param pathname: where to store the url
-    :returns: the content of url
+    :param filename: where to store the url
+    :returns: the contents of url
+
+
+    example:
+
+    >>> import os, jsonstat
+    >>> # cache_dir = os.path.normpath(os.path.join(jsonstat.__fixtures_dir, "json-stat.org"))
+    >>> # download external content into the /tmp dir so next downloads can be faster
+    >>> uri = 'http://json-stat.org/samples/oecd-canada.json'
+    >>> jsonstat.cache_dir("/tmp")
+    '/tmp'
+    >>> o = jsonstat.from_url(uri)
+    >>> o.info()
+    JsonstatCollection contains the following JsonStatDataSet:
+    +-----+----------+
+    | pos | dataset  |
+    +-----+----------+
+    | 0   | 'oecd'   |
+    | 1   | 'canada' |
+    +-----+----------+
+
     """
-    json_string = download(url, pathname)
+    json_string = download(url, filename)
     return from_string(json_string)
