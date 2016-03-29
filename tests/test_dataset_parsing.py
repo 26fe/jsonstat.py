@@ -138,7 +138,7 @@ class TestDataSet(unittest.TestCase):
         #     "  2: dim id: 'area' label: 'OECD countries, EU15 and total' size: '4' role: 'geo'\n"
         # )
 
-        expected =(
+        expected = (
             "name:   'canada'\n"
             "label:  'Unemployment rate in the OECD countries'\n"
             "source: 'Unemployment rate in the OECD countries'\n"
@@ -151,8 +151,8 @@ class TestDataSet(unittest.TestCase):
             "| 2   | area  | OECD countries, EU15 and total | 4    | geo  |\n"
             "+-----+-------+--------------------------------+------+------+"
         )
-        #self.maxDiff=None
-        #print(dataset)
+        # self.maxDiff=None
+        # print(dataset)
         self.assertEqual(expected, dataset.__str__())
 
     #
@@ -223,8 +223,7 @@ class TestDataSet(unittest.TestCase):
         self.assertEqual(data.status, "e")
 
         lint = oecd.idx_as_lint(idx)
-        self.assertEqual(lint, [0,0,10])
-
+        self.assertEqual(lint, [0, 0, 10])
 
     #
     # test from functions
@@ -236,10 +235,10 @@ class TestDataSet(unittest.TestCase):
         dataset.from_file(json_pathname)
 
         ret = dataset._from_aidx_to_adim(["area", "year"])
-        self.assertEqual([2,1], ret)
+        self.assertEqual([2, 1], ret)
 
         ret = dataset._from_aidx_to_adim(["year", "area"])
-        self.assertEqual([1,2], ret)
+        self.assertEqual([1, 2], ret)
 
     #
     # enumeration function
@@ -256,9 +255,9 @@ class TestDataSet(unittest.TestCase):
         # second digit is year from 0 to 2
         # third digit is area from 0 to 3
         # order is ["serie", "year", "area"]
-        expected = [[0, 0, 0], [0, 0, 1], [0, 0, 2], [0, 0, 3], # first digit 0
-                    [0, 1, 0], [0, 1, 1], [0, 1, 2], [0, 1, 3], # first digit 1
-                    [0, 2, 0], [0, 2, 1], [0, 2, 2], [0, 2, 3]] # first digit 2
+        expected = [[0, 0, 0], [0, 0, 1], [0, 0, 2], [0, 0, 3],  # first digit 0
+                    [0, 1, 0], [0, 1, 1], [0, 1, 2], [0, 1, 3],  # first digit 1
+                    [0, 2, 0], [0, 2, 1], [0, 2, 2], [0, 2, 3]]  # first digit 2
         self.assertEqual(result, expected)
 
     def test_all_pos_reorder(self):
@@ -301,7 +300,7 @@ class TestDataSet(unittest.TestCase):
         dataset.from_file(json_pathname)
 
         # test 1
-        result = list(dataset.all_pos({'one':'one_1'}))
+        result = list(dataset.all_pos({'one': 'one_1'}))
         expected = [
             [0, 0, 0], [0, 0, 1], [0, 0, 2], [0, 0, 3],
             [0, 1, 0], [0, 1, 1], [0, 1, 2], [0, 1, 3],
@@ -311,7 +310,7 @@ class TestDataSet(unittest.TestCase):
 
         # test 2
         dataset.generate_all_vec(one='one_1')
-        result = list(dataset.all_pos({"two":"two_2"}))
+        result = list(dataset.all_pos({"two": "two_2"}))
         expected = [
             [0, 1, 0], [0, 1, 1], [0, 1, 2], [0, 1, 3],
             [1, 1, 0], [1, 1, 1], [1, 1, 2], [1, 1, 3]
