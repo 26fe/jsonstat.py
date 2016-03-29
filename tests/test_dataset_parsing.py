@@ -162,22 +162,19 @@ class TestDataSet(unittest.TestCase):
     #   dataset.status()
     #
 
-    def test_value_and_status_with_three_dimensions(self):
+    def test_data_with_three_dimensions(self):
         json_pathname = os.path.join(self.fixture_dir, "dataset", "json_three_dimensions.json")
         dataset = jsonstat.JsonStatDataSet()
         dataset.from_file(json_pathname)
 
         data = dataset.data(one="one_1", two="two_1", three="three_1")
         self.assertEqual(data.value, 111)
+        self.assertIsNone(data.status)
 
         data = dataset.data(one="one_2", two="two_2", three="three_2")
         self.assertEqual(data.value, 222)
 
-        # status
-        data = dataset.data(one="one_1", two="two_1", three="three_1")
-        self.assertIsNone(data.status)
-
-    def test_value_and_status_with_unemployment(self):
+    def test_data_with_unemployment(self):
         json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(json_pathname)
@@ -201,12 +198,9 @@ class TestDataSet(unittest.TestCase):
 
         data = dataset.data(area="BE", year="2014")
         self.assertEqual(data.value, 33)
+        self.assertIsNone(data.status)
 
-        # status
-        status = dataset.status(area="BE", year="2014")
-        self.assertIsNone(status)
-
-    def test_value_and_status_with_oecd_canada(self):
+    def test_data_with_oecd_canada(self):
         json_pathname = os.path.join(self.fixture_dir, "json-stat.org", "oecd-canada.json")
         collection = jsonstat.JsonStatCollection()
         collection.from_file(json_pathname)
@@ -214,9 +208,6 @@ class TestDataSet(unittest.TestCase):
 
         data = oecd.data(concept='UNR', area='AU', year='2004')
         self.assertEqual(5.39663128, data.value)
-
-        # status
-        data = oecd.data(concept='UNR', area='AU', year='2004')
         self.assertIsNone(data.status)
 
         # first position with status 10
@@ -224,8 +215,15 @@ class TestDataSet(unittest.TestCase):
         apos = oecd._from_adim_to_apos(adim)
         idx = oecd._from_apos_to_idx(apos)
         self.assertEqual(idx, 10)
-        status = oecd.status(adim)
-        self.assertEqual(status, "e")
+
+        data = oecd.data(adim)
+        self.assertEqual(data.status, "e")
+
+        data = oecd.data(10)
+        self.assertEqual(data.status, "e")
+
+        lint = oecd.idx_as_lint(idx)
+        self.assertEqual(lint, [0,0,10])
 
 
     #

@@ -20,7 +20,7 @@ from jsonstat.dimension import JsonStatDimension
 from jsonstat.exceptions import JsonStatException
 from jsonstat.exceptions import JsonStatMalformedJson
 
-JsonStatValue = namedtuple('JsonStatValue', ['value', 'status'])
+JsonStatValue = namedtuple('JsonStatValue', ['idx', 'value', 'status'])
 
 
 class JsonStatDataSet:
@@ -85,7 +85,7 @@ class JsonStatDataSet:
         | 35  | 'OECD' | 'total'                    |
         +-----+--------+----------------------------+
         >>> dataset.data(0)
-        JsonStatValue(value=5.943826289, status=None)
+        JsonStatValue(idx=0, value=5.943826289, status=None)
 
 
     """
@@ -232,13 +232,13 @@ class JsonStatDataSet:
         >>> filename = os.path.join(jsonstat.__fixtures_dir, "json-stat.org", "oecd-canada-col.json")
         >>> dataset = jsonstat.from_file(filename).dataset(0)
         >>> dataset.data(0)
-        JsonStatValue(value=5.943826289, status=None)
+        JsonStatValue(idx=0, value=5.943826289, status=None)
         >>> dataset.data(concept='UNR', area='AU', year='2003')
-        JsonStatValue(value=5.943826289, status=None)
+        JsonStatValue(idx=0, value=5.943826289, status=None)
         >>> dataset.data(area='AU', year='2003')
-        JsonStatValue(value=5.943826289, status=None)
+        JsonStatValue(idx=0, value=5.943826289, status=None)
         >>> dataset.data({'area':'AU', 'year':'2003'})
-        JsonStatValue(value=5.943826289, status=None)
+        JsonStatValue(idx=0, value=5.943826289, status=None)
         """
         if not self.__valid:
             raise JsonStatException('dataset not initialized')
@@ -260,7 +260,7 @@ class JsonStatDataSet:
             status = None
         else:
             status = self.__status[idx]
-        return JsonStatValue(value, status)
+        return JsonStatValue(idx, value, status)
 
     def value(self, *args, **kargs):
         """get a value
@@ -272,13 +272,13 @@ class JsonStatDataSet:
         return self.data(*args, **kargs).value
 
     def status(self, *args, **kargs):
-        """get a status
+        """get datapoint status
 
         For the parameters see py:meth:`jsonstat.JsonStatDataSet.data`.
 
         :returns: status (typically a string)
         """
-        # TODO: add onlystatus=true to extract only the value
+        # TODO: add onlystatus=true to extract only the value?
         return self.data(*args, **kargs).status
 
     def __value_from_vec_pos(self, lst):
@@ -358,16 +358,17 @@ class JsonStatDataSet:
         r = s * lst
         return np.sum(r)
 
-    def _from_idx_to_apos(self, idx):
+    def idx_as_lint(self, idx):
         print(self.__pos2size)
         print(self.__pos2mult)
-        apos = len(self.__pos2cat) * [0]
+        apos = self.__dim_nr * [0]
         i = len(self.__pos2size) - 1
         while idx > 0 and i != 0:
             apos[i] = idx % self.__pos2size[i]
             idx -= (apos[i] * self.__pos2mult[i])
             i -= 1
         print(apos)
+        return apos
 
     def _from_apos_to_aidx(self, vec_pos, without_one_dimension=False):
         """transforms an array of pos into ana arry of idc
