@@ -3,12 +3,6 @@
 # Copyright (C) 2016 gf <gf@26fe.com>
 # See LICENSE file
 
-
-"""
-Documentazione!!!
-"""
-
-
 # stdlib
 from __future__ import print_function
 from __future__ import unicode_literals
@@ -28,42 +22,6 @@ JsonStatCategory = namedtuple('JsonStatCategory', ['label', 'index', 'pos'])
 class JsonStatDimension:
     """Represents a JsonStat Dimension. It is contained into a JsonStat Dataset.
 
-    example::
-
-        "dimension" : {
-            "concept" : {
-                "label" : "concepts",
-                "category" : {
-                    "index" : {
-                        "POP" : 0,
-                        "PERCENT" : 1
-                    },
-                    "label" : {
-                        "POP" : "population",
-                        "PERCENT" : "weight of age group in the population"
-                    },
-                    "unit" : {
-                        "POP" : {
-                            "label": "thousands of persons",
-                            "decimals": 1,
-                            "type" : "count",
-                            "base" : "people",
-                            "multiplier" : 3
-                        },
-                        "PERCENT" : {
-                            "label" : "%",
-                            "decimals": 1,
-                            "type" : "ratio",
-                            "base" : "per cent",
-                            "multiplier" : 0
-                        }
-                    }
-                }
-            },
-            "dim": {
-            ...
-            },
-        }
 
     >>> json_string = '''{
     ...                    "label" : "concepts",
@@ -90,15 +48,43 @@ class JsonStatDimension:
     | 0   | 'POP'     | 'population'                            |
     | 1   | 'PERCENT' | 'weight of age group in the population' |
     +-----+-----------+-----------------------------------------+
+    >>> json_string_dimension_sex = '''
+    ... {
+    ...     "label" : "sex",
+    ...     "category" : {
+    ...       "index" : {
+    ...         "M" : 0,
+    ...         "F" : 1,
+    ...         "T" : 2
+    ...       },
+    ...       "label" : {
+    ...         "M" : "men",
+    ...         "F" : "women",
+    ...         "T" : "total"
+    ...       }
+    ...     }
+    ... }
+    ... '''
+    >>> dim = JsonStatDimension(name="sex").from_string(json_string_dimension_sex)
+    >>> len(dim)
+    3
     """
 
     def __init__(self, name=None, size=None, pos=None, role=None):
         """initialize a dimension
 
+        .. warning::
+
+            this is an internal library function (it is not public api)
+
         :param name: name of dimension
         :param size: size of dimension (nr of values)
         :param pos: position of dimension into the dataset
         :param role: of dimension
+
+
+
+
         """
 
         # it is valid is correctly built (f.e. it was parsed correctly)
@@ -257,17 +243,17 @@ class JsonStatDimension:
     #
 
     def from_string(self, json_string):
-        """Parse a json string
+        """parse a json string
 
         :param json_string:
-        :returns: itself to chain call
+        :returns: itself to chain calls
         """
         json_data = json.loads(json_string)
         self.from_json(json_data)
         return self
 
     def from_json(self, json_data):
-        """Parse a json structure representing a dimension id
+        """Parse a json structure representing a dimension
 
         From `json-stat.org <https://json-stat.org/format/#dimensionid>`_
 
@@ -335,6 +321,7 @@ class JsonStatDimension:
 
         if 'index' in json_data_category:
             self.__parse_json_index(json_data_category)
+
         if 'label' in json_data_category:
             self.__parse_json_label(json_data_category)
 
@@ -460,8 +447,3 @@ class JsonStatDimension:
             # if only labels are present into the json,  deduce indexes from labels
             self.__idx2cat[idx] = cat
             self.__lbl2cat[lbl] = cat
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

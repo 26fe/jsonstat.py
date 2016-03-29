@@ -287,37 +287,51 @@ class JsonStatDataSet:
         :param lst: [0,3,4]
         :returns: value at dimension [0,3,4]
         """
-        return self.__value[self._from_apos_to_idx(lst)]
+        return self.__value[self.lint_as_idx(lst)]
 
     #
-    # transform function about dimensions indexes
+    # dataset can be access using different type of indexes
+    # simple index is integer.
+    # ex. dataset.data(0)
+    # other type of idexes
+    # lint [ <int1>, <int2>, <int3> ...]
+    # lcat [ <cat1>, <cat2>, ... ]
+    # dcat [ <did1>:<cat1>, <did2>:<cat1>, ... ]
+
     # this functions are only for library internal usage
     #
 
     def _2idx(self, *args, **kargs):
+        """convert args to integer index """
 
         if len(args) == 1:
-            # data({k1:v1, k2:v2})
-            if isinstance(args[0], dict):
-                dims = args[0]
-            # data(i)
-            elif isinstance(args[0], int):
+            # data(int)
+            if isinstance(args[0], int):
                 return args[0]
+            # data([i1,i2,i3])
+            elif isinstance(args[0], list):
+                idx = self.lint_as_idx(args[0])
+                return idx
+            # data({k1:v1, k2:v2})
+            elif isinstance(args[0], dict):
+                dims = args[0]
+                apos = self.dcat_to_lint(dims)
+                idx = self.lint_as_idx(apos)
+                return idx
         elif len(args) == 0:
             # data(k1:v1, k2:v2)
             dims = kargs
-        else:
-            msg = "unexpected parameters"
-            raise JsonStatException(msg)
+            # print(dims)
+            apos = self.dcat_to_lint(dims)
+            # print(apos)
+            idx = self.lint_as_idx(apos)
+            # print(idx)
+            return idx
 
-        # print(dims)
-        apos = self._from_adim_to_apos(dims)
-        # print(apos)
-        idx = self._from_apos_to_idx(apos)
-        # print(idx)
-        return idx
+        msg = "unexpected parameters"
+        raise JsonStatException(msg)
 
-    def _from_adim_to_apos(self, dims):
+    def dcat_to_lint(self, dims):
         """Transforms a dimension dict to dimension array
 
         ::
@@ -347,7 +361,7 @@ class JsonStatDataSet:
             apos[dim.pos()] = dim._2pos(val)
         return apos
 
-    def _from_apos_to_idx(self, lst):
+    def lint_as_idx(self, lst):
         """from a list of position get a index into value array
 
         [1,2,3] -> 10
@@ -359,19 +373,18 @@ class JsonStatDataSet:
         return np.sum(r)
 
     def idx_as_lint(self, idx):
-        print(self.__pos2size)
-        print(self.__pos2mult)
+        """ 10 -> [<int1>, <int2>, ...]
+        """
         apos = self.__dim_nr * [0]
         i = len(self.__pos2size) - 1
         while idx > 0 and i != 0:
             apos[i] = idx % self.__pos2size[i]
             idx -= (apos[i] * self.__pos2mult[i])
             i -= 1
-        print(apos)
         return apos
 
-    def _from_apos_to_aidx(self, vec_pos, without_one_dimension=False):
-        """transforms an array of pos into ana arry of idc
+    def lint_as_lcat(self, vec_pos, without_one_dimension=False):
+        """transforms an array of int into an array of cat
 
         [0,3,4] -> ['dimension 1 index', 'dimension 2 label', 'dimension 3 label']
 
@@ -386,7 +399,7 @@ class JsonStatDataSet:
                 vec_idx.append(dim._pos2cat(vec_pos[pos]).index)
         return vec_idx
 
-    def _from_apos_to_alabel(self, apos, without_one_dimension=False):
+    def _lint_to_llbl(self, apos, without_one_dimension=False):
         """transforms on array of dim into an array of label
 
         :param apos:  [0,3,4]
@@ -431,9 +444,12 @@ class JsonStatDataSet:
         """
 
         nr_dim = len(self.__pos2dim)
-        if order is not None and len(order) != nr_dim:
-            msg = "length of the order vector is different from number of dimension {}".format(nr_dim)
-            raise JsonStatException(msg)
+        if order is not None:
+            if len(order) != nr_dim:
+                msg = "length of the order vector is different from number of dimension {}".format(nr_dim)
+                raise JsonStatException(msg)
+            if isinstance(order[1],str):
+                order = [self.__iid2dim[iid].pos() for iid in order]
 
         vec_pos_blocked = nr_dim * [False]
         vec_pos = nr_dim * [0]
@@ -481,7 +497,7 @@ class JsonStatDataSet:
 
     def generate_all_vec(self, **blocked_dims):
         for vec_pos in self.all_pos(blocked_dims):
-            vec_idx = self._from_apos_to_aidx(vec_pos)
+            vec_idx = self.lint_as_lcat(vec_pos)
             value = self.__value_from_vec_pos(vec_pos)
 
     #
@@ -515,9 +531,9 @@ class JsonStatDataSet:
         for apos in self.all_pos(order=order, blocked_dims=blocked_dims):
             value = self.__value_from_vec_pos(apos)
             if content == "label":
-                row = self._from_apos_to_alabel(apos, without_one_dimension=without_one_dimensions)
+                row = self._lint_to_llbl(apos, without_one_dimension=without_one_dimensions)
             else:
-                row = self._from_apos_to_aidx(apos, without_one_dimension=without_one_dimensions)
+                row = self.lint_as_lcat(apos, without_one_dimension=without_one_dimensions)
             row.append(value)
             table.append(row)
 
@@ -560,11 +576,12 @@ class JsonStatDataSet:
     #
 
     def from_file(self, filename):
-        """read a jsonstat from a file and parse it to initialize this dataset
+        """read a jsonstat from a file and parse it to initialize this dataset.
+
         It is better to use :py:meth:`jsonstat.from_file`
 
         :param filename: path of the file.
-        :returns: itself to chain call
+        :returns: itself to chain calls
         """
         with open(filename) as f:
             json_string = f.read()
@@ -572,11 +589,12 @@ class JsonStatDataSet:
         return self
 
     def from_string(self, json_string):
-        """parse a string to initialize this (empty) dataset
+        """parse a string containing a jsonstat and initialize this dataset
+
         It is better to use :py:meth:`jsonstat.from_string`
 
-        :param json_string:
-        :returns: itself to chain call
+        :param json_string: string containing a jsonstat
+        :returns: itself to chain calls
         """
         json_data = json.loads(json_string)
         self.from_json(json_data)
@@ -584,10 +602,11 @@ class JsonStatDataSet:
 
     def from_json(self, json_data):
         """parse a json structure and initialize this dataset
+
         It is better to use py:meth:`jsonstat.from_json`
 
         :param json_data: json structure
-        :returns: itself to chain call
+        :returns: itself to chain calls
         """
         if "version" in json_data:
             # assume version 2
@@ -695,7 +714,7 @@ class JsonStatDataSet:
         self.__valid = True
 
     def _from_json_v2(self, json_data):
-        """parse a jsonstat structure complaint to jsonstat format version 2.x
+        """parse a jsonstat structure compliant to jsonstat format version 2.x
 
         .. warning::
 
@@ -706,6 +725,7 @@ class JsonStatDataSet:
         keys to be parsed
         - version
         - class: "dataset"
+
         - href: url
         - label: "..."
         - id: <list of dimension id>

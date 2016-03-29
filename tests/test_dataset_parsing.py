@@ -210,35 +210,42 @@ class TestDataSet(unittest.TestCase):
         self.assertEqual(5.39663128, data.value)
         self.assertIsNone(data.status)
 
-        # first position with status 10
-        adim = {'concept': 'UNR', 'area': 'AU', 'year': '2013'}
-        apos = oecd._from_adim_to_apos(adim)
-        idx = oecd._from_apos_to_idx(apos)
-        self.assertEqual(idx, 10)
-
-        data = oecd.data(adim)
+        # first position with status at idx 10
+        dcat = {'concept': 'UNR', 'area': 'AU', 'year': '2013'}
+        data = oecd.data(dcat)
         self.assertEqual(data.status, "e")
 
         data = oecd.data(10)
         self.assertEqual(data.status, "e")
 
-        lint = oecd.idx_as_lint(idx)
+        data = oecd.data([0, 0, 10])
+        self.assertEqual(data.status, "e")
+
+    #
+    # test dataset indexes transform functions
+    #
+
+    def test_dcat_to_lint(self):
+        json_pathname = os.path.join(self.fixture_dir, "json-stat.org", "oecd-canada.json")
+        collection = jsonstat.JsonStatCollection()
+        collection.from_file(json_pathname)
+        oecd = collection.dataset('oecd')
+
+        dcat = {'concept': 'UNR', 'area': 'AU', 'year': '2013'}
+        lint = oecd.dcat_to_lint(dcat)
         self.assertEqual(lint, [0, 0, 10])
 
-    #
-    # test from functions
-    #
+        idx = oecd.lint_as_idx(lint)
+        self.assertEqual(idx, 10)
 
-    def test_from_vec_idx_to_vec_dim(self):
-        json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
-        dataset = jsonstat.JsonStatDataSet("canada")
-        dataset.from_file(json_pathname)
+    def test_idx_as_lint(self):
+        json_pathname = os.path.join(self.fixture_dir, "json-stat.org", "oecd-canada.json")
+        collection = jsonstat.JsonStatCollection()
+        collection.from_file(json_pathname)
+        oecd = collection.dataset('oecd')
 
-        ret = dataset._from_aidx_to_adim(["area", "year"])
-        self.assertEqual([2, 1], ret)
-
-        ret = dataset._from_aidx_to_adim(["year", "area"])
-        self.assertEqual([1, 2], ret)
+        lint = oecd.idx_as_lint(10)
+        self.assertEqual(lint, [0, 0, 10])
 
     #
     # enumeration function
@@ -265,8 +272,7 @@ class TestDataSet(unittest.TestCase):
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(json_pathname)
 
-        reorder = dataset._from_aidx_to_adim(["area", "year", "serie"])
-        result = list(dataset.all_pos(order=reorder))
+        result = list(dataset.all_pos(order=["area", "year", "serie"]))
         # fist digit is serie always 0
         # second digit is year from 0 to 2
         # third digit is area from 0 to 3
