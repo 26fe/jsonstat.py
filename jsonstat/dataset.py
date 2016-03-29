@@ -107,12 +107,12 @@ class JsonStatDataSet:
         # dimensions
         self.__dim_nr = 0  # len(self.__pos2dim)
 
-        self.__pos2size = []    # array int -> int (dimension size)
+        self.__pos2size = []  # array int -> int (dimension size)
         self.__pos2mult = None  # array int -> multiplicative factor
 
-        self.__pos2dim = []   # array int -> dim
-        self.__iid2dim = {}   # dict  id  -> dim
-        self.__lbl2dim = {}   # dict  lbl -> dim
+        self.__pos2dim = []  # array int -> dim
+        self.__did2dim = {}  # dict  id  -> dim
+        self.__lbl2dim = {}  # dict  lbl -> dim
 
         self.__value = None
         self.__status = None
@@ -174,11 +174,11 @@ class JsonStatDataSet:
         """
         if type(spec) is int:
             return self.__pos2dim[spec]
-        if spec not in self.__iid2dim:
+        if spec not in self.__did2dim:
             msg = "dataset '{}': unknown dimension '{}' know dimensions ids are: {}"
             msg = msg.format(self.__name, spec, ", ".join([dim.name() for dim in self.__pos2dim]))
             raise JsonStatException(msg)
-        return self.__iid2dim[spec]
+        return self.__did2dim[spec]
 
     def __str__dimensions(self):
         lst = [["pos", "id", "label", "size", "role"]]
@@ -202,8 +202,9 @@ class JsonStatDataSet:
         print(self.__str__dimensions())
 
     def _repr_html_(self):
-        out ="in ipython"
+        out = "in ipython"
         return out
+
     #
     # querying value/status
     #
@@ -346,8 +347,8 @@ class JsonStatDataSet:
         apos = len(self.__pos2dim) * [0]
         for (cat, val) in dims.items():
             # key is id
-            if cat in self.__iid2dim:
-                dim = self.__iid2dim[cat]
+            if cat in self.__did2dim:
+                dim = self.__did2dim[cat]
             # key is label
             elif cat in self.__lbl2dim:
                 dim = self.__lbl2dim[cat]
@@ -395,7 +396,7 @@ class JsonStatDataSet:
         vec_idx = []
         for pos in range(len(vec_pos)):
             dim = self.__pos2dim[pos]
-            if not(without_one_dimension and len(dim) == 1):
+            if not (without_one_dimension and len(dim) == 1):
                 vec_idx.append(dim._pos2cat(vec_pos[pos]).index)
         return vec_idx
 
@@ -415,12 +416,12 @@ class JsonStatDataSet:
                 lbl = dim._pos2cat(apos[pos]).index
 
             # vec_idx[i] = lbl
-            if not(without_one_dimension and len(dim) == 1):
+            if not (without_one_dimension and len(dim) == 1):
                 aidx.append(lbl)
 
         return aidx
 
-    def _from_aidx_to_adim(self, lst_iids):
+    def _from_aidx_to_adim(self, ldid):
         """From a list of dimension name to a list of numerical dimension position
 
           F.e.
@@ -429,7 +430,7 @@ class JsonStatDataSet:
 
         :returns: list of number
         """
-        return [self.__iid2dim[iid].pos() for iid in lst_iids]
+        return [self.__did2dim[did].pos() for did in ldid]
 
     #
     # generators
@@ -448,8 +449,8 @@ class JsonStatDataSet:
             if len(order) != nr_dim:
                 msg = "length of the order vector is different from number of dimension {}".format(nr_dim)
                 raise JsonStatException(msg)
-            if isinstance(order[1],str):
-                order = [self.__iid2dim[iid].pos() for iid in order]
+            if not isinstance(order[1], int):
+                order = [self.__did2dim[iid].pos() for iid in order]
 
         vec_pos_blocked = nr_dim * [False]
         vec_pos = nr_dim * [0]
@@ -538,13 +539,13 @@ class JsonStatDataSet:
             table.append(row)
 
         if rtype == pd.DataFrame:
-            ret = pd.DataFrame(table[1:],columns=table[0])
+            ret = pd.DataFrame(table[1:], columns=table[0])
         else:
             ret = table
 
         return ret
 
-    def to_data_frame(self, index, content="label", order=None, blocked_dims={},value_column="Value"):
+    def to_data_frame(self, index, content="label", order=None, blocked_dims={}, value_column="Value"):
         """Transform dataset to pandas data frame
 
         extract_bidimensional("year", "country")
@@ -831,7 +832,7 @@ class JsonStatDataSet:
 
             dimension = JsonStatDimension(dname, dsize, dpos, roles.get(dname))
             dimension.from_json(json_data_dimension[dname])
-            self.__iid2dim[dname] = dimension
+            self.__did2dim[dname] = dimension
             self.__pos2dim[dpos] = dimension
             if dimension.label() is not None:
                 self.__lbl2dim[dimension.label()] = dimension
