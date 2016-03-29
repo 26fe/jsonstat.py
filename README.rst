@@ -117,6 +117,43 @@ For more python script examples see
 For jupyter (ipython) notebooks see
 `examples-notebooks directory <https://github.com/26fe/jsonstat.py/tree/master/examples-notebooks>`_
 
+Support
+=======
+
+This is an open source project, maintained in my spare time.
+This may well mean that particular features or functions that you would like are missing.
+But things don’t have to stay that way: you can contribute the project development yourself.
+
+
+Bug reports and feature requests should be submitted using the github issue tracker.
+Please provide a full traceback of any error you see and if possible a sample file.
+If you are unable to make a file publicly available then contact me.
+
+
+How to Contribute Code
+======================
+
+Any help will be greatly appreciated, just follow those steps:
+
+    1. Please start a new fork for each independent feature,
+    don’t try to fix all problems at the same time,
+    it’s easier for those who will review and merge your changes.
+
+    2. Write your code
+
+    3. Add unit tests for your changes!
+    (changes without tests will not be accepted.)
+
+    4. If you added a whole new feature, or just improved something, you can be proud of it,
+    so add yourself to the AUTHORS file :-)
+
+    5. Update the docs!
+
+    6. When it’s done, just issue a pull request (click on the large “pull request” button on your repository)
+    and wait for your code to be reviewed, and, if you followed all theses steps, merged into the main repository.
+
+
+
 License
 =======
 
