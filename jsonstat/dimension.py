@@ -22,7 +22,7 @@ JsonStatCategory = namedtuple('JsonStatCategory', ['label', 'index', 'pos'])
 class JsonStatDimension:
     """Represents a JsonStat Dimension. It is contained into a JsonStat Dataset.
 
-
+    >>> from jsonstat import JsonStatDimension
     >>> json_string = '''{
     ...                    "label" : "concepts",
     ...                    "category" : {

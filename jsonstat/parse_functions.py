@@ -52,7 +52,8 @@ def from_json(json_data):
     :param json_data: data structure (dictionary) representing a json
     :returns: a JsonStatCollection, JsonStatDataset or JsonStatDimension object
 
-    >>> import jsonstat
+    >>> import json, jsonstat
+    >>> from collections import OrderedDict
     >>> json_string_v1 = '''{
     ...                       "oecd" : {
     ...                         "value": [1],

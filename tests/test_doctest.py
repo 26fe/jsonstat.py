@@ -7,6 +7,7 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 import sys
+import os
 import unittest
 import doctest
 
@@ -22,6 +23,8 @@ def load_tests(loader, tests, ignore):
         tests.addTests(doctest.DocTestSuite(jsonstat.dimension))
         tests.addTests(doctest.DocTestSuite(jsonstat.dataset))
         tests.addTests(doctest.DocTestSuite(jsonstat.collection))
+        doc_dir = os.path.join(os.path.dirname(__file__), "..", "docs")
+        tests.addTests(doctest.DocFileSuite(os.path.join(doc_dir, 'tutorial.rst'), module_relative=False))
     return tests
 
 
