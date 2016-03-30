@@ -42,9 +42,11 @@ and utility functions to parse `jsonstat data format <https://json-stat.org/>`_.
         "role"      : roles of dimension
         "value"     : [<int>, <int> ]
         "status"    : status
-        "dimension" : { <dimension_id> : dataset, ...}
+        "dimension" : { <dimension_id> : dimension, ...}
         "link"      :
         }
+
+ dimension_id := <string>
 
  # possible values of dimension are called categories
  dimension := {

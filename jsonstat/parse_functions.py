@@ -176,3 +176,7 @@ def from_url(url, filename=None):
     """
     json_string = download(url, filename)
     return from_string(json_string)
+
+
+def validate(json_string):
+    return True

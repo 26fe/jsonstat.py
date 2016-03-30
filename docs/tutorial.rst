@@ -59,3 +59,35 @@ This would output:
 
 
 
+
+.. testcode::
+
+   >>> json_string_dimension_sex = '''
+    ... {
+    ...     "label" : "sex",
+    ...     "category" : {
+    ...       "index" : {
+    ...         "M" : 0,
+    ...         "F" : 1,
+    ...         "T" : 2
+    ...       },
+    ...       "label" : {
+    ...         "M" : "men",
+    ...         "F" : "women",
+    ...         "T" : "total"
+    ...       }
+    ...     }
+    ... }
+    ... '''
+    >>> dim = JsonStatDimension(did="sex").from_string(json_string_dimension_sex)
+    >>> len(dim)
+    3
+
+This would output:
+
+.. testoutput::
+
+   4
+
+
+
