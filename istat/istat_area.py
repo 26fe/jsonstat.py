@@ -75,7 +75,7 @@ class IstatArea:
         for cod, ds in sorted(self.__cod2dataset.items()):
             html += "<tr>"
             html += "<td>{}</td>".format(cod)
-            html += "<td>{}</td>".format(ds.did())
+            html += "<td>{}</td>".format(ds.name())
             html += "<td>{}</td>".format(ds.nrdim())
             html += "</td>"
             html += "</tr>"

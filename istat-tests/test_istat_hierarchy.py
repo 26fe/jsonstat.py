@@ -31,23 +31,23 @@ class TestIstat(unittest.TestCase):
         n = i_it.area(26).desc()
         self.assertEqual("Lavoro", n)
 
-        d = i_it.area(26).dataset('DCCV_INATTIVMENS').did()
+        d = i_it.area(26).dataset('DCCV_INATTIVMENS').name()
         self.assertEqual(u'Inattivi - dati mensili', d)
 
-        dname = i_it.area(26).dataset('DCCV_INATTIVMENS').dimension(0).did()
+        dname = i_it.area(26).dataset('DCCV_INATTIVMENS').dimension(0).name()
         self.assertEqual("Territorio", dname)
 
     def test_istat_english(self):
         n = self.i_en.area(26).desc()
         self.assertEqual("Labour", n)
 
-        d = self.i_en.area(26).dataset('DCCV_INATTIVMENS').did()
+        d = self.i_en.area(26).dataset('DCCV_INATTIVMENS').name()
         self.assertEqual(u'Inactive population - monthly data', d)
 
         dim = self.i_en.area(26).dataset('DCCV_INATTIVMENS').dimension(0)
-        self.assertEqual('Territory', dim.did())
+        self.assertEqual('Territory', dim.name())
         
-        dname = self.i_en.area(26).dataset('DCCV_INATTIVMENS').dimension(0).did()
+        dname = self.i_en.area(26).dataset('DCCV_INATTIVMENS').dimension(0).name()
         self.assertEqual("Territory", dname)
 
     def test_areas(self):
@@ -60,13 +60,13 @@ class TestIstat(unittest.TestCase):
 
         istat_dataset = self.i_en.dataset(istat_area_name, istat_dataset_name)
         istat_dimension = istat_dataset.dimension(0)
-        self.assertEqual("Territory", istat_dimension.did())
+        self.assertEqual("Territory", istat_dimension.name())
 
         collection = istat_dataset.getvalues("1,18,0,0,0")
         self.assertEqual(1, len(collection))
 
         dataset = collection.dataset(0)
-        self.assertEqual('IDMISURA1*IDTYPPURCH*IDTIME', dataset.did())
+        self.assertEqual('IDMISURA1*IDTYPPURCH*IDTIME', dataset.name())
 
         # same istat dataset with explicit dimension
         spec = {
@@ -78,7 +78,7 @@ class TestIstat(unittest.TestCase):
         }
         collection = istat_dataset.getvalues(spec)
         dataset = collection.dataset(0)
-        self.assertEqual('IDMISURA1*IDTYPPURCH*IDTIME', dataset.did())
+        self.assertEqual('IDMISURA1*IDTYPPURCH*IDTIME', dataset.name())
         self.assertEquals(207, len(dataset))
 
         # same istat dataset with explicit dimension
@@ -91,7 +91,7 @@ class TestIstat(unittest.TestCase):
         }
         collection = istat_dataset.getvalues(spec)
         dataset = collection.dataset(0)
-        self.assertEqual('IDMISURA1*IDTYPPURCH*IDTIME', dataset.did())
+        self.assertEqual('IDMISURA1*IDTYPPURCH*IDTIME', dataset.name())
         self.assertEquals(207, len(dataset))
 
 if __name__ == '__main__':
