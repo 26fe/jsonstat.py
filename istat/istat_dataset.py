@@ -71,7 +71,7 @@ class IstatDataset:
         for i, dim in enumerate(self.__pos2dim):
             html += "<tr>"
             html += "<td>{}</td>".format(i)
-            html += "<td>{}</td>".format(dim.name())
+            html += "<td>{}</td>".format(dim.did())
             html += "<td>{}</td>".format(len(dim))
             html += "<td>{}</td>".format(dim.values_as_str(show_values))
             html += "</td>"
@@ -127,7 +127,7 @@ class IstatDataset:
                 # search value into the description
                 if value != 0 and dim.cod2desc(value) is None:
                     if dim.desc2cod(value) is None:
-                        msg = "unknown value '{}' for dimension '{}'".format(value, dim.name())
+                        msg = "unknown value '{}' for dimension '{}'".format(value, dim.did())
                         raise IstatException(msg)
                     value = dim.desc2cod(value)
 

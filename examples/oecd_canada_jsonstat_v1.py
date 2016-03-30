@@ -12,6 +12,7 @@ import os
 
 # http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
 import sys
+
 # TODO: remove following hack
 # http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
 if sys.version_info < (3,):
@@ -42,7 +43,7 @@ def test(uri, cache_dir, json_filename):
     oecd.info()
 
     for d in oecd.dimensions():
-        print("\n*** info for dimensions '{}'".format(d.name()))
+        print("\n*** info for dimensions '{}'".format(d.did()))
         d.info()
 
     print("\n*** value oecd(area:IT,year:2012): {}".format(oecd.data(area='IT', year='2012')))
@@ -50,10 +51,11 @@ def test(uri, cache_dir, json_filename):
     print("\ngenerate all vec")
     oecd.generate_all_vec(area='CA')
 
-    df = oecd.to_data_frame('year', content='id', blocked_dims={'area':'CA'})
+    df = oecd.to_data_frame('year', content='id', blocked_dims={'area': 'CA'})
     print(df)
 
     table = oecd.to_table()
+
 
 if __name__ == "__main__":
     uri = 'http://json-stat.org/samples/oecd-canada.json'

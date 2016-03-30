@@ -38,7 +38,7 @@ def test(uri, cache_dir):
     print("\n*** dataset '{}' info".format(oecd.name()))
     oecd.info()
     for d in oecd.dimensions():
-        print("\n*** info for dimensions '{}'".format(d.name()))
+        print("\n*** info for dimensions '{}'".format(d.did()))
         d.info()
 
     print("\n*** value oecd(area:IT,year:2012): {}".format(oecd.data(area='IT', year='2012')))

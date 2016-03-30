@@ -115,7 +115,7 @@ class TestDataSet(unittest.TestCase):
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(json_pathname)
 
-        self.assertEqual(dataset.dimension("year").name(), "year")
+        self.assertEqual(dataset.dimension("year").did(), "year")
         with self.assertRaises(jsonstat.JsonStatException) as cm:
             dataset.dimension("not existent dim")
         e = cm.exception

@@ -46,7 +46,7 @@ if __name__ == "__main__":
     for istat_dataset in area.datasets():
         # TODO: this not works print(istat_dataset)
         try:
-            print(u"{}({}):{}".format(istat_dataset.cod(), istat_dataset.nrdim(), istat_dataset.name()))
+            print(u"{}({}):{}".format(istat_dataset.cod(), istat_dataset.nrdim(), istat_dataset.did()))
         except istat.IstatException as e:
             # ignore exception
             # TODO: better diagnostic?

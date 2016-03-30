@@ -79,7 +79,7 @@ class TestDimension(unittest.TestCase):
 
     def test_getters(self):
         dim = jsonstat.JsonStatDimension("test_dim", 10, 0, 'role')
-        self.assertEqual(dim.name(), "test_dim")
+        self.assertEqual(dim.did(), "test_dim")
         self.assertEqual(len(dim), 10)
         self.assertEqual(dim.pos(), 0)
         self.assertEqual(dim.role(), "role")
@@ -98,7 +98,7 @@ class TestDimension(unittest.TestCase):
     def test_exception_hole_in_category_index(self):
         dim = jsonstat.JsonStatDimension("year", 8, 0, None)
 
-        r = "index \d+ for dimension 'year' is greater than size 8"
+        r = "dimension 'year': index \d+ is greater than size 8"
 
         # following code doesn't work with python 2.7.11
         # with self.assertRaisesRegex(jsonstat.JsonStatException, r):

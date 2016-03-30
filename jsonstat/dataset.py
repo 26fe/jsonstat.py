@@ -26,7 +26,6 @@ JsonStatValue = namedtuple('JsonStatValue', ['idx', 'value', 'status'])
 class JsonStatDataSet:
     """Represents a JsonStat dataset
 
-
         >>> import os, jsonstat  # doctest: +ELLIPSIS
         >>> filename = os.path.join(jsonstat.__fixtures_dir, "json-stat.org", "oecd-canada-col.json")
         >>> dataset = jsonstat.from_file(filename).dataset(0)
@@ -86,8 +85,6 @@ class JsonStatDataSet:
         +-----+--------+----------------------------+
         >>> dataset.data(0)
         JsonStatValue(idx=0, value=5.943826289, status=None)
-
-
     """
 
     def __init__(self, name=None):
@@ -176,14 +173,14 @@ class JsonStatDataSet:
             return self.__pos2dim[spec]
         if spec not in self.__did2dim:
             msg = "dataset '{}': unknown dimension '{}' know dimensions ids are: {}"
-            msg = msg.format(self.__name, spec, ", ".join([dim.name() for dim in self.__pos2dim]))
+            msg = msg.format(self.__name, spec, ", ".join([dim.did() for dim in self.__pos2dim]))
             raise JsonStatException(msg)
         return self.__did2dim[spec]
 
     def __str__dimensions(self):
         lst = [["pos", "id", "label", "size", "role"]]
         for i, dim in enumerate(self.__pos2dim):
-            row = [str(i), dim.name(), dim.label(), str(len(dim)), dim.role()]
+            row = [str(i), dim.did(), dim.label(), str(len(dim)), dim.role()]
             row = list(map(lambda x: "" if x is None else x, row))
             lst.append(row)
         table = terminaltables.AsciiTable(lst)
@@ -523,7 +520,7 @@ class JsonStatDataSet:
         if content == "label":
             header = [dim.label() for dim in self.__pos2dim]
         else:
-            header = [dim.name() for dim in self.__pos2dim]
+            header = [dim.did() for dim in self.__pos2dim]
 
         header.append(value_column)
 
