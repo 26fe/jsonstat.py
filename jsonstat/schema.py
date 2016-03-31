@@ -1,9 +1,17 @@
+# -*- coding: utf-8 -*-
+# This file is part of https://github.com/26fe/jsonstat.py
+# Copyright (C) 2016 gf <gf@26fe.com>
+# See LICENSE file
+
 # version was introduced in version 2.0. That’s why this property can’t accept values lower than 2.00.
 version = {"type": "string", "pattern": "^[0-9]+\.[0-9]+$"}
-# 2012-12-27T12:25:09Z
+
+# parse data like 2012-12-27T12:25:09Z
 updated = {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}(T\d+:\d+:\d+Z?)?$"}
 
+# parse href field
 href = {"type": "string", "pattern": "^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$"}
+
 
 category_unit = {"type": "object",
                  "properties": {"additionalProperties": {"type": "object",
