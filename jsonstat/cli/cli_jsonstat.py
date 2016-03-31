@@ -21,10 +21,15 @@ except ImportError:
     import jsonstat
 
 
-@click.command()
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
 @click.option('--cache_dir', default='./data', help='where to store downloaded files')
 @click.argument('urls', nargs=-1)
-def jsonstat_cli(cache_dir, urls):
+def info(cache_dir, urls):
     # this function name will go into the setup.py,
     # if you rename it check setup.py
     if len(urls) == 0:
@@ -42,5 +47,11 @@ def jsonstat_cli(cache_dir, urls):
     print(collection)
 
 
+@cli.command()
+@click.argument('file', nargs=-1)
+def validate():
+    click.echo('Validate')
+    jsonstat.validate("")
+
 if __name__ == "__main__":
-    jsonstat_cli()
+    cli()

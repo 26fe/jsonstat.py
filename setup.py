@@ -76,7 +76,7 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'jsonstat=jsonstat.cli.cli_jsonstat:jsonstat_cli',  # command=package.module:function
+            'jsonstat=jsonstat.cli.cli_jsonstat:cli',  # command=package.module:function
         ],
     },
 

@@ -178,5 +178,30 @@ def from_url(url, filename=None):
     return from_string(json_string)
 
 
-def validate(json_string):
+def validate(spec):
+    try:
+        import jsonschema
+    except ImportError:
+        print("to validate install jsonschema")
+        return
+
+    import jsonstat.schema as JS_SCHEMA
+
+    if not isinstance(spec, dict):
+        json_data = json.loads(spec, object_pairs_hook=OrderedDict)
+    else:
+        json_data = spec
+    if "version" not in json_data:
+        raise JsonStatException("cannot validate jsonstat version < 2.0")
+    class_ = json_data.get("class", "collection")
+
+    schema = {
+        "collection": JS_SCHEMA.collection,
+        "dataset": JS_SCHEMA.dataset,
+        "dimension": JS_SCHEMA.dimension
+    }[class_]
+    try:
+        jsonschema.validate(json_data, schema)
+    except jsonschema.exceptions.SchemaError as e:
+        return False
     return True

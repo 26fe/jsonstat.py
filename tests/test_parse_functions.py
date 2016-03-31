@@ -18,7 +18,8 @@ class TestParseFunctions(unittest.TestCase):
     def setUp(self):
         self.fixture_jsonstat_org_dir = os.path.join(os.path.dirname(__file__), "fixtures", "json-stat.org")
 
-        self.json_string_v1_one_dataset = """
+    def test_parse_collection(self):
+        json_string_v1_one_dataset = """
         {
             "oecd" : {
                 "value": [1],
@@ -30,8 +31,10 @@ class TestParseFunctions(unittest.TestCase):
             }
         }
         """
+        ret = jsonstat.from_string(json_string_v1_one_dataset)
+        self.assertIsInstance(ret, jsonstat.JsonStatCollection)
 
-        self.json_string_v1_two_datasets = """
+        json_string_v1_two_datasets = """
         {
             "oecd" : {
                 "value": [1],
@@ -51,9 +54,7 @@ class TestParseFunctions(unittest.TestCase):
             }
         }
         """
-
-    def test_parse_collection(self):
-        ret = jsonstat.from_string(self.json_string_v1_one_dataset)
+        ret = jsonstat.from_string(json_string_v1_two_datasets)
         self.assertIsInstance(ret, jsonstat.JsonStatCollection)
 
     def test_parse_dataset(self):
@@ -63,7 +64,7 @@ class TestParseFunctions(unittest.TestCase):
         self.assertIsInstance(dataset, jsonstat.JsonStatDataSet)
         self.assertEqual(120, len(dataset))
 
-    def test_dimension(self):
+    def test_parse_dimension(self):
         self.json_string_dimension = """
         {
             "version" : "2.0",
@@ -90,6 +91,7 @@ class TestParseFunctions(unittest.TestCase):
                 ret = jsonstat.from_file(jsonstat_file)
                 msg = "parsing {}".format(jsonstat_file)
                 self.assertIsNotNone(ret, msg)
+
 
 if __name__ == '__main__':
     unittest.main()

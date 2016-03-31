@@ -13,10 +13,10 @@ import unittest
 from click.testing import CliRunner
 
 # jsonstat
-from jsonstat.cli.cli_jsonstat import jsonstat_cli
+from jsonstat.cli.cli_jsonstat import cli
 
 
-class TestCollection(unittest.TestCase):
+class TestCli(unittest.TestCase):
 
     def setUp(self):
         self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures")
@@ -26,9 +26,9 @@ class TestCollection(unittest.TestCase):
         # TODO: download from a local webserver, eliminate network dipendence
 
         cache_dir = os.path.join(self.fixture_dir, 'cli')
-        args = ['--cache_dir', cache_dir]
+        args = ['info', '--cache_dir', cache_dir]
         runner = CliRunner()
-        result = runner.invoke(jsonstat_cli, args)
+        result = runner.invoke(cli, args)
         self.assertEqual(result.exit_code, 0)
 
         # print("#{}#".format(result.output))
