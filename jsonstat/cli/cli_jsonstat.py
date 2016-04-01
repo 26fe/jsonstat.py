@@ -22,6 +22,8 @@ except ImportError:
 
 
 @click.group()
+# this function name will go into the setup.py,
+# if you rename it check setup.py
 def cli():
     pass
 
@@ -30,10 +32,8 @@ def cli():
 @click.option('--cache_dir', default='./data', help='where to store downloaded files')
 @click.argument('urls', nargs=-1)
 def info(cache_dir, urls):
-    # this function name will go into the setup.py,
-    # if you rename it check setup.py
     if len(urls) == 0:
-        urls = ['http://json-stat.org/samples/oecd-canada.json']
+        urls = ['http://json-stat.org/samples/oecd-canada-col.json']
 
     url = urls[0]
 
@@ -48,10 +48,11 @@ def info(cache_dir, urls):
 
 
 @cli.command()
-@click.argument('file', nargs=-1)
-def validate():
+@click.argument('file', nargs=1) #help="file containing jsonstat to validate")
+def validate(file):
     click.echo('Validate')
-    jsonstat.validate("")
+    contents = open(file).read()
+    jsonstat.validate(contents)
 
 if __name__ == "__main__":
     cli()

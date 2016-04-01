@@ -17,7 +17,6 @@ from jsonstat.cli.cli_jsonstat import cli
 
 
 class TestCli(unittest.TestCase):
-
     def setUp(self):
         self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures")
 
@@ -31,19 +30,19 @@ class TestCli(unittest.TestCase):
         result = runner.invoke(cli, args)
         self.assertEqual(result.exit_code, 0)
 
-        # print("#{}#".format(result.output))
         expected = [
             u"downloaded file(s) are stored into '{}'\n".format(cache_dir),
-            u"download 'http://json-stat.org/samples/oecd-canada.json'\n",
+            u"download 'http://json-stat.org/samples/oecd-canada-col.json'\n",
             u"JsonstatCollection contains the following JsonStatDataSet:\n",
-            u"+-----+----------+\n",
-            u"| pos | dataset  |\n",
-            u"+-----+----------+\n",
-            u"| 0   | 'oecd'   |\n",
-            u"| 1   | 'canada' |\n",
-            u"+-----+----------+\n"
+            u"+-----+-----------------------------------------------------+\n",
+            u"| pos | dataset                                             |\n",
+            u"+-----+-----------------------------------------------------+\n",
+            u"| 0   | 'Unemployment rate in the OECD countries 2003-2014' |\n",
+            u"| 1   | 'Population by sex and age group. Canada. 2012'     |\n",
+            u"+-----+-----------------------------------------------------+\n"
         ]
         expected = ''.join(expected)
+        self.maxDiff = None
         self.assertEqual(result.output, expected)
 
 
