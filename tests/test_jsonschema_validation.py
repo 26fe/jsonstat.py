@@ -15,12 +15,20 @@ import jsonschema
 
 # jsonstat
 import jsonstat
-import jsonstat.schema as JS_SCHEMA
+from jsonstat.schema import JsonStatSchema
 
 
 class TestJsonSchemaValidation(unittest.TestCase):
     def setUp(self):
         self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures")
+        self.__schema = JsonStatSchema()
+
+    def validate(self, jsonstat, schemas):
+        try:
+            for s in schemas:
+                jsonschema.validate(jsonstat, s)
+        except jsonschema.exceptions.SchemaError as e:
+            self.fail("validate failed!")
 
     def test_dimension(self):
         # dimension.index as array
@@ -36,11 +44,7 @@ class TestJsonSchemaValidation(unittest.TestCase):
                     }
                 }
         }
-        try:
-            jsonschema.validate(jsonstat_dimension, JS_SCHEMA.dimension)
-        except jsonschema.exceptions.SchemaError as e:
-            self.fail("validate failed!")
-
+        self.validate(jsonstat_dimension, [self.__schema.dimension, self.__schema.all])
         # dimension.child
         jsonstat_dimension = {
             "label": "activity status",
@@ -65,11 +69,7 @@ class TestJsonSchemaValidation(unittest.TestCase):
                 }
             }
         }
-        try:
-            jsonschema.validate(jsonstat_dimension, JS_SCHEMA.dimension)
-        except jsonschema.exceptions.SchemaError as e:
-            self.fail("validate failed!")
-
+        self.validate(jsonstat_dimension, [self.__schema.dimension])
         # dimension.coordinates
         jsonstat_dimension = {
             "category": {
@@ -81,10 +81,7 @@ class TestJsonSchemaValidation(unittest.TestCase):
                 }
             }
         }
-        try:
-            jsonschema.validate(jsonstat_dimension, JS_SCHEMA.dimension)
-        except jsonschema.exceptions.SchemaError as e:
-            self.fail("validate failed!")
+        self.validate(jsonstat_dimension, [self.__schema.dimension])
 
         json_string = '''
         {
@@ -117,10 +114,8 @@ class TestJsonSchemaValidation(unittest.TestCase):
             }
         }'''
         jsonstat_dimension = json.loads(json_string)
-        try:
-            jsonschema.validate(jsonstat_dimension, JS_SCHEMA.dimension)
-        except jsonschema.exceptions.SchemaError as e:
-            self.fail("validate failed!")
+        self.validate(jsonstat_dimension, [self.__schema.dimension])
+
 
     def test_dataset(self):
         jsonstat_dataset = {
@@ -135,11 +130,7 @@ class TestJsonSchemaValidation(unittest.TestCase):
             "value": []
         }
 
-        try:
-            jsonschema.validate(jsonstat_dataset, JS_SCHEMA.dataset)
-        except jsonschema.exceptions.SchemaError as e:
-            self.fail("validate failed!")
-
+        self.validate(jsonstat_dataset, [self.__schema.dataset])
         # dataset.role
         jsonstat_dataset = {
             "version": "2.0",
@@ -152,10 +143,7 @@ class TestJsonSchemaValidation(unittest.TestCase):
                 "metric": ["concept"]
             }}
 
-        try:
-            jsonschema.validate(jsonstat_dataset, JS_SCHEMA.dataset)
-        except jsonschema.exceptions.SchemaError as e:
-            self.fail("validate failed!")
+        self.validate(jsonstat_dataset, [self.__schema.dataset, self.__schema.all])
 
         # dataset.value null value
         json_string = """{
@@ -166,10 +154,7 @@ class TestJsonSchemaValidation(unittest.TestCase):
         """
         jsonstat_dataset3 = json.loads(json_string)
         # print(self.jsonstat_dataset3)
-        try:
-            jsonschema.validate(jsonstat_dataset3, JS_SCHEMA.dataset)
-        except jsonschema.exceptions.SchemaError as e:
-            self.fail("validate failed!")
+        self.validate(jsonstat_dataset, [self.__schema.dataset, self.__schema.all])
 
         # dataset.value as dict
         jsonstat_dataset = {
@@ -177,10 +162,7 @@ class TestJsonSchemaValidation(unittest.TestCase):
             "class": "dataset",
             "value": {"0": 1.3587, "18": 1.5849},
         }
-        try:
-            jsonschema.validate(jsonstat_dataset, JS_SCHEMA.dataset)
-        except jsonschema.exceptions.SchemaError as e:
-            self.fail("validate failed!")
+        self.validate(jsonstat_dataset, [self.__schema.dataset, self.__schema.all])
 
         # dataset.status
         json_string = """{
@@ -190,10 +172,7 @@ class TestJsonSchemaValidation(unittest.TestCase):
             "status": ["a", "m", "a", "a", "p"]
         }"""
         jsonstat_dataset = json.loads(json_string)
-        try:
-            jsonschema.validate(jsonstat_dataset, JS_SCHEMA.dataset)
-        except jsonschema.exceptions.SchemaError as e:
-            self.fail("validate failed!")
+        self.validate(jsonstat_dataset, [self.__schema.dataset, self.__schema.all])
 
         # dataset.status
         jsonstat_dataset6 = {
@@ -202,10 +181,7 @@ class TestJsonSchemaValidation(unittest.TestCase):
             "value": [100, 99, 102, 103, 104],
             "status": "e",
         }
-        try:
-            jsonschema.validate(jsonstat_dataset6, JS_SCHEMA.dataset)
-        except jsonschema.exceptions.SchemaError as e:
-            self.fail("validate failed!")
+        self.validate(jsonstat_dataset, [self.__schema.dataset, self.__schema.all])
 
         # dataset.status
         jsonstat_dataset7 = json.loads("""{
@@ -215,10 +191,7 @@ class TestJsonSchemaValidation(unittest.TestCase):
             "status": {"1": "m"}
         }""")
 
-        try:
-            jsonschema.validate(jsonstat_dataset7, JS_SCHEMA.dataset)
-        except jsonschema.exceptions.SchemaError as e:
-            self.fail("validate failed!")
+        self.validate(jsonstat_dataset, [self.__schema.dataset, self.__schema.all])
 
         # dataset.dimension
         jsonstat_dataset = {
@@ -234,10 +207,7 @@ class TestJsonSchemaValidation(unittest.TestCase):
 
             }
         }
-        try:
-            jsonschema.validate(jsonstat_dataset, JS_SCHEMA.dataset)
-        except jsonschema.exceptions.SchemaError as e:
-            self.fail("validate failed!")
+        self.validate(jsonstat_dataset, [self.__schema.dataset, self.__schema.all])
 
         # dataset.link
         jsonstat_dataset = {
@@ -255,10 +225,7 @@ class TestJsonSchemaValidation(unittest.TestCase):
                     }
                 ]}}
 
-        try:
-            jsonschema.validate(jsonstat_dataset, JS_SCHEMA.dataset)
-        except jsonschema.exceptions.SchemaError as e:
-            self.fail("validate failed!")
+        self.validate(jsonstat_dataset, [self.__schema.dataset, self.__schema.all])
 
     def test_collection_complete(self):
 
@@ -292,18 +259,15 @@ class TestJsonSchemaValidation(unittest.TestCase):
                 "item": [jsonstat_dataset]
             }
         }
+        self.validate(jsonstat_dimension_sex, [self.__schema.dimension])
+
         try:
-            jsonschema.validate(jsonstat_dimension_sex, JS_SCHEMA.dimension)
+            jsonschema.validate(jsonstat_dataset, self.__schema.dataset)
         except jsonschema.exceptions.SchemaError as e:
             self.fail("validate failed!")
 
         try:
-            jsonschema.validate(jsonstat_dataset, JS_SCHEMA.dataset)
-        except jsonschema.exceptions.SchemaError as e:
-            self.fail("validate failed!")
-
-        try:
-            jsonschema.validate(jsonstat_collection, JS_SCHEMA.collection)
+            jsonschema.validate(jsonstat_collection, self.__schema.collection)
         except jsonschema.exceptions.SchemaError as e:
             self.fail("validate failed!")
 

@@ -185,7 +185,7 @@ def validate(spec):
         print("to validate install jsonschema")
         return
 
-    import jsonstat.schema as JS_SCHEMA
+    from jsonstat.schema import JsonStatSchema
 
     if not isinstance(spec, dict):
         json_data = json.loads(spec, object_pairs_hook=OrderedDict)
@@ -195,13 +195,14 @@ def validate(spec):
         raise JsonStatException("cannot validate jsonstat version < 2.0")
     class_ = json_data.get("class", "collection")
 
-    schema = {
-        "collection": JS_SCHEMA.collection,
-        "dataset": JS_SCHEMA.dataset,
-        "dimension": JS_SCHEMA.dimension
-    }[class_]
+    schema = JsonStatSchema()
+    # schema = {
+    #     "collection": schema.collection,
+    #     "dataset": schema.dataset,
+    #     "dimension": schema.dimension
+    # }[class_]
     try:
-        jsonschema.validate(json_data, schema)
+        jsonschema.validate(json_data, schema.all)
     except jsonschema.exceptions.SchemaError as e:
         return False
     return True

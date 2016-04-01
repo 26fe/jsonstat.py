@@ -1,0 +1,145 @@
+{
+  "definitions": {
+
+    "version": {"type": "string", "pattern": "^[0-9]+[.][0-9]+$"},
+
+    "updated": {"type": "string", "format": "date-time"},
+
+    "href": {"type": "string", "format": "uri"},
+
+    "category_index": {
+        "anyOf": [
+            {"type": "array"},
+            {"type": "object", "properties": {"additionalProperties": {"type": "number"}}}
+        ]
+    },
+
+    "category_unit": {
+        "type": "object",
+        "properties": {
+            "additionalProperties": {
+                "type": "object",
+                "properties": {"label": {"type": "string"},
+                               "decimals": {"type": "number"},
+                               "type": {"type": "string"},
+                               "base": {"type": "string"},
+                               "multiplier": {"type": "number"},
+                               "position": {"type": "string"}},
+                "additionalProperties": false
+            }
+        }
+    },
+
+    "category": {
+        "type": "object",
+        "properties": {
+            "index": {"$ref": "#/definitions/category_index"},
+            "label": {"type": "object"},
+            "note": {"type": "array"},
+            "unit": {"$ref": "#/definitions/category_index"},
+            "child": {"type": "object", "properties": {"additionalProperties": {"type": "array"}}},
+            "coordinates": {"type": "object",
+                            "properties": {"additionalProperties": {"type": "array"}}}
+        },
+        "additionalProperties": false
+    },
+
+    "dimension": {
+        "type": "object",
+        "properties": {
+            "version": {"$ref": "#/definitions/version"},
+            "href": {"$ref": "#/definitions/href"},
+            "class": {"type": "string", "enum": ["dimension"]},
+            "label": {"type": "string"},
+            "note": {"type": "array"},
+            "category": {"$ref": "#/definitions/category"}
+        },
+        "additionalProperties": false
+    },
+
+    "dataset_role": {
+        "type": "object",
+        "properties": {
+            "time": {"type": "array", "items": {"type": "string"}},
+            "geo": {"type": "array", "items": {"type": "string"}},
+            "metric": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+    },
+
+    "dataset_value": {
+        "anyOf": [
+            {"type": "array", "items": {"anyOf": [
+                {"type": "number"},
+                {"type": "null"},
+                {"type": "string"}
+            ]}},
+            {"type": "object",
+             "properties": {"additionalProperties": {"type": "number"}}}]
+    },
+
+    "dataset_link": {
+        "type": "object",
+        "properties": {
+            "additionalProperties": {
+                "type": "array",
+                "items": {"type": "object",
+                          "properties": {"href": {"$ref": "#/definitions/href"},
+                                         "type": {"type": "string"}},
+                          "additionalProperties": false
+                          }
+            }
+        }
+    },
+
+    "dataset": {
+        "type": "object",
+        "properties": {
+            "version": {"$ref": "#/definitions/version"},
+            "class": {"type": "string", "enum": ["dataset"]},
+            "href": {"$ref": "#/definitions/href"},
+            "label": {"type": "string"},
+            "note": {"type": "array"},
+            "source": {"type": "string"},
+            "updated": {"$ref": "#/definitions/updated"},
+            "id": {"type": "array", "items": {"type": "string"}},
+            "size": {"type": "array", "items": {"type": "number"}},
+            "role": {"$ref": "#/definitions/dataset_role"},
+            "dimension": {"type": "object",
+                          "properties": {"additionalProperties": {"$ref": "#/definitions/dimension"}}},
+            "value": {"$ref": "#/definitions/dataset_value"},
+            "status": {"anyOf": [{"type": "string"},
+                                 {"type": "array"},
+                                 {"type": "object"}]},
+            "link": {"$ref": "#/definitions/dataset_link"},
+            "extension": {"type": "object"}
+        },
+        "additionalProperties": false
+    },
+
+    "collection": {
+        "type": "object",
+        "properties": {
+            "version": {"$ref": "#/definitions/version"},
+            "class": {"type": "string", "enum": ["collection"]},
+            "href": {"$ref": "#/definitions/href"},
+            "label": {"type": "string"},
+            "updated": {"$ref": "#/definitions/updated"},
+            "link": {"type": "object",
+                     "properties": {
+                         "item": {
+                             "type": "array",
+                             "items": {"$ref": "#/definitions/dimension_or_dataset_or_collection"}}}
+                     }
+        }
+    },
+
+    "dimension_or_dataset_or_collection": {
+        "anyOf": [
+            {"$ref": "#/definitions/dimension"},
+            {"$ref": "#/definitions/dataset"},
+            {"$ref": "#/definitions/collection"}
+        ]
+    }
+  }
+}
