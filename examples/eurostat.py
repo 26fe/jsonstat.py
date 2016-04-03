@@ -35,7 +35,7 @@ def test(uri, cache_dir, filename):
 
 if __name__ == "__main__":
     # cache_dir directory where store json data downloaded from internet
-    cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "eurostat"))
+    cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "www.ec.europa.eu_eurostat"))
     if not os.path.exists(cache_dir):
         os.makedirs(cache_dir)
 

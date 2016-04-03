@@ -67,7 +67,7 @@ class TestDataSetToTable(unittest.TestCase):
 
     def test_to_table_eurostat_one_dim(self):
         # convert collection to table
-        json_pathname = os.path.join(self.fixture_dir, "eurostat", "eurostat-name_gpd_c-geo_IT.json")
+        json_pathname = os.path.join(self.fixture_dir, "www.ec.europa.eu_eurostat", "eurostat-name_gpd_c-geo_IT.json")
         collection = jsonstat.JsonStatCollection()
         collection.from_file(json_pathname)
         gdp_c = collection.dataset('nama_gdp_c')
@@ -91,7 +91,7 @@ class TestDataSetToTable(unittest.TestCase):
 
     def test_to_table_oecd_canada(self):
         """test convert dataset to table"""
-        json_pathname = os.path.join(self.fixture_dir, "json-stat.org", "oecd-canada.json")
+        json_pathname = os.path.join(self.fixture_dir, "www.json-stat.org", "oecd-canada.json")
         collection = jsonstat.JsonStatCollection()
         collection.from_file(json_pathname)
         oecd = collection.dataset('oecd')
@@ -116,7 +116,7 @@ class TestDataSetToTable(unittest.TestCase):
         """
         test convert dataset to table
         """
-        json_pathname = os.path.join(self.fixture_dir, "ssb_no", "29843.json")
+        json_pathname = os.path.join(self.fixture_dir, "www.ssb.no", "29843.json")
         collection = jsonstat.JsonStatCollection()
         collection.from_file(json_pathname)
         ds = collection.dataset(0)

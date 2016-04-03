@@ -58,7 +58,9 @@ class Downloader:
         pathname = self.__build_pathname(filename, url)
         # note: html must be a str type not byte type
         if time_to_live == 0 or not self.__is_cached(pathname):
-            html = self.__session.get(url).text
+            response = self.__session.get(url)
+            response.raise_for_status()
+            html = response.text
             self.__write_page_from_cache(pathname, html)
         else:
             html = self.__read_cached_page(pathname)

@@ -54,7 +54,6 @@ if __name__ == "__main__":
     uri = 'http://json-stat.org/samples/oecd-canada-col.json'
     json_filename = "oecd-canada-col.json"
 
-    JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
-    cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "json-stat.org"))
+    cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "www.json-stat.org"))
     cache_dir = os.path.abspath(cache_dir)
     test(uri, cache_dir)

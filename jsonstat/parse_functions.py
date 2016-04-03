@@ -26,7 +26,7 @@ def from_file(filename):
     example
 
     >>> import os, jsonstat
-    >>> filename = os.path.join(jsonstat.__fixtures_dir, "json-stat.org", "oecd-canada-col.json")
+    >>> filename = os.path.join(jsonstat.__fixtures_dir, "www.json-stat.org", "oecd-canada-col.json")
     >>> o = jsonstat.from_file(filename)
     >>> type(o)
     <class 'jsonstat.collection.JsonStatCollection'>
@@ -42,7 +42,10 @@ def from_string(json_string):
     :param json_string: string containing a json
     :returns: a JsonStatCollection, JsonStatDataset or JsonStatDimension object
     """
-    json_data = json.loads(json_string, object_pairs_hook=OrderedDict)
+    try:
+        json_data = json.loads(json_string, object_pairs_hook=OrderedDict)
+    except json.decoder.JSONDecodeError:
+        JsonStatException("invalid json")
     return from_json(json_data)
 
 
@@ -134,7 +137,8 @@ def download(url, pathname=None):
     if pathname is None:
         return __downloader__.download(url)
     else:
-        d = Downloader(os.path.dirname(pathname))
+        cache_dir = os.path.dirname(pathname)
+        d = Downloader(cache_dir)
         return d.download(url, os.path.basename(pathname))
 
 

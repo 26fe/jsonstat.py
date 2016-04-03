@@ -201,7 +201,7 @@ class TestDataSet(unittest.TestCase):
         self.assertIsNone(data.status)
 
     def test_data_with_oecd_canada(self):
-        json_pathname = os.path.join(self.fixture_dir, "json-stat.org", "oecd-canada.json")
+        json_pathname = os.path.join(self.fixture_dir, "www.json-stat.org", "oecd-canada.json")
         collection = jsonstat.JsonStatCollection()
         collection.from_file(json_pathname)
         oecd = collection.dataset('oecd')
@@ -226,7 +226,7 @@ class TestDataSet(unittest.TestCase):
     #
 
     def test_dcat_to_lint(self):
-        json_pathname = os.path.join(self.fixture_dir, "json-stat.org", "oecd-canada.json")
+        json_pathname = os.path.join(self.fixture_dir, "www.json-stat.org", "oecd-canada.json")
         collection = jsonstat.JsonStatCollection()
         collection.from_file(json_pathname)
         oecd = collection.dataset('oecd')
@@ -239,7 +239,7 @@ class TestDataSet(unittest.TestCase):
         self.assertEqual(idx, 10)
 
     def test_idx_as_lint(self):
-        json_pathname = os.path.join(self.fixture_dir, "json-stat.org", "oecd-canada.json")
+        json_pathname = os.path.join(self.fixture_dir, "www.json-stat.org", "oecd-canada.json")
         collection = jsonstat.JsonStatCollection()
         collection.from_file(json_pathname)
         oecd = collection.dataset('oecd')

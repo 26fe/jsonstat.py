@@ -16,7 +16,7 @@ import jsonstat
 
 class TestParseFunctions(unittest.TestCase):
     def setUp(self):
-        self.fixture_jsonstat_org_dir = os.path.join(os.path.dirname(__file__), "fixtures", "json-stat.org")
+        self.fixture_jsonstat_org_dir = os.path.join(os.path.dirname(__file__), "fixtures", "www.json-stat.org")
 
     def test_parse_collection(self):
         json_string_v1_one_dataset = """

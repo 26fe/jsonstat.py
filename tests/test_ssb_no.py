@@ -15,7 +15,7 @@ import jsonstat
 
 class TestSsbNo(unittest.TestCase):
     def setUp(self):
-        self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures", "ssb_no")
+        self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures", "www.ssb.no")
 
     def test_one_dimension(self):
         uri = 'http://data.ssb.no/api/v0/dataset/29843.json?lang=en'

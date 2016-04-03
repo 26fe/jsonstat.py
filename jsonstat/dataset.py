@@ -27,7 +27,7 @@ class JsonStatDataSet:
     """Represents a JsonStat dataset
 
         >>> import os, jsonstat  # doctest: +ELLIPSIS
-        >>> filename = os.path.join(jsonstat.__fixtures_dir, "json-stat.org", "oecd-canada-col.json")
+        >>> filename = os.path.join(jsonstat.__fixtures_dir, "www.json-stat.org", "oecd-canada-col.json")
         >>> dataset = jsonstat.from_file(filename).dataset(0)
         >>> dataset.label()
         'Unemployment rate in the OECD countries 2003-2014'
@@ -227,7 +227,7 @@ class JsonStatDataSet:
         ex.:{country:"AU", "year":"2014"}
 
         >>> import os, jsonstat  # doctest: +ELLIPSIS
-        >>> filename = os.path.join(jsonstat.__fixtures_dir, "json-stat.org", "oecd-canada-col.json")
+        >>> filename = os.path.join(jsonstat.__fixtures_dir, "www.json-stat.org", "oecd-canada-col.json")
         >>> dataset = jsonstat.from_file(filename).dataset(0)
         >>> dataset.data(0)
         JsonStatValue(idx=0, value=5.943826289, status=None)
@@ -373,29 +373,34 @@ class JsonStatDataSet:
     def idx_as_lint(self, idx):
         """ 10 -> [<int1>, <int2>, ...]
         """
-        apos = self.__dim_nr * [0]
+        lint = self.__dim_nr * [0]
         i = len(self.__pos2size) - 1
         while idx > 0 and i != 0:
-            apos[i] = idx % self.__pos2size[i]
-            idx -= (apos[i] * self.__pos2mult[i])
+            lint[i] = idx % self.__pos2size[i]
+            idx -= (lint[i] * self.__pos2mult[i])
             i -= 1
-        return apos
+        return lint
 
-    def lint_as_lcat(self, vec_pos, without_one_dimension=False):
+    def idx_as_lcat(self, idx):
+        lint = self.idx_as_lint(idx)
+        lcat = self.lint_as_lcat(lint)
+        return lcat
+
+    def lint_as_lcat(self, lint, without_one_dimension=False):
         """transforms an array of int into an array of cat
 
         [0,3,4] -> ['dimension 1 index', 'dimension 2 label', 'dimension 3 label']
 
-        :param vec_pos:  [0,3,4]
+        :param lint:  [0,3,4]
         :returns: ['dimension 1 index', 'dimension 2 label', 'dimension 3 label']
         """
-        # vec_idx = len(vec_pos) * [None]
-        vec_idx = []
-        for pos in range(len(vec_pos)):
+        lcat = []
+        for pos, lint_pos in enumerate(lint):
             dim = self.__pos2dim[pos]
             if not (without_one_dimension and len(dim) == 1):
-                vec_idx.append(dim._pos2cat(vec_pos[pos]).index)
-        return vec_idx
+                cat = dim._pos2cat(lint_pos).index
+                lcat.append(cat)
+        return lcat
 
     def _lint_to_llbl(self, apos, without_one_dimension=False):
         """transforms on array of dim into an array of label

@@ -274,7 +274,7 @@ class TestJsonSchemaValidation(unittest.TestCase):
         self.assertTrue(jsonstat.validate(jsonstat_collection))
 
     def test_validate(self):
-        fixture_jsonstat_org_dir = os.path.join(self.fixture_dir, "json-stat.org")
+        fixture_jsonstat_org_dir = os.path.join(self.fixture_dir, "www.json-stat.org")
         for f in os.listdir(fixture_jsonstat_org_dir):
             jsonstat_file = os.path.join(fixture_jsonstat_org_dir, f)
             if os.path.isfile(jsonstat_file) and jsonstat_file.endswith(".json"):

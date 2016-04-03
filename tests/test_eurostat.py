@@ -15,7 +15,7 @@ import jsonstat
 
 class TestEurostat(unittest.TestCase):
     def setUp(self):
-        self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures", "eurostat")
+        self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures", "www.ec.europa.eu_eurostat")
         self.base_uri = 'http://ec.europa.eu/eurostat/wdds/rest/data/v1.1/json/en/'
 
     def test_one_dimension(self):
