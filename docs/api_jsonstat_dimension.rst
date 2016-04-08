@@ -7,7 +7,7 @@ JsonStatDimension
 .. autoclass:: JsonStatDimension
 
     .. automethod:: JsonStatDimension.__init__
-    .. automethod:: JsonStatDimension.name
+    .. automethod:: JsonStatDimension.did
     .. automethod:: JsonStatDimension.label
     .. automethod:: JsonStatDimension.role
     .. automethod:: JsonStatDimension.pos
