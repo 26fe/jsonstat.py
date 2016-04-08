@@ -12,7 +12,7 @@ jsonstat.py
 .. image:: https://badge.fury.io/py/jsonstat.py.png
     :target: https://badge.fury.io/py/jsonstat.py
 
-**jsonstat.py** is a library for reading the `**JSON-stat** <http://json-stat.org/>`_ data format
+**jsonstat.py** is a library for reading the `JSON-stat <http://json-stat.org/>`_ data format
 maintained and promoted by `Xavier Badosa <https://xavierbadosa.com/>`_.
 The JSON-stat format is a JSON format for publishing dataset.
 JSON-stat is used by several institutions to publish statistical data.
@@ -34,7 +34,7 @@ You can also check out some of the jupyter example notebook from the
 or into the `documentation <http://jsonstatpy.readthedocs.org/en/latest>`_
 
 As bonus **jsonstat.py** contains an useful classes to explore dataset
-publiched by Istat.
+published by Istat.
 
 You can find useful another python library
 `pyjstat <https://pypi.python.org/pypi/pyjstat>`_
@@ -129,28 +129,28 @@ Bug reports and feature requests should be submitted using the github issue trac
 Please provide a full traceback of any error you see and if possible a sample file.
 If you are unable to make a file publicly available then contact me.
 
+You can find support on the `google group <https://groups.google.com/forum/#!forum/json-stat>`_
 
 How to Contribute Code
 ======================
 
 Any help will be greatly appreciated, just follow those steps:
 
-    1. Please start a new fork for each independent feature,
-    don’t try to fix all problems at the same time,
-    it’s easier for those who will review and merge your changes.
+1) Fork it. Start a new fork for each independent feature, don’t try to fix all problems at the same time,
+   it’s easier for those who will review and merge your changes.
 
-    2. Write your code
+2) Create your feature branch (``git checkout -b my-new-feature``)
 
-    3. Add unit tests for your changes!
-    (changes without tests will not be accepted.)
+3) Write your code. Add unit tests for your changes!
+   If you added a whole new feature, or just improved something, you can be proud of it,
+   so add yourself to the ``AUTHORS`` file :-)
+   Update the docs!
+4) Commit your changes (``git commit -am 'Added some feature'``)
 
-    4. If you added a whole new feature, or just improved something, you can be proud of it,
-    so add yourself to the AUTHORS file :-)
+5) Push to the branch (``git push origin my-new-feature``)
 
-    5. Update the docs!
-
-    6. When it’s done, just issue a pull request (click on the large “pull request” button on your repository)
-    and wait for your code to be reviewed, and, if you followed all theses steps, merged into the main repository.
+6) Create new Pull Request. Click on the large “pull request” button on your repository.
+   Wait for your code to be reviewed, and, if you followed all theses steps, merged into the main repository.
 
 
 
