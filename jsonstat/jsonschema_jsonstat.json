@@ -40,11 +40,13 @@
         "properties": {
             "index": {"$ref": "#/definitions/category_index"},
             "label": {"type": "object"},
-            "note": {"type": "array"},
+
             "unit": {"$ref": "#/definitions/category_index"},
             "child": {"type": "object", "properties": {"additionalProperties": {"type": "array"}}},
             "coordinates": {"type": "object",
-                            "properties": {"additionalProperties": {"type": "array"}}}
+                            "properties": {"additionalProperties": {"type": "array"}}},
+            "note": {"type": "array"}
+
         },
         "additionalProperties": false
     },
@@ -56,10 +58,11 @@
             "href": {"$ref": "#/definitions/href"},
             "class": {"type": "string", "enum": ["dimension"]},
             "label": {"type": "string"},
-            "note": {"type": "array"},
-            "category": {"$ref": "#/definitions/category"}
+            "category": {"$ref": "#/definitions/category"},
+            "note": {"type": "array"}
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "required": ["category"]
     },
 
     "dataset_role": {
