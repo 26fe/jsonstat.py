@@ -23,16 +23,16 @@ class TestJsonSchemaValidation(unittest.TestCase):
         self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures")
         self.__schema = JsonStatSchema()
 
-    def validate(self, jsonstat, schemas):
+    def validate(self, json_data, schemas):
         try:
             for s in schemas:
-                jsonschema.validate(jsonstat, s)
+                jsonschema.validate(json_data, s)
         except jsonschema.exceptions.SchemaError as e:
             self.fail("validate failed!")
 
     def test_dimension(self):
         # dimension.index as array
-        jsonstat_dimension = {
+        jsonstat_string = {
             "label": "sex",
             "category":
                 {
@@ -44,9 +44,10 @@ class TestJsonSchemaValidation(unittest.TestCase):
                     }
                 }
         }
-        self.validate(jsonstat_dimension, [self.__schema.dimension, self.__schema.all])
+        self.validate(jsonstat_string, [self.__schema.dimension, self.__schema.all])
+
         # dimension.child
-        jsonstat_dimension = {
+        jsonstat_string = {
             "label": "activity status",
             "category": {
                 "index": {
@@ -69,9 +70,10 @@ class TestJsonSchemaValidation(unittest.TestCase):
                 }
             }
         }
-        self.validate(jsonstat_dimension, [self.__schema.dimension])
+        self.validate(jsonstat_string, [self.__schema.dimension, self.__schema.all])
+
         # dimension.coordinates
-        jsonstat_dimension = {
+        jsonstat_string = {
             "category": {
                 "label": {
                     "ISO-3166-2:TV": "Tuvalu"
@@ -81,7 +83,7 @@ class TestJsonSchemaValidation(unittest.TestCase):
                 }
             }
         }
-        self.validate(jsonstat_dimension, [self.__schema.dimension])
+        self.validate(jsonstat_string, [self.__schema.dimension, self.__schema.all])
 
         json_string = '''
         {
@@ -113,12 +115,10 @@ class TestJsonSchemaValidation(unittest.TestCase):
                 }
             }
         }'''
-        jsonstat_dimension = json.loads(json_string)
-        self.validate(jsonstat_dimension, [self.__schema.dimension])
-
+        self.validate(jsonstat_string, [self.__schema.dimension, self.__schema.all])
 
     def test_dataset(self):
-        jsonstat_dataset = {
+        jsonstat_data = {
             "version": "2.0",
             "class": "dataset",
             "label": "Unemployment rate in the OECD countries 2003-2014",
@@ -129,10 +129,10 @@ class TestJsonSchemaValidation(unittest.TestCase):
             "dimension": {},
             "value": []
         }
+        self.validate(jsonstat_data, [self.__schema.dataset])
 
-        self.validate(jsonstat_dataset, [self.__schema.dataset])
         # dataset.role
-        jsonstat_dataset = {
+        jsonstat_data = {
             "version": "2.0",
             "class": "dataset",
             "id": ["concept", "arrival_date", "departure_date", "origin", "destination"],
@@ -142,59 +142,56 @@ class TestJsonSchemaValidation(unittest.TestCase):
                 "geo": ["origin", "destination"],
                 "metric": ["concept"]
             }}
-
-        self.validate(jsonstat_dataset, [self.__schema.dataset, self.__schema.all])
+        self.validate(jsonstat_data, [self.__schema.dataset, self.__schema.all])
 
         # dataset.value null value
-        json_string = """{
+        jsonstat_string = """{
             "version": "2.0",
             "class": "dataset",
             "value": [105.3, 104.3, null, 177.2]
-            }
-        """
-        jsonstat_dataset3 = json.loads(json_string)
-        # print(self.jsonstat_dataset3)
-        self.validate(jsonstat_dataset, [self.__schema.dataset, self.__schema.all])
+        }"""
+        jsonstat_data = json.loads(jsonstat_string)
+        self.validate(jsonstat_data, [self.__schema.dataset, self.__schema.all])
 
         # dataset.value as dict
-        jsonstat_dataset = {
+        jsonstat_data = {
             "version": "2.0",
             "class": "dataset",
             "value": {"0": 1.3587, "18": 1.5849},
         }
-        self.validate(jsonstat_dataset, [self.__schema.dataset, self.__schema.all])
+        self.validate(jsonstat_data, [self.__schema.dataset, self.__schema.all])
 
         # dataset.status
-        json_string = """{
+        jsonstat_string = """{
             "version": "2.0",
             "class": "dataset",
             "value": [100, null, 102, 103, 104],
             "status": ["a", "m", "a", "a", "p"]
         }"""
-        jsonstat_dataset = json.loads(json_string)
-        self.validate(jsonstat_dataset, [self.__schema.dataset, self.__schema.all])
+        jsonstat_data = json.loads(jsonstat_string)
+        self.validate(jsonstat_data, [self.__schema.dataset, self.__schema.all])
 
         # dataset.status
-        jsonstat_dataset6 = {
+        jsonstat_data = {
             "version": "2.0",
             "class": "dataset",
             "value": [100, 99, 102, 103, 104],
             "status": "e",
         }
-        self.validate(jsonstat_dataset, [self.__schema.dataset, self.__schema.all])
+        self.validate(jsonstat_data, [self.__schema.dataset, self.__schema.all])
 
         # dataset.status
-        jsonstat_dataset7 = json.loads("""{
+        jsonstat_string = """{
             "version": "2.0",
             "class": "dataset",
             "value": [100, null, 102, 103, 104],
             "status": {"1": "m"}
-        }""")
-
-        self.validate(jsonstat_dataset, [self.__schema.dataset, self.__schema.all])
+        }"""
+        jsonstat_data = json.loads(jsonstat_string)
+        self.validate(jsonstat_data, [self.__schema.dataset, self.__schema.all])
 
         # dataset.dimension
-        jsonstat_dataset = {
+        jsonstat_data = {
             "version": "2.0",
             "class": "dataset",
             "value": [100, 99, 102, 103, 104],
@@ -207,10 +204,10 @@ class TestJsonSchemaValidation(unittest.TestCase):
 
             }
         }
-        self.validate(jsonstat_dataset, [self.__schema.dataset, self.__schema.all])
+        self.validate(jsonstat_data, [self.__schema.dataset, self.__schema.all])
 
         # dataset.link
-        jsonstat_dataset = {
+        jsonstat_data = {
             "version": "2.0",
             "class": "dataset",
             "link": {
@@ -224,14 +221,9 @@ class TestJsonSchemaValidation(unittest.TestCase):
                         "href": "http://provider.domain/2002/population/sex.html"
                     }
                 ]}}
-
-        self.validate(jsonstat_dataset, [self.__schema.dataset, self.__schema.all])
+        self.validate(jsonstat_data, [self.__schema.dataset, self.__schema.all])
 
     def test_collection_complete(self):
-
-        # json_string = '{"uffa":false}'
-        # json_data = json.loads(json_string)
-        # print(json_data)
 
         jsonstat_dimension_sex = {
             "label": "sex",
@@ -275,8 +267,9 @@ class TestJsonSchemaValidation(unittest.TestCase):
 
     def test_validate(self):
         fixture_jsonstat_org_dir = os.path.join(self.fixture_dir, "www.json-stat.org")
-        for f in os.listdir(fixture_jsonstat_org_dir):
-            jsonstat_file = os.path.join(fixture_jsonstat_org_dir, f)
+
+        for filename in os.listdir(fixture_jsonstat_org_dir):
+            jsonstat_file = os.path.join(fixture_jsonstat_org_dir, filename)
             if os.path.isfile(jsonstat_file) and jsonstat_file.endswith(".json"):
                 # print("validating {}".format(jsonstat_file))
                 with open(jsonstat_file) as f:
@@ -287,6 +280,7 @@ class TestJsonSchemaValidation(unittest.TestCase):
                         self.assertTrue(ret, msg)
                     except jsonstat.JsonStatException:
                         pass
+
 
 if __name__ == '__main__':
     unittest.main()
