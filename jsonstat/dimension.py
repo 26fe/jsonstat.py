@@ -83,7 +83,7 @@ class JsonStatDimension:
         :param role: of dimension
         """
 
-        # it is valid is correctly built (f.e. it was parsed correctly)
+        # it is valid if is correctly built (f.e. it was parsed correctly)
         self.__valid = False
 
         self.__did = did
@@ -103,7 +103,7 @@ class JsonStatDimension:
     #   dimension properties
 
     def did(self):
-        """id of dimension"""
+        """id of this dimension"""
         return self.__did
 
     def label(self):
@@ -111,21 +111,18 @@ class JsonStatDimension:
         return self.__label
 
     def role(self):
-        """role of this dimension (time, geo or metric)"""
+        """role of this dimension (can be time, geo or metric)"""
         return self.__role
 
     def pos(self):
-        """position of this dimension respect to the dataset which dimension belongs to"""
+        """position of this dimension with respect to the data set to which this dimension belongs"""
         return self.__pos
 
     def __len__(self):
         """size of this dimension"""
         return self.__size
 
-    def __str__(self):
-        if self.__pos2cat is None:
-            return ""
-
+    def __to_list(self):
         lst = [["pos", "idx", "label"]]
         for cat in self.__pos2cat:
             idx = cat.index
@@ -135,6 +132,13 @@ class JsonStatDimension:
             row = [str(cat.pos), "'" + idx + "'", "'" + lbl + "'"]
             row = list(map(lambda x: "" if x is None else x, row))
             lst.append(row)
+        return lst
+
+    def __str__(self):
+        if self.__pos2cat is None:
+            return ""
+
+        lst = self.__to_list()
 
         table = terminaltables.AsciiTable(lst)
         out = table.table
@@ -143,6 +147,23 @@ class JsonStatDimension:
     def __repr__(self):
         """used by ipython to make a better representation"""
         return self.__str__()
+
+    def _repr_html_(self):
+        lst = self.__to_list()
+        html = "<table>"
+        maxlines = 5
+        nr_line = 0
+        while nr_line < maxlines and nr_line < len(lst):
+            l = lst[nr_line]
+            html += "<tr>"
+            for c in l:
+                html += "<td>{}</td>".format(c)
+            html += "</tr>"
+            nr_line += 1
+        if nr_line < len(lst):
+            html += "<td>...</td>" * len(lst[0])
+        html += "</table>"
+        return html
 
     def info(self):
         """print some info on standard output about this dimension"""
@@ -154,38 +175,28 @@ class JsonStatDimension:
     #
 
     def category(self, spec):
-        if not self.__valid:
-            raise JsonStatException("dimension {} is not initialized".format(self.__did))
+        """return JsonStatCategory according to spec
 
-        if isinstance(spec, int):
+        :param spec: can be index (string) or label (string) or a position (integer)
+        :returns: a JsonStatCategory
+        """
+        if not self.__valid:
+            raise JsonStatException("dimension '{}': is not initialized".format(self.__did))
+
+        if isinstance(spec, int) and spec < len(self.__pos2cat):
             cat = self.__pos2cat[spec]
             return cat
 
         # try first indexes
         if spec in self.__idx2cat:
             cat = self.__idx2cat[spec]
-        elif spec in self.__lbl2cat:
-            cat = self.__lbl2cat[spec]
-        else:
-            raise JsonStatException("dimension '{}': do not have index or label '{}'".format(self.__did, spec))
+            return cat
 
-        return cat
-
-    def _2pos(self, spec):
-        """from spec to position
-
-        :param spec: index or label or integer
-        :returns: integer
-        """
-        if not self.__valid:
-            raise JsonStatException("dimension {} is not initialized".format(self.__did))
-        if spec in self.__idx2cat:
-            return self.__idx2cat[spec].pos
         if self.__lbl2cat is not None and spec in self.__lbl2cat:
-            return self.__lbl2cat[spec].pos
-        if isinstance(spec, int) and spec < len(self.__pos2cat):
-            return spec
-        raise JsonStatException("dimension '{}': do not have index or label '{}'".format(self.__did, spec))
+            cat = self.__lbl2cat[spec]
+            return cat
+
+        raise JsonStatException("dimension '{}': unknown index or label '{}'".format(self.__did, spec))
 
     def _pos2cat(self, pos):
         """get the category associated with the position (integer)
@@ -247,21 +258,20 @@ class JsonStatDimension:
             The name of this object must be one of the strings in the id array.
             There must be one and only one dimension ID object for every dimension in the id array.
 
-        example::
+        jsonschema for dimension is about::
 
-            "dimension" : {
-                "metric" : { … },
-                "time" : { … },
-                "geo" : { … },
-                "sex" : { … },
-                …
-            }
-
-        Parent: 'dimension'
-        Children:
-        - category
-        - label
-        - class
+            "dimension": {
+                "type": "object",
+                "properties": {
+                    "version": {"$ref": "#/definitions/version"},
+                    "href": {"$ref": "#/definitions/href"},
+                    "class": {"type": "string", "enum": ["dimension"]},
+                    "label": {"type": "string"},
+                    "category": {"$ref": "#/definitions/category"},
+                    "note": {"type": "array"},
+                },
+                "additionalProperties": false
+            },
 
         :param json_data:
         :returns: itself to chain call
@@ -287,17 +297,28 @@ class JsonStatDimension:
 
     def __parse_category(self, json_data_category):
         """It is used to describe the possible values of a dimension.
-
-        https://json-stat.org/format/#category
-        category is required
-        children of category:
-          - index
-          - label
-          - child
-          - coordinates
-          - unit
+        See https://json-stat.org/format/#category
         :param json_data_category:
         :returns:
+
+        jsonschema for dimension is about::
+
+            "category": {
+                "type": "object",
+                "properties": {
+                    "index": {"$ref": "#/definitions/category_index"},
+                    "label": {"type": "object"},
+
+                    "unit": {"$ref": "#/definitions/category_index"},
+                    "child": {"type": "object", "properties": {"additionalProperties": {"type": "array"}}},
+                    "coordinates": {"type": "object",
+                                    "properties": {"additionalProperties": {"type": "array"}}},
+                    "note": {"type": "array"}
+
+                },
+                "additionalProperties": false
+            },
+
         """
 
         # validate: label or index must be present
@@ -334,6 +355,22 @@ class JsonStatDimension:
             msg = "dimension '{}':hole in index".format(self.__did)
             raise JsonStatMalformedJson(msg)
 
+        # "category_unit": {
+        #                      "type": "object",
+        #                      "properties": {
+        #                          "additionalProperties": {
+        #                              "type": "object",
+        #                              "properties": {"label": {"type": "string"},
+        #                                             "decimals": {"type": "number"},
+        #                                             "type": {"type": "string"},
+        #                                             "base": {"type": "string"},
+        #                                             "multiplier": {"type": "number"},
+        #                                             "position": {"type": "string"}},
+        #                              "additionalProperties": false
+        #                          }
+        #                      }
+        #                  },
+
         # TODO: parse 'unit'
         # "unit" : {
         # 	 "exp" : {
@@ -359,7 +396,7 @@ class JsonStatDimension:
         # 	}
         if 'unit' in json_data_category:
             if self.__role != "metric":
-                msg = "dimension {}: 'unit' are used but dimension role must be 'metric'"
+                msg = "dimension {}: 'unit' can be used only when role is 'metric'"
                 msg = msg.format(self.__did)
                 JsonStatException(msg)
             self.__unit = json_data_category['unit']
