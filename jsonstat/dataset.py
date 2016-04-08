@@ -145,6 +145,11 @@ class JsonStatDataSet:
         """used by ipython to make a better representation"""
         return self.__str__()
 
+    # todo: implementing _repr_html
+    # def _repr_html_(self):
+    #     out = "in ipython"
+    #     return out
+
     def info(self):
         """print some info about this dataset on stdout"""
         print(self)
@@ -197,10 +202,6 @@ class JsonStatDataSet:
     def info_dimensions(self):
         """print same info on dimensions on stdout"""
         print(self.__str__dimensions())
-
-    def _repr_html_(self):
-        out = "in ipython"
-        return out
 
     #
     # querying value/status
@@ -356,7 +357,7 @@ class JsonStatDataSet:
                 msg = msg.format(self.__name, cat, allowed_categories)
                 raise JsonStatException(msg)
 
-            apos[dim.pos()] = dim._2pos(val)
+            apos[dim.pos()] = dim.category(val).pos
         return apos
 
     def lint_as_idx(self, lst):
