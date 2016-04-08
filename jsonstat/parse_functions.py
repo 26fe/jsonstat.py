@@ -197,14 +197,7 @@ def validate(spec):
         json_data = spec
     if "version" not in json_data:
         raise JsonStatException("cannot validate jsonstat version < 2.0")
-    class_ = json_data.get("class", "collection")
-
     schema = JsonStatSchema()
-    # schema = {
-    #     "collection": schema.collection,
-    #     "dataset": schema.dataset,
-    #     "dimension": schema.dimension
-    # }[class_]
     try:
         jsonschema.validate(json_data, schema.all)
     except jsonschema.exceptions.SchemaError as e:
