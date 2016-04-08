@@ -314,7 +314,7 @@ class JsonStatDimension:
         # validate: number of indexes and labels must the same??
         if self.__idx2cat is not None and self.__lbl2cat is not None:
             if len(self.__idx2cat) != len(self.__lbl2cat):
-                # TODO: cannot raise expeption, emit warning see hierarchy.json
+                # TODO: cannot raise exception, emit warning see hierarchy.json
                 msg = "dimension '{}': the number of indexes ({}) are different of the numbers of labels ({})"
                 msg = msg.format(self.__did, len(self.__idx2cat), len(self.__lbl2cat))
                 # raise JsonStatMalformedJson(msg)
@@ -417,9 +417,7 @@ class JsonStatDimension:
 
         self.__lbl2cat = {}
 
-        for i, item in enumerate(json_data_label.items()):
-            idx = item[0]
-            lbl = item[1]
+        for i, (idx, lbl) in enumerate(json_data_label.items()):
 
             if no_index:
                 # if index are not defined in json, give an order to the label
