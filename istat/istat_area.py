@@ -9,6 +9,7 @@ from __future__ import unicode_literals
 
 # istat
 from istat.istat_dataset import IstatDataset
+from istat.istat_dataset import IstatDatasetList
 from istat.istat_exception import IstatException
 
 
@@ -76,25 +77,12 @@ class IstatArea:
         """Returns a list of IstatDataset"""
         if self.__cod2dataset is None:
             self.__download_datasets()
-        return self.__cod2dataset.values()
 
-    def datasets_as_html(self):
-        """returns an html string useful to show into ipython notebook"""
-        if self.__cod2dataset is None:
-            self.__download_datasets()
-
-        # todo: using __repr__html?
-        html = "<table>"
-        html += "<tr><th>cod</th><th>name</th><th>dim</th></tr>"
+        lst = IstatDatasetList()
         for cod, ds in sorted(self.__cod2dataset.items()):
-            html += "<tr>"
-            html += "<td>{}</td>".format(cod)
-            html += "<td>{}</td>".format(ds.name())
-            html += "<td>{}</td>".format(ds.nrdim())
-            html += "</td>"
-            html += "</tr>"
-        html += "</table>"
-        return html
+            lst.append(ds)
+        return lst
+
 
     def __download_datasets(self):
         """

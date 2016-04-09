@@ -31,6 +31,7 @@ class TestEurostat(unittest.TestCase):
 
         # extract dataset contained into collection
         ds = collection.dataset('nama_gdp_c')
+        """:type: jsonstat.JsonStatDataset"""
         self.assertEqual(69, len(ds))
         time = ds.dimension('time')
         self.assertEqual(69, len(time))

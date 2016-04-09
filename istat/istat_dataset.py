@@ -15,6 +15,23 @@ from istat.istat_exception import IstatException
 from istat.istat_dimension import IstatDimension
 
 
+class IstatDatasetList(list):
+    def _repr_html_(self):
+        """returns an html string useful to show into ipython notebook"""
+
+        html = "<table>"
+        html += "<tr><th>cod</th><th>name</th><th>dim</th></tr>"
+        for ds in self:
+            html += "<tr>"
+            html += "<td>{}</td>".format(ds.cod())
+            html += "<td>{}</td>".format(ds.name())
+            html += "<td>{}</td>".format(ds.nrdim())
+            html += "</td>"
+            html += "</tr>"
+        html += "</table>"
+        return html
+
+
 class IstatDataset:
     def __init__(self, istat_helper, dataset):
         """
@@ -27,7 +44,7 @@ class IstatDataset:
         self.__dataset = dataset
 
         self.__name2dim = None  # dict
-        self.__pos2dim = None   # array
+        self.__pos2dim = None  # array
 
     def cod(self):
         """returns the code of this dataset"""
@@ -50,24 +67,17 @@ class IstatDataset:
         """used by ipython to make a better representation"""
         return self.__str__()
 
-    def info(self):
-        print(self)
-
-    def info_dimensions(self):
-        """print info about dimensions of this dataset"""
-        for i, dim in enumerate(self.__pos2dim):
-            print("dim {} {}".format(i, dim.__str__()))
-
-    def info_dimensions_as_html(self, show_values=3):
+    def _repr_html_(self):
         """prints info about dimension in html format
 
         :param show_values: number of values to show. If equals to 0 show all values
         :returns: html string
         """
-        # todo: using __repr__html for pretty print in ipython?
-        html = "<table>"
-        html +="<tr><th>nr</th><th>name</th><th>nr. values</th>"
-        html +="<th>values (first {} values)</th></tr>".format(show_values)
+        show_values = 3
+        html = "{}({}):{}</br>".format(self.cod(), self.nrdim(), self.name())
+        html += "<table>"
+        html += "<tr><th>nr</th><th>name</th><th>nr. values</th>"
+        html += "<th>values (first {} values)</th></tr>".format(show_values)
         for i, dim in enumerate(self.__pos2dim):
             html += "<tr>"
             html += "<td>{}</td>".format(i)
@@ -78,6 +88,14 @@ class IstatDataset:
             html += "</tr>"
         html += "</table>"
         return html
+
+    def info(self):
+        print(self)
+
+    def info_dimensions(self):
+        """print info about dimensions of this dataset"""
+        for i, dim in enumerate(self.__pos2dim):
+            print("dim {} {}".format(i, dim.__str__()))
 
     def nrdim(self):
         """returns the number of dimensions"""
