@@ -15,7 +15,7 @@ import terminaltables
 
 # jsonstat
 from jsonstat.dataset import JsonStatDataSet
-
+from jsonstat.utility import lst2html
 
 class JsonStatCollection:
     """Represents a jsonstat collection.
@@ -86,14 +86,9 @@ class JsonStatCollection:
         """used by jupyter to make a better representation into notebooks"""
         html = "JsonstatCollection contains the following JsonStatDataSet:</br>"
         lst = self.__to_table()
-        html += "<table>"
-        for r in lst:
-            html += "<tr>"
-            for c in r:
-                html += "<td>{}</td>".format(c)
-            html += "</tr>"
-        html += "</table>"
+        html += lst2html(lst)
         return html
+
 
     def info(self):
         """print some info about this collection"""

@@ -19,6 +19,7 @@ import terminaltables
 from jsonstat.dimension import JsonStatDimension
 from jsonstat.exceptions import JsonStatException
 from jsonstat.exceptions import JsonStatMalformedJson
+from jsonstat.utility import lst2html
 
 JsonStatValue = namedtuple('JsonStatValue', ['idx', 'value', 'status'])
 
@@ -145,10 +146,26 @@ class JsonStatDataSet:
         """used by ipython to make a better representation"""
         return self.__str__()
 
-    # todo: implementing _repr_html
-    # def _repr_html_(self):
-    #     out = "in ipython"
-    #     return out
+    def _repr_html_(self):
+        """used by ipython to make a better representation"""
+
+        html = ""
+        if self.__name is not None:
+            html += "name:   '{}'</br>".format(self.__name)
+
+        if self.__title is not None:
+            html += "title:  '{}'</br>".format(self.__title)
+
+        if self.__label is not None:
+            html += "label:  '{}'</br>".format(self.__label)
+
+        if self.__source is not None:
+            html += "source: '{}'</br>".format(self.__label, self.__source)
+
+        html += "size: {}</br>".format(len(self))
+        lst = self.__dim_to_table()
+        html += lst2html(lst)
+        return html
 
     def info(self):
         """print some info about this dataset on stdout"""
@@ -160,7 +177,7 @@ class JsonStatDataSet:
 
     def __len__(self):
         """returns the size of the dataset"""
-        return len(self.__value)
+        return self.__dim_nr
 
     def dimensions(self):
         """returns list of JsonStatDimension"""
@@ -182,21 +199,20 @@ class JsonStatDataSet:
             raise JsonStatException(msg)
         return self.__did2dim[spec]
 
-    def __str__dimensions(self):
+    def __dim_to_table(self):
         lst = [["pos", "id", "label", "size", "role"]]
         for i, dim in enumerate(self.__pos2dim):
             row = [str(i), dim.did(), dim.label(), str(len(dim)), dim.role()]
             row = list(map(lambda x: "" if x is None else x, row))
             lst.append(row)
+        return lst
+
+    def __str__dimensions(self):
+        lst = self.__dim_to_table()
+
         table = terminaltables.AsciiTable(lst)
         # table.justify_columns = {2: "right", 4: "right"}
-        # print(table.table)
         out = table.table
-
-        # out = "{} dimensions:\n".format(len(self.__pos2dim))
-        # msg = "  {}: dim id: '{}' label: '{}' size: '{}' role: '{}'\n"
-        # for i, dim in enumerate(self.__pos2dim):
-        #     out += msg.format(i, dim.name(), dim.label(), len(dim), dim.role())
         return out
 
     def info_dimensions(self):
