@@ -37,13 +37,14 @@ class JsonStatCollection:
     +-----+-----------------------------------------------------+
 
     """
+
     def __init__(self):
         self.__href = None
         self.__label = None
         self.__updated = None
 
-        self.__name2dataset = {}   # str -> dataset
-        self.__pos2dataset = []    # int -> dataset
+        self.__name2dataset = {}  # str -> dataset
+        self.__pos2dataset = []  # int -> dataset
 
     def __len__(self):
         """the number of dataset contained in this collection"""
@@ -60,29 +61,39 @@ class JsonStatCollection:
         :returns: a JsonStatDataSet object
         """
 
-        # In Python2, str == bytes.
-        # In Python3, str means unicode (bytes remains unchanged),
-        #             while unicode is not defined anymore
-
-        # for python3 str == unicode
         if type(spec) is int:
             return self.__pos2dataset[spec]
         return self.__name2dataset[spec]
 
-    def __str__(self):
-        out = "JsonstatCollection contains the following JsonStatDataSet:\n"
+    def __to_table(self):
         lst = [["pos", "dataset"]]
         for i, dataset in enumerate(self.__pos2dataset):
             row = [str(i), "'" + dataset.name() + "'"]
             lst.append(row)
+        return lst
 
+    def __str__(self):
+        out = "JsonstatCollection contains the following JsonStatDataSet:\n"
+        lst = self.__to_table()
         table = terminaltables.AsciiTable(lst)
         out += table.table
         return out
 
     def __repr__(self):
-        """used by jupyter/ipython to make a better representation into notebooks"""
         return self.__str__()
+
+    def _repr_html_(self):
+        """used by jupyter to make a better representation into notebooks"""
+        html = "JsonstatCollection contains the following JsonStatDataSet:</br>"
+        lst = self.__to_table()
+        html += "<table>"
+        for r in lst:
+            html += "<tr>"
+            for c in r:
+                html += "<td>{}</td>".format(c)
+            html += "</tr>"
+        html += "</table>"
+        return html
 
     def info(self):
         """print some info about this collection"""
@@ -137,11 +148,15 @@ class JsonStatCollection:
             this is an internal library function (it is not public api)
 
         :param json_data: json structure
+
+        json_data example::
+
+            {
+                "dataset1" : {...}
+                "dataset2" : {...}
+            }
+
         """
-        # {
-        #   dataset1 : {...}
-        #   dataset2 : {...}
-        # }
         for dataset_name, dataset_json in json_data.items():
             dataset = JsonStatDataSet(dataset_name)
             dataset.from_json(dataset_json)
@@ -156,19 +171,23 @@ class JsonStatCollection:
             this is an internal library function (it is not public api)
 
         :param json_data: json structure
-        """
 
-        # "version" : "2.0",
-        # "class" : "collection",
-        # "href" : "http://json-stat.org/samples/collection.json",
-        # "label" : "JSON-stat Dataset Sample Collection",
-        # "updated" : "2015-07-02",
-        # "link" : {
-		#    "item" : [
-        #         {},
-        #         {},
-        #     ]
-        # }
+
+        json_data example::
+
+            "version" : "2.0",
+            "class" : "collection",
+            "href" : "http://json-stat.org/samples/collection.json",
+            "label" : "JSON-stat Dataset Sample Collection",
+            "updated" : "2015-07-02",
+            "link" : {
+               "item" : [
+                    {},
+                    {},
+                ]
+        }
+
+        """
 
         if "href" in json_data:
             self.__href = json_data["href"]
@@ -176,7 +195,6 @@ class JsonStatCollection:
         if "label" in json_data:
             self.__label = json_data["label"]
 
-        # TODO: parsing "updated" field as date
         if "updated" in json_data:
             self.__updated = dateutil.parser.parse(json_data["updated"])
 
