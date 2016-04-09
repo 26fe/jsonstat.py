@@ -14,6 +14,7 @@ import jsonstat
 # istat
 from istat.istat_helper import IstatHelper
 from istat.istat_area import IstatArea
+from istat.istat_area import IstatAreaList
 
 
 class IstatRoot:
@@ -48,24 +49,11 @@ class IstatRoot:
         """
         if self.__id2area is None:
             self.__download_areas()
-        return self.__id2area.values()
 
-    def areas_as_html(self):
-        """returns html string useful to be showed into ipython notebooks"""
-        if self.__id2area is None:
-            self.__download_areas()
-
-        # todo: using __repr__html?
-        html = "<table>"
-        html += "<tr><th>id</th><th>desc</th></tr>"
-        for iid, area in sorted(self.__id2area.items()):
-            html += "<tr>"
-            html += "<td>{}</td>".format(iid)
-            html += "<td>{}</td>".format(area.desc())
-            html += "</td>"
-            html += "</tr>"
-        html += "</table>"
-        return html
+        lst = IstatAreaList()
+        for _, area in sorted(self.__id2area.items()):
+            lst.append(area)
+        return lst
 
     def area(self, spec):
         """Get a IstatArea by name or id
@@ -75,6 +63,7 @@ class IstatRoot:
         """
         if self.__id2area is None:
             self.__download_areas()
+
         if type(spec) is str:
             if spec in self.__cod2area: return self.__cod2area[spec]
             if spec in self.__desc2area: return self.__desc2area[spec]
@@ -94,6 +83,7 @@ class IstatRoot:
         :return: an instance of IstatDataset
         """
         a = self.area(spec_area)
+        """:type: IstatArea"""
         ds = a.dataset(spec_dataset)
         return ds
 

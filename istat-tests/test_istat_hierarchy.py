@@ -51,6 +51,11 @@ class TestIstat(unittest.TestCase):
         self.assertEqual("Territory", dname)
 
     def test_areas(self):
+        lst = self.i_en.areas()
+        """:type: IstatAreaTable"""
+        self.assertIsInstance(lst, istat.IstatAreaList)
+
+    def test_area(self):
         istat_area = self.i_en.area(3)
         self.assertEqual("CEN", istat_area.cod())
 

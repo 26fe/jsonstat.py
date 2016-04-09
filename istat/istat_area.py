@@ -12,11 +12,26 @@ from istat.istat_dataset import IstatDataset
 from istat.istat_exception import IstatException
 
 
+class IstatAreaList(list):
+    def _repr_html_(self):
+        """returns html string useful to be showed into ipython notebooks"""
+        html = "<table>"
+        html += "<tr><th>id</th><th>desc</th></tr>"
+        for area in self:
+            html += "<tr>"
+            html += "<td>{}</td>".format(area.iid())
+            html += "<td>{}</td>".format(area.desc())
+            html += "</td>"
+            html += "</tr>"
+        html += "</table>"
+        return html
+
+
 class IstatArea:
-    """
-    Represents a Area. An Area contains a list of dataset.
+    """Represents a Area. An Area contains a list of dataset.
     Instances of this class are build only by Istat class
     """
+
     def __init__(self, istat_helper, iid, cod, desc):
         self.__istat_helper = istat_helper
         self.__iid = iid
@@ -49,8 +64,7 @@ class IstatArea:
         print(self)
 
     def dataset(self, spec):
-        """
-        get a instance of IstatDataset by spec
+        """get a instance of IstatDataset by spec
         :param spec: code of the dataset
         :return: IstatDataset instance
         """
@@ -92,7 +106,7 @@ class IstatArea:
             for json_dataset in json_data:
                 try:
                     dataset = IstatDataset(self.__istat_helper, json_dataset)
-                    dataset.dimensions() # force download dimensions
+                    dataset.dimensions()  # force download dimensions
                     self.__cod2dataset[json_dataset['Cod']] = dataset
                 except IstatException:
                     # ignore istatexception for dataset that cannot retrieve dimensions
@@ -100,4 +114,3 @@ class IstatArea:
         else:
             msg = "IstatArea area {}: cannot retrieve datasets".format(self.__area)
             raise IstatException(msg)
-

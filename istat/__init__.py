@@ -6,6 +6,7 @@
 from istat.istat_exception import IstatException
 from istat.istat_helper import IstatHelper
 from istat.istat_area import IstatArea
+from istat.istat_area import IstatAreaList
 from istat.istat_dataset import IstatDataset
 from istat.istat_dimension import IstatDimension
 from istat.istat_root import IstatRoot
