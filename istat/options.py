@@ -3,9 +3,6 @@
 # Copyright (C) 2016 gf <gf@26fe.com>
 # See LICENSE file
 
-from __future__ import print_function
-from __future__ import unicode_literals
 
-
-class IstatException(Exception):
-    pass
+class display:
+    max_rows = 3

@@ -20,8 +20,8 @@ class IstatAreaList(list):
         html += "<tr><th>id</th><th>desc</th></tr>"
         for area in self:
             html += "<tr>"
-            html += "<td>{}</td>".format(area.iid())
-            html += "<td>{}</td>".format(area.desc())
+            html += "<td>{}</td>".format(area.iid)
+            html += "<td>{}</td>".format(area.desc)
             html += "</td>"
             html += "</tr>"
         html += "</table>"
@@ -40,14 +40,17 @@ class IstatArea:
         self.__desc = desc
         self.__cod2dataset = None
 
+    @property
     def iid(self):
         """returns the id of the area"""
         return self.__iid
 
+    @property
     def cod(self):
         """returns name of the area"""
         return self.__cod
 
+    @property
     def desc(self):
         """returns name of the area"""
         return self.__desc
@@ -59,6 +62,11 @@ class IstatArea:
     def __repr__(self):
         """used by ipython to make a better representation"""
         return self.__str__()
+
+    def _repr_html_(self):
+        """used by jupyter to make a better representation"""
+        html = "IstatArea: cod = {} description = {}".format(self.__cod, self.__desc)
+        return html
 
     def info(self):
         """print some info about the area"""
@@ -83,11 +91,8 @@ class IstatArea:
             lst.append(ds)
         return lst
 
-
     def __download_datasets(self):
-        """
-        download a json_dataset using istat_helper
-        """
+        """download a json_dataset using istat_helper"""
         self.__cod2dataset = {}
         json_data = self.__istat_helper.dslist(self.__iid, show=False)
         if json_data is not None:

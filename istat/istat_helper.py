@@ -65,7 +65,7 @@ class IstatHelper:
         :return: json structure
         """
         uri = 'http://apistat.istat.it/?q=getarea&lang={}'.format(self.__lang)
-        filename ="istat-area-{}.json".format(self.__lang2str())
+        filename = "istat-area-{}.json".format(self.__lang2str())
         json_string = self.__dwl.download(uri, filename)
         json_data = json.loads(json_string)
         if show:
@@ -99,7 +99,7 @@ class IstatHelper:
             print(dump)
         return json_data
 
-    def dim(self,dataset,show=True):
+    def dim(self, dataset, show=True):
         """
         Returns the dimension of the dataset <dataset>
         It perform the api calls http://apistat.istat.it/?q=getdim&dataset=DCIS_POPRES&lang=0
@@ -116,7 +116,7 @@ class IstatHelper:
         :return:
         """
         uri = 'http://apistat.istat.it/?q=getdim&dataset={}&lang={}'.format(dataset, self.__lang)
-        filename="istat-dim-{}-{}.json".format(dataset, self.__lang2str())
+        filename = "istat-dim-{}-{}.json".format(dataset, self.__lang2str())
         try:
             json_string = self.__dwl.download(uri, filename)
 
@@ -145,8 +145,7 @@ class IstatHelper:
         except ValueError:
             return None
 
-
-    def table(self,dataset,dim,show=True):
+    def table(self, dataset, dim, show=True):
         """
         Returns dataset using dimensions dim
         It perform the api calls
@@ -216,7 +215,7 @@ class IstatHelper:
         """
         pass
 
-    def datajson(self,dataset,dim,show=True):
+    def datajson(self, dataset, dim, show=True):
         """
         returns dataset 'dataset' using dimensions 'dim'
         It perform the api calls http://apistat.istat.it/?q=getdatajson&dataset=<dataset>&dim=<dim>&lang=0
@@ -293,5 +292,3 @@ class IstatHelper:
         :return:
         """
         pass
-
-

@@ -25,5 +25,8 @@ class TestIstat(unittest.TestCase):
         cd = istat.cache_dir()
         self.assertEqual(cd, '/tmp')
 
+    def test_options(self):
+        self.assertEqual(3, istat.options.display.max_rows)
+
 if __name__ == '__main__':
     unittest.main()

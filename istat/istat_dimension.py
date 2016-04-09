@@ -27,10 +27,12 @@ class IstatDimension:
                 self.__desc2cod[desc] = cod
                 self.__cod2desc[cod] = desc
 
+    @property
     def name(self):
         """the name of the istat dimension"""
         return self.__name
 
+    @property
     def pos(self):
         """position into the dataset"""
         return self.__pos

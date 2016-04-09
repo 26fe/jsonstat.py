@@ -11,4 +11,6 @@ from istat.istat_dataset import IstatDataset
 from istat.istat_dimension import IstatDimension
 from istat.istat_root import IstatRoot
 
+import istat.options
+
 from istat.istat_functions import (cache_dir, lang, areas, areas_as_html, area, dataset)

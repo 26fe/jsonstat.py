@@ -13,6 +13,7 @@ import jsonstat
 # istat
 from istat.istat_exception import IstatException
 from istat.istat_dimension import IstatDimension
+import istat.options
 
 
 class IstatDatasetList(list):
@@ -23,8 +24,8 @@ class IstatDatasetList(list):
         html += "<tr><th>cod</th><th>name</th><th>dim</th></tr>"
         for ds in self:
             html += "<tr>"
-            html += "<td>{}</td>".format(ds.cod())
-            html += "<td>{}</td>".format(ds.name())
+            html += "<td>{}</td>".format(ds.cod)
+            html += "<td>{}</td>".format(ds.name)
             html += "<td>{}</td>".format(ds.nrdim())
             html += "</td>"
             html += "</tr>"
@@ -46,10 +47,12 @@ class IstatDataset:
         self.__name2dim = None  # dict
         self.__pos2dim = None  # array
 
+    @property
     def cod(self):
         """returns the code of this dataset"""
         return self.__dataset['Cod']
 
+    @property
     def name(self):
         """returns the name of this dataset"""
         return self.__dataset['Desc']
@@ -60,7 +63,7 @@ class IstatDataset:
         return len(self.__name2dim)
 
     def __str__(self):
-        out = "{}({}):{}".format(self.cod(), self.nrdim(), self.name())
+        out = "{}({}):{}".format(self.cod, self.nrdim(), self.name)
         return out
 
     def __repr__(self):
@@ -73,15 +76,18 @@ class IstatDataset:
         :param show_values: number of values to show. If equals to 0 show all values
         :returns: html string
         """
-        show_values = 3
-        html = "{}({}):{}</br>".format(self.cod(), self.nrdim(), self.name())
+        show_values = istat.options.display.max_rows
+        html = "{}({}):{}</br>".format(self.cod, self.nrdim(), self.name)
         html += "<table>"
         html += "<tr><th>nr</th><th>name</th><th>nr. values</th>"
-        html += "<th>values (first {} values)</th></tr>".format(show_values)
+        if show_values == 0:
+            html += "<th>values (alls values)</th></tr>"
+        else:
+            html += "<th>values (first {} values)</th></tr>".format(show_values)
         for i, dim in enumerate(self.__pos2dim):
             html += "<tr>"
             html += "<td>{}</td>".format(i)
-            html += "<td>{}</td>".format(dim.name())
+            html += "<td>{}</td>".format(dim.name)
             html += "<td>{}</td>".format(len(dim))
             html += "<td>{}</td>".format(dim.values_as_str(show_values))
             html += "</td>"
@@ -149,7 +155,7 @@ class IstatDataset:
                         raise IstatException(msg)
                     value = dim.desc2cod(value)
 
-                dim_values_array[dim.pos()] = value
+                dim_values_array[dim.pos] = value
             spec = ",".join(map(str, dim_values_array))
 
         json_data = self.__istat_helper.datajson(self.__dataset['Cod'], spec, show=False)
