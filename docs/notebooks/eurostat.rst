@@ -5,14 +5,13 @@ Notebook: using jsonstat.py with eurostat api
 This Jupyter notebook shows the python library
 `jsonstat.py <http://github.com/26fe/jsonstat.py>`__ in action. It shows
 how to explore dataset downloaded from a data provider. This notebook
-uses some datasets from Eurostat.
-
-Eurostat provides a rest api to download its datasets. You can find
-details about the api
+uses some datasets from Eurostat. Eurostat provides a rest api to
+download its datasets. You can find details about the api
 `here <http://ec.europa.eu/eurostat/web/json-and-unicode-web-services>`__
 It is possible to use a `query
 builder <http://ec.europa.eu/eurostat/web/json-and-unicode-web-services/getting-started/query-builder>`__
-for discovering the rest api parameters
+for discovering the rest api parameters. The following image shows the
+query builder:
 
 .. code:: python
 
@@ -25,12 +24,14 @@ for discovering the rest api parameters
     import matplotlib as plt
     %matplotlib inline
 
-Exploring data with one dimension (time) with size > 1
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 - Exploring data with one dimension (time) with size > 1
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Download or use the json file cached on disk. Caching file is useful to
-avoid download file every time. Caching can speed the development, and
-provides consistent result. You can see the raw data
+Following cell downloads a datataset from eurostat. If the file is
+already downloaded use the copy presents on the disk. Caching file is
+useful to avoid downloading dataset every time notebook runs. Caching
+can speed the development, and provides consistent results. You can see
+the raw data
 `here <http://ec.europa.eu/eurostat/wdds/rest/data/v1.1/json/en/nama_gdp_c?precision=1&geo=IT&unit=EUR_HAB&indic_na=B1GM>`__
 
 .. code:: python
@@ -38,9 +39,9 @@ provides consistent result. You can see the raw data
     url_1 = 'http://ec.europa.eu/eurostat/wdds/rest/data/v1.1/json/en/nama_gdp_c?precision=1&geo=IT&unit=EUR_HAB&indic_na=B1GM'
     file_name_1 = "eurostat-name_gpd_c-geo_IT.json"
     
-    file_path_1 = os.path.abspath(os.path.join("..", "tests", "fixtures", "eurostat", file_name_1))
+    file_path_1 = os.path.abspath(os.path.join("..", "tests", "fixtures", "www.ec.europa.eu_eurostat", file_name_1))
     if os.path.exists(file_path_1):
-        print("using alredy donwloaded file {}".format(file_path_1))
+        print("using already donwloaded file {}".format(file_path_1))
     else:
         print("download file")
         jsonstat.download(url_1, file_name_1)
@@ -49,7 +50,7 @@ provides consistent result. You can see the raw data
 
 .. parsed-literal::
 
-    using alredy donwloaded file /Users/26fe_nas/gioprj.on_mac/prj.python/jsonstat.py/tests/fixtures/eurostat/eurostat-name_gpd_c-geo_IT.json
+    using already donwloaded file /Users/26fe_nas/gioprj.on_mac/prj.python/jsonstat.py/tests/fixtures/www.ec.europa.eu_eurostat/eurostat-name_gpd_c-geo_IT.json
 
 
 Initialize JsonStatCollection with eurostat data and print some info
@@ -63,10 +64,9 @@ about the collection.
 
 
 
-.. parsed-literal::
+.. raw:: html
 
-    JsonstatCollection contains the following JsonStatDataSet:
-    0: dataset 'nama_gdp_c'
+    JsonstatCollection contains the following JsonStatDataSet:</br><table><tr><td>pos</td><td>dataset</td></tr><tr><td>0</td><td>'nama_gdp_c'</td></tr></table>
 
 
 
@@ -80,16 +80,9 @@ Previous collection contains only a dataset named '``nama_gdp_c``'
 
 
 
-.. parsed-literal::
+.. raw:: html
 
-    name:   'nama_gdp_c'
-    title:  'GDP and main components - Current prices'
-    size: 69
-    4 dimensions:
-      0: dim id: 'unit' label: 'unit' size: '1' role: 'None'
-      1: dim id: 'indic_na' label: 'indic_na' size: '1' role: 'None'
-      2: dim id: 'geo' label: 'geo' size: '1' role: 'None'
-      3: dim id: 'time' label: 'time' size: '69' role: 'None'
+    name:   'nama_gdp_c'</br>title:  'GDP and main components - Current prices'</br>size: 4</br><table><tr><td>pos</td><td>id</td><td>label</td><td>size</td><td>role</td></tr><tr><td>0</td><td>unit</td><td>unit</td><td>1</td><td></td></tr><tr><td>1</td><td>indic_na</td><td>indic_na</td><td>1</td><td></td></tr><tr><td>2</td><td>geo</td><td>geo</td><td>1</td><td></td></tr><tr><td>3</td><td>time</td><td>time</td><td>69</td><td></td></tr></table>
 
 
 
@@ -103,79 +96,9 @@ exception of ``time`` dimension. Let's explore the time dimension.
 
 
 
-.. parsed-literal::
+.. raw:: html
 
-    index
-      pos idx      label   
-        0 '1946'   '1946'  
-        1 '1947'   '1947'  
-        2 '1948'   '1948'  
-        3 '1949'   '1949'  
-        4 '1950'   '1950'  
-        5 '1951'   '1951'  
-        6 '1952'   '1952'  
-        7 '1953'   '1953'  
-        8 '1954'   '1954'  
-        9 '1955'   '1955'  
-       10 '1956'   '1956'  
-       11 '1957'   '1957'  
-       12 '1958'   '1958'  
-       13 '1959'   '1959'  
-       14 '1960'   '1960'  
-       15 '1961'   '1961'  
-       16 '1962'   '1962'  
-       17 '1963'   '1963'  
-       18 '1964'   '1964'  
-       19 '1965'   '1965'  
-       20 '1966'   '1966'  
-       21 '1967'   '1967'  
-       22 '1968'   '1968'  
-       23 '1969'   '1969'  
-       24 '1970'   '1970'  
-       25 '1971'   '1971'  
-       26 '1972'   '1972'  
-       27 '1973'   '1973'  
-       28 '1974'   '1974'  
-       29 '1975'   '1975'  
-       30 '1976'   '1976'  
-       31 '1977'   '1977'  
-       32 '1978'   '1978'  
-       33 '1979'   '1979'  
-       34 '1980'   '1980'  
-       35 '1981'   '1981'  
-       36 '1982'   '1982'  
-       37 '1983'   '1983'  
-       38 '1984'   '1984'  
-       39 '1985'   '1985'  
-       40 '1986'   '1986'  
-       41 '1987'   '1987'  
-       42 '1988'   '1988'  
-       43 '1989'   '1989'  
-       44 '1990'   '1990'  
-       45 '1991'   '1991'  
-       46 '1992'   '1992'  
-       47 '1993'   '1993'  
-       48 '1994'   '1994'  
-       49 '1995'   '1995'  
-       50 '1996'   '1996'  
-       51 '1997'   '1997'  
-       52 '1998'   '1998'  
-       53 '1999'   '1999'  
-       54 '2000'   '2000'  
-       55 '2001'   '2001'  
-       56 '2002'   '2002'  
-       57 '2003'   '2003'  
-       58 '2004'   '2004'  
-       59 '2005'   '2005'  
-       60 '2006'   '2006'  
-       61 '2007'   '2007'  
-       62 '2008'   '2008'  
-       63 '2009'   '2009'  
-       64 '2010'   '2010'  
-       65 '2011'   '2011'  
-       66 '2012'   '2012'  
-       67 '2013'   '2013'  
-       68 '2014'   '2014'  
+    <table><tr><td>pos</td><td>idx</td><td>label</td></tr><tr><td>0</td><td>'1946'</td><td>'1946'</td></tr><tr><td>1</td><td>'1947'</td><td>'1947'</td></tr><tr><td>2</td><td>'1948'</td><td>'1948'</td></tr><tr><td>3</td><td>'1949'</td><td>'1949'</td></tr><td>...</td><td>...</td><td>...</td></table>
 
 
 
@@ -230,28 +153,28 @@ Convert the jsonstat data into a pandas dataframe.
           <td>EUR_HAB</td>
           <td>B1GM</td>
           <td>IT</td>
-          <td>25700</td>
+          <td>25700.0</td>
         </tr>
         <tr>
           <th>2011</th>
           <td>EUR_HAB</td>
           <td>B1GM</td>
           <td>IT</td>
-          <td>26000</td>
+          <td>26000.0</td>
         </tr>
         <tr>
           <th>2012</th>
           <td>EUR_HAB</td>
           <td>B1GM</td>
           <td>IT</td>
-          <td>25700</td>
+          <td>25700.0</td>
         </tr>
         <tr>
           <th>2013</th>
           <td>EUR_HAB</td>
           <td>B1GM</td>
           <td>IT</td>
-          <td>25600</td>
+          <td>25600.0</td>
         </tr>
         <tr>
           <th>2014</th>
@@ -271,14 +194,14 @@ Adding a simple plot
 .. code:: python
 
     df_1 = df_1.dropna() # remove rows with NaN values
-    df_1.plot(grid=True)
+    df_1.plot(grid=True, figsize=(20,5))
 
 
 
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x1127c1160>
+    <matplotlib.axes._subplots.AxesSubplot at 0x114bc12b0>
 
 
 
@@ -286,8 +209,8 @@ Adding a simple plot
 .. image:: eurostat_files/eurostat_15_1.png
 
 
-Exploring data with two dimensions (geo, time) with size > 1
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 - Exploring data with two dimensions (geo, time) with size > 1
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Download or use the jsonstat file cached on disk. The cache is used to
 avoid internet download during the devolopment to make the things a bit
@@ -299,7 +222,7 @@ faster. You can see the raw data
     url_2 = 'http://ec.europa.eu/eurostat/wdds/rest/data/v1.1/json/en/nama_gdp_c?precision=1&geo=IT&geo=FR&unit=EUR_HAB&indic_na=B1GM'
     file_name_2 = "eurostat-name_gpd_c-geo_IT_FR.json"
     
-    file_path_2 = os.path.abspath(os.path.join("..", "tests", "fixtures", "eurostat", file_name_2))
+    file_path_2 = os.path.abspath(os.path.join("..", "tests", "fixtures", "www.ec.europa.eu_eurostat", file_name_2))
     if os.path.exists(file_path_2):
         print("using alredy donwloaded file {}".format(file_path_2))
     else:
@@ -310,7 +233,7 @@ faster. You can see the raw data
 
 .. parsed-literal::
 
-    using alredy donwloaded file /Users/26fe_nas/gioprj.on_mac/prj.python/jsonstat.py/tests/fixtures/eurostat/eurostat-name_gpd_c-geo_IT_FR.json
+    using alredy donwloaded file /Users/26fe_nas/gioprj.on_mac/prj.python/jsonstat.py/tests/fixtures/www.ec.europa.eu_eurostat/eurostat-name_gpd_c-geo_IT_FR.json
 
 
 .. code:: python
@@ -322,16 +245,9 @@ faster. You can see the raw data
 
 
 
-.. parsed-literal::
+.. raw:: html
 
-    name:   'nama_gdp_c'
-    title:  'GDP and main components - Current prices'
-    size: 138
-    4 dimensions:
-      0: dim id: 'unit' label: 'unit' size: '1' role: 'None'
-      1: dim id: 'indic_na' label: 'indic_na' size: '1' role: 'None'
-      2: dim id: 'geo' label: 'geo' size: '2' role: 'None'
-      3: dim id: 'time' label: 'time' size: '69' role: 'None'
+    name:   'nama_gdp_c'</br>title:  'GDP and main components - Current prices'</br>size: 4</br><table><tr><td>pos</td><td>id</td><td>label</td><td>size</td><td>role</td></tr><tr><td>0</td><td>unit</td><td>unit</td><td>1</td><td></td></tr><tr><td>1</td><td>indic_na</td><td>indic_na</td><td>1</td><td></td></tr><tr><td>2</td><td>geo</td><td>geo</td><td>2</td><td></td></tr><tr><td>3</td><td>time</td><td>time</td><td>69</td><td></td></tr></table>
 
 
 
@@ -342,12 +258,9 @@ faster. You can see the raw data
 
 
 
-.. parsed-literal::
+.. raw:: html
 
-    index
-      pos idx      label   
-        0 'FR'     'France'
-        1 'IT'     'Italy' 
+    <table><tr><td>pos</td><td>idx</td><td>label</td></tr><tr><td>0</td><td>'FR'</td><td>'France'</td></tr><tr><td>1</td><td>'IT'</td><td>'Italy'</td></tr></table>
 
 
 
@@ -406,7 +319,7 @@ faster. You can see the raw data
           <td>B1GM</td>
           <td>IT</td>
           <td>2010</td>
-          <td>25700</td>
+          <td>25700.0</td>
         </tr>
         <tr>
           <th>134</th>
@@ -414,7 +327,7 @@ faster. You can see the raw data
           <td>B1GM</td>
           <td>IT</td>
           <td>2011</td>
-          <td>26000</td>
+          <td>26000.0</td>
         </tr>
         <tr>
           <th>135</th>
@@ -422,7 +335,7 @@ faster. You can see the raw data
           <td>B1GM</td>
           <td>IT</td>
           <td>2012</td>
-          <td>25700</td>
+          <td>25700.0</td>
         </tr>
         <tr>
           <th>136</th>
@@ -430,7 +343,7 @@ faster. You can see the raw data
           <td>B1GM</td>
           <td>IT</td>
           <td>2013</td>
-          <td>25600</td>
+          <td>25600.0</td>
         </tr>
         <tr>
           <th>137</th>
@@ -450,14 +363,14 @@ faster. You can see the raw data
 
     df_FR_IT = df_2.dropna()[['time', 'geo', 'Value']]
     df_FR_IT = df_FR_IT.pivot('time', 'geo', 'Value')
-    df_FR_IT.plot(grid=True)
+    df_FR_IT.plot(grid=True, figsize=(20,5))
 
 
 
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x112d7a6d8>
+    <matplotlib.axes._subplots.AxesSubplot at 0x114c0f0b8>
 
 
 
@@ -469,14 +382,14 @@ faster. You can see the raw data
 
     df_3 = nama_gdp_c_2.to_data_frame('time', content='id', blocked_dims={'geo':'FR'})
     df_3 = df_3.dropna()
-    df_3.plot(grid=True)
+    df_3.plot(grid=True,figsize=(20,5))
 
 
 
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x112da0fd0>
+    <matplotlib.axes._subplots.AxesSubplot at 0x1178e7d30>
 
 
 
@@ -488,14 +401,14 @@ faster. You can see the raw data
 
     df_4 = nama_gdp_c_2.to_data_frame('time', content='id', blocked_dims={'geo':'IT'})
     df_4 = df_4.dropna()
-    df_4.plot(grid=True)
+    df_4.plot(grid=True,figsize=(20,5))
 
 
 
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x112eed518>
+    <matplotlib.axes._subplots.AxesSubplot at 0x117947630>
 
 
 

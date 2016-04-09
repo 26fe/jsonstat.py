@@ -5,9 +5,9 @@ Notebook: using jsonstat.py to explore ISTAT data (unemployment)
 This Jupyter notebook shows how to use
 `jsonstat.py <http://github.com/26fe/jsonstat.py>`__ python library to
 explore Istat data. `Istat <http://www.istat.it/en/about-istat>`__ is
-the Italian National Institute of Statistics. It publishs a rest api for
-browsing italian statistics. This api can return results in jsonstat
-format.
+the Italian National Institute of Statistics. It publishes a rest api
+for browsing italian statistics. This api can return results in
+`jsonstat format <https://json-stat.org/>`__.
 
 .. code:: python
 
@@ -30,7 +30,7 @@ files to get a fresh copy.
 
 .. code:: python
 
-    cache_dir = os.path.abspath(os.path.join("..", "tmp", "istat_cached"))
+    cache_dir = os.path.abspath(os.path.join("..", "tmp", "istat_cached")) # you could choice /tmp
     istat.cache_dir(cache_dir)
     print("cache_dir is '{}'".format(istat.cache_dir()))
 
@@ -44,7 +44,7 @@ List all istat areas
 
 .. code:: python
 
-    HTML(istat.areas_as_html())
+    istat.areas()
 
 
 
@@ -60,14 +60,14 @@ List all datasets contained into area ``LAB`` (Labour)
 .. code:: python
 
     istat_area_lab = istat.area('LAB')
-    HTML(istat_area_lab.datasets_as_html())
+    istat_area_lab
 
 
 
 
 .. raw:: html
 
-    <table><tr><th>cod</th><th>name</th><th>dim</th></tr><tr><td>DCCV_COMPL</td><td>Supplementary indicators to unemployment</td><td>12</td></td></tr><tr><td>DCCV_DISOCCUPT</td><td>Unemployment</td><td>10</td></td></tr><tr><td>DCCV_DISOCCUPTDE</td><td>Unemployed - seasonally adjusted data</td><td>7</td></td></tr><tr><td>DCCV_DISOCCUPTMENS</td><td>Unemployed - monthly data</td><td>8</td></td></tr><tr><td>DCCV_FORZLV</td><td>Labour force</td><td>8</td></td></tr><tr><td>DCCV_FORZLVDE</td><td>Labour force - seasonally adjusted data</td><td>7</td></td></tr><tr><td>DCCV_FORZLVMENS</td><td>Labour force - monthly data</td><td>8</td></td></tr><tr><td>DCCV_INATTIV</td><td>Inactive population</td><td>11</td></td></tr><tr><td>DCCV_INATTIVDE</td><td>Inactive population - seasonally adjusted data</td><td>7</td></td></tr><tr><td>DCCV_INATTIVMENS</td><td>Inactive population - monthly data</td><td>8</td></td></tr><tr><td>DCCV_NEET</td><td>Young people not in employment, education or training</td><td>10</td></td></tr><tr><td>DCCV_OCCUPATIMENS</td><td>Employed - monthly data</td><td>8</td></td></tr><tr><td>DCCV_OCCUPATIT</td><td> Employment                                </td><td>14</td></td></tr><tr><td>DCCV_OCCUPATITDE</td><td>Employed - seasonally adjusted data</td><td>8</td></td></tr><tr><td>DCCV_ORELAVMED</td><td>Employment by number of actual weekly hours and average number of actual weekly hours</td><td>12</td></td></tr><tr><td>DCCV_TAXATVT</td><td>Activity rate</td><td>8</td></td></tr><tr><td>DCCV_TAXATVTDE</td><td>Activity rate - seasonally adjusted data</td><td>7</td></td></tr><tr><td>DCCV_TAXATVTMENS</td><td>Activity rate - monthly data</td><td>8</td></td></tr><tr><td>DCCV_TAXDISOCCU</td><td>Unemployment rate</td><td>9</td></td></tr><tr><td>DCCV_TAXDISOCCUDE</td><td>Unemployment rate - seasonally adjusted data</td><td>7</td></td></tr><tr><td>DCCV_TAXDISOCCUMENS</td><td>Unemployment rate - monthly data</td><td>8</td></td></tr><tr><td>DCCV_TAXINATT</td><td>Inactivity rate</td><td>8</td></td></tr><tr><td>DCCV_TAXINATTDE</td><td>Inactivity rate - seasonally adjusted data</td><td>7</td></td></tr><tr><td>DCCV_TAXINATTMENS</td><td>Inactivity rate - monthly data</td><td>8</td></td></tr><tr><td>DCCV_TAXOCCU</td><td>Employment rate</td><td>8</td></td></tr><tr><td>DCCV_TAXOCCUDE</td><td>Employment rate - seasonally adjusted data</td><td>7</td></td></tr><tr><td>DCCV_TAXOCCUMENS</td><td>Employment rate - monthly data</td><td>8</td></td></tr><tr><td>DCIS_RICSTAT</td><td>New series of estimates on the resident population at NUTS-2 level for the 1/1/2002-1/1/2014 period</td><td>6</td></td></tr><tr><td>DCSC_COSTLAVSTRUT_1</td><td>Labour cost survey (four-yearly survey)</td><td>6</td></td></tr><tr><td>DCSC_COSTLAVULAOROS_1</td><td>Labour cost per full time equivalent unit indicators - quarterly data</td><td>5</td></td></tr><tr><td>DCSC_GI_COS</td><td>Labour cost in enterprises with more than 500 employees - monthly data</td><td>6</td></td></tr><tr><td>DCSC_GI_OCC</td><td>Employment, inflow and outflow rates in enterprises with more than 500 employees - monthly data</td><td>6</td></td></tr><tr><td>DCSC_GI_ORE</td><td>Hours worked in enterprises with more than 500 employees - monthly data</td><td>6</td></td></tr><tr><td>DCSC_GI_RE</td><td>Gross earnings in enterprises with more than 500 employees - monthly data</td><td>6</td></td></tr><tr><td>DCSC_ORE10_1</td><td>Hours worked in enterprises with at least 10 employees - quarterly data</td><td>5</td></td></tr><tr><td>DCSC_OROS_1</td><td>Number of payroll jobs index - quarterly data</td><td>5</td></td></tr><tr><td>DCSC_POSTIVAC_1</td><td>Job vacancy rate - quarterly data</td><td>5</td></td></tr><tr><td>DCSC_RETRATECO1</td><td>Wages according to collective labour agreements by Nace rev.2</td><td>6</td></td></tr><tr><td>DCSC_RETRCASSCOMPPA</td><td>Cash and accrual wages according to collective labour agreements per public administration employee per agreement - annual data -  euros</td><td>7</td></td></tr><tr><td>DCSC_RETRCONTR1C</td><td>Wages according to collective labour agreements by agreement  - monthly and annual data               .</td><td>6</td></td></tr><tr><td>DCSC_RETRCONTR1O</td><td>Annual gross, net hours, holiday pay and other hours reduction according to collective labour agreements</td><td>6</td></td></tr><tr><td>DCSC_RETRCONTR1T</td><td>Indicators of bargaining tension - monthly and annual data</td><td>6</td></td></tr><tr><td>DCSC_RETRULAOROS_1</td><td>Gross earnings per full time equivalent unit index - quarterly data</td><td>5</td></td></tr></table>
+    IstatArea: cod = LAB description = Labour
 
 
 
@@ -76,14 +76,14 @@ List all dimension for dataset ``DCCV_TAXDISOCCU`` (Unemployment rate)
 .. code:: python
 
     istat_dataset_taxdisoccu = istat_area_lab.dataset('DCCV_TAXDISOCCU')
-    HTML(istat_dataset_taxdisoccu.info_dimensions_as_html())
+    istat_dataset_taxdisoccu
 
 
 
 
 .. raw:: html
 
-    <table><tr><th>nr</th><th>name</th><th>nr. values</th><th>values (first 3 values)</th></tr><tr><td>0</td><td>Territory</td><td>136</td><td>1:'Italy', 3:'Nord', 4:'Nord-ovest' ...</td></td></tr><tr><td>1</td><td>Data type</td><td>1</td><td>6:'unemployment rate'</td></td></tr><tr><td>2</td><td>Measure</td><td>1</td><td>1:'percentage values'</td></td></tr><tr><td>3</td><td>Gender</td><td>3</td><td>1:'males', 2:'females', 3:'total' ...</td></td></tr><tr><td>4</td><td>Age class</td><td>14</td><td>32:'18-29 years', 3:'20-24 years', 4:'15-24 years' ...</td></td></tr><tr><td>5</td><td>Highest level of education attained</td><td>5</td><td>11:'tertiary (university, doctoral and specialization courses)', 12:'total', 3:'primary school certificate, no educational degree' ...</td></td></tr><tr><td>6</td><td>Citizenship</td><td>3</td><td>1:'italian', 2:'foreign', 3:'total' ...</td></td></tr><tr><td>7</td><td>Duration of unemployment</td><td>2</td><td>2:'12 months and more', 3:'total'</td></td></tr><tr><td>8</td><td>Time and frequency</td><td>193</td><td>1536:'Q4-1980', 2049:'Q4-2007', 1540:'1981' ...</td></td></tr></table>
+    DCCV_TAXDISOCCU(9):Unemployment rate</br><table><tr><th>nr</th><th>name</th><th>nr. values</th><th>values (first 3 values)</th></tr><tr><td>0</td><td>Territory</td><td>136</td><td>1:'Italy', 3:'Nord', 4:'Nord-ovest' ...</td></td></tr><tr><td>1</td><td>Data type</td><td>1</td><td>6:'unemployment rate'</td></td></tr><tr><td>2</td><td>Measure</td><td>1</td><td>1:'percentage values'</td></td></tr><tr><td>3</td><td>Gender</td><td>3</td><td>1:'males', 2:'females', 3:'total' ...</td></td></tr><tr><td>4</td><td>Age class</td><td>14</td><td>32:'18-29 years', 3:'20-24 years', 4:'15-24 years' ...</td></td></tr><tr><td>5</td><td>Highest level of education attained</td><td>5</td><td>11:'tertiary (university, doctoral and specialization courses)', 12:'total', 3:'primary school certificate, no educational degree' ...</td></td></tr><tr><td>6</td><td>Citizenship</td><td>3</td><td>1:'italian', 2:'foreign', 3:'total' ...</td></td></tr><tr><td>7</td><td>Duration of unemployment</td><td>2</td><td>2:'12 months and more', 3:'total'</td></td></tr><tr><td>8</td><td>Time and frequency</td><td>193</td><td>1536:'Q4-1980', 2049:'Q4-2007', 1540:'1981' ...</td></td></tr></table>
 
 
 
@@ -105,14 +105,15 @@ Extract data from dataset ``DCCV_TAXDISOCCU``
     
     # convert istat dataset into jsonstat collection and print some info
     collection = istat_dataset_taxdisoccu.getvalues(spec)
-    collection.info()
+    collection
 
 
-.. parsed-literal::
 
-    JsonstatCollection contains the following JsonStatDataSet:
-    0: dataset 'IDITTER107*IDTIME'
-    
+
+.. raw:: html
+
+    JsonstatCollection contains the following JsonStatDataSet:</br><table><tr><td>pos</td><td>dataset</td></tr><tr><td>0</td><td>'IDITTER107*IDTIME'</td></tr></table>
+
 
 
 Print some info of the only dataset contained into the above jsonstat
@@ -126,14 +127,9 @@ collection
 
 
 
-.. parsed-literal::
+.. raw:: html
 
-    name:   'IDITTER107*IDTIME'
-    label:  'Unemployment rate by Territory and Time and frequency - unemployment rate - percentage values - 15-74 years'
-    size: 7830
-    2 dimensions:
-      0: dim id: 'IDITTER107' label: 'Territory' size: '135' role: 'None'
-      1: dim id: 'IDTIME' label: 'Time and frequency' size: '58' role: 'None'
+    name:   'IDITTER107*IDTIME'</br>label:  'Unemployment rate by Territory and Time and frequency - unemployment rate - percentage values - 15-74 years'</br>size: 7830</br><table><tr><td>pos</td><td>id</td><td>label</td><td>size</td><td>role</td></tr><tr><td>0</td><td>IDITTER107</td><td>Territory</td><td>135</td><td></td></tr><tr><td>1</td><td>IDTIME</td><td>Time and frequency</td><td>58</td><td></td></tr></table>
 
 
 
@@ -399,14 +395,15 @@ collection
     
     # convert istat dataset into jsonstat collection and print some info
     collection_2 = istat_dataset_taxdisoccu.getvalues(spec)
-    collection_2.info()
+    collection_2
 
 
-.. parsed-literal::
 
-    JsonstatCollection contains the following JsonStatDataSet:
-    0: dataset 'IDCLASETA28*IDTIME'
-    
+
+.. raw:: html
+
+    JsonstatCollection contains the following JsonStatDataSet:</br><table><tr><td>pos</td><td>dataset</td></tr><tr><td>0</td><td>'IDCLASETA28*IDTIME'</td></tr></table>
+
 
 
 .. code:: python
@@ -539,31 +536,24 @@ collection
 
 .. code:: python
 
-    plt.figure(figsize=(7,4))
-    df.plot(x='Time and frequency',y='Value')
+    df.plot(x='Time and frequency',y='Value', figsize=(18,4))
 
 
 
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x11829b8d0>
+    <matplotlib.axes._subplots.AxesSubplot at 0x1184b1908>
 
 
 
 
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x1182a7d30>
-
-
-
-.. image:: istat_unemployment_files/istat_unemployment_19_2.png
+.. image:: istat_unemployment_files/istat_unemployment_19_1.png
 
 
 .. code:: python
 
-    fig = plt.figure(figsize=(16,12))
+    fig = plt.figure(figsize=(18,6))
     ax = fig.add_subplot(111)
     plt.grid(True)
     df.plot(x='Time and frequency',y='Value', ax=ax, grid=True) 
@@ -575,7 +565,7 @@ collection
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x1182a7fd0>
+    <matplotlib.axes._subplots.AxesSubplot at 0x11a898b70>
 
 
 

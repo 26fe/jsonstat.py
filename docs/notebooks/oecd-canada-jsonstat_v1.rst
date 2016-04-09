@@ -9,7 +9,7 @@ dissemination format. For more information about the format see the
 `official site <https://json-stat.org/>`__. This example shows how to
 explore the example data file
 `oecd-canada <http://json-stat.org/samples/oecd-canada.json>`__ from
-json-stat.org site. This file is complaint to the version 1 of jsonstat.
+json-stat.org site. This file is compliant to the version 1 of jsonstat.
 
 .. code:: python
 
@@ -26,14 +26,14 @@ json-stat.org site. This file is complaint to the version 1 of jsonstat.
     %matplotlib inline
 
 Download or use cached file oecd-canada.json. Caching file on disk
-permits to work off-line and to speed up the exloration of the data.
+permits to work off-line and to speed up the exploration of the data.
 
 .. code:: python
 
     url = 'http://json-stat.org/samples/oecd-canada.json'
     file_name = "oecd-canada.json"
     
-    file_path = os.path.abspath(os.path.join("..", "tests", "fixtures", "json-stat.org", file_name))
+    file_path = os.path.abspath(os.path.join("..", "tests", "fixtures", "www.json-stat.org", file_name))
     if os.path.exists(file_path):
         print("using already downloaded file {}".format(file_path))
     else:
@@ -44,7 +44,7 @@ permits to work off-line and to speed up the exloration of the data.
 
 .. parsed-literal::
 
-    using already downloaded file /Users/26fe_nas/gioprj.on_mac/prj.python/jsonstat.py/tests/fixtures/json-stat.org/oecd-canada.json
+    using already downloaded file /Users/26fe_nas/gioprj.on_mac/prj.python/jsonstat.py/tests/fixtures/www.json-stat.org/oecd-canada.json
 
 
 Initialize JsonStatCollection from the file and print the list of
@@ -58,11 +58,9 @@ dataset contained into the collection.
 
 
 
-.. parsed-literal::
+.. raw:: html
 
-    JsonstatCollection contains the following JsonStatDataSet:
-    0: dataset 'oecd'
-    1: dataset 'canada'
+    JsonstatCollection contains the following JsonStatDataSet:</br><table><tr><td>pos</td><td>dataset</td></tr><tr><td>0</td><td>'oecd'</td></tr><tr><td>1</td><td>'canada'</td></tr></table>
 
 
 
@@ -77,16 +75,9 @@ Select the dataset named ``oedc``. Oecd dataset has three dimensions
 
 
 
-.. parsed-literal::
+.. raw:: html
 
-    name:   'oecd'
-    label:  'Unemployment rate in the OECD countries 2003-2014'
-    source: 'Unemployment rate in the OECD countries 2003-2014'
-    size: 432
-    3 dimensions:
-      0: dim id: 'concept' label: 'indicator' size: '1' role: 'metric'
-      1: dim id: 'area' label: 'OECD countries, EU15 and total' size: '36' role: 'geo'
-      2: dim id: 'year' label: '2003-2014' size: '12' role: 'time'
+    name:   'oecd'</br>label:  'Unemployment rate in the OECD countries 2003-2014'</br>source: 'Unemployment rate in the OECD countries 2003-2014'</br>size: 3</br><table><tr><td>pos</td><td>id</td><td>label</td><td>size</td><td>role</td></tr><tr><td>0</td><td>concept</td><td>indicator</td><td>1</td><td>metric</td></tr><tr><td>1</td><td>area</td><td>OECD countries, EU15 and total</td><td>36</td><td>geo</td></tr><tr><td>2</td><td>year</td><td>2003-2014</td><td>12</td><td>time</td></tr></table>
 
 
 
@@ -94,80 +85,60 @@ Shows some detailed info about dimensions
 
 .. code:: python
 
-    for d in oecd.dimensions():
-        print("info for dimensions '{}'".format(d.name()))
-        d.info()
+    oecd.dimension('concept')
 
 
-.. parsed-literal::
 
-    info for dimensions 'concept'
-    index
-      pos idx      label   
-        0 'UNR'    'unemployment rate'
-    
-    info for dimensions 'area'
-    index
-      pos idx      label   
-        0 'AU'     'Australia'
-        1 'AT'     'Austria'
-        2 'BE'     'Belgium'
-        3 'CA'     'Canada'
-        4 'CL'     'Chile' 
-        5 'CZ'     'Czech Republic'
-        6 'DK'     'Denmark'
-        7 'EE'     'Estonia'
-        8 'FI'     'Finland'
-        9 'FR'     'France'
-       10 'DE'     'Germany'
-       11 'GR'     'Greece'
-       12 'HU'     'Hungary'
-       13 'IS'     'Iceland'
-       14 'IE'     'Ireland'
-       15 'IL'     'Israel'
-       16 'IT'     'Italy' 
-       17 'JP'     'Japan' 
-       18 'KR'     'Korea' 
-       19 'LU'     'Luxembourg'
-       20 'MX'     'Mexico'
-       21 'NL'     'Netherlands'
-       22 'NZ'     'New Zealand'
-       23 'NO'     'Norway'
-       24 'PL'     'Poland'
-       25 'PT'     'Portugal'
-       26 'SK'     'Slovak Republic'
-       27 'SI'     'Slovenia'
-       28 'ES'     'Spain' 
-       29 'SE'     'Sweden'
-       30 'CH'     'Switzerland'
-       31 'TR'     'Turkey'
-       32 'UK'     'United Kingdom'
-       33 'US'     'United States'
-       34 'EU15'   'Euro area (15 countries)'
-       35 'OECD'   'total' 
-    
-    info for dimensions 'year'
-    index
-      pos idx      label   
-        0 '2003'   ''      
-        1 '2004'   ''      
-        2 '2005'   ''      
-        3 '2006'   ''      
-        4 '2007'   ''      
-        5 '2008'   ''      
-        6 '2009'   ''      
-        7 '2010'   ''      
-        8 '2011'   ''      
-        9 '2012'   ''      
-       10 '2013'   ''      
-       11 '2014'   ''      
-    
+
+.. raw:: html
+
+    <table><tr><td>pos</td><td>idx</td><td>label</td></tr><tr><td>0</td><td>'UNR'</td><td>'unemployment rate'</td></tr></table>
+
+
+
+.. code:: python
+
+    oecd.dimension('area')
+
+
+
+
+.. raw:: html
+
+    <table><tr><td>pos</td><td>idx</td><td>label</td></tr><tr><td>0</td><td>'AU'</td><td>'Australia'</td></tr><tr><td>1</td><td>'AT'</td><td>'Austria'</td></tr><tr><td>2</td><td>'BE'</td><td>'Belgium'</td></tr><tr><td>3</td><td>'CA'</td><td>'Canada'</td></tr><td>...</td><td>...</td><td>...</td></table>
+
+
+
+.. code:: python
+
+    oecd.dimension('year')
+
+
+
+
+.. raw:: html
+
+    <table><tr><td>pos</td><td>idx</td><td>label</td></tr><tr><td>0</td><td>'2003'</td><td>''</td></tr><tr><td>1</td><td>'2004'</td><td>''</td></tr><tr><td>2</td><td>'2005'</td><td>''</td></tr><tr><td>3</td><td>'2006'</td><td>''</td></tr><td>...</td><td>...</td><td>...</td></table>
+
 
 
 Accessing value in the dataset
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Print the value in oecd dataset for area = IT and year = 2012
+
+.. code:: python
+
+    oecd.data(area='IT', year='2012')
+
+
+
+
+.. parsed-literal::
+
+    JsonStatValue(idx=201, value=10.55546863, status=None)
+
+
 
 .. code:: python
 
@@ -285,7 +256,7 @@ Trasforming dataset into pandas DataFrame
 
     count     432
     unique     36
-    top        AT
+    top        JP
     freq       12
     Name: area, dtype: object
 
@@ -384,12 +355,12 @@ specific country (Canada)
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x1131ec710>
+    <matplotlib.axes._subplots.AxesSubplot at 0x113980908>
 
 
 
 
-.. image:: oecd-canada-jsonstat_v1_files/oecd-canada-jsonstat_v1_21_1.png
+.. image:: oecd-canada-jsonstat_v1_files/oecd-canada-jsonstat_v1_24_1.png
 
 
 Trasforming a dataset into a python list
@@ -416,9 +387,8 @@ It is possible to trasform jsonstat data into table in different order
 
 .. code:: python
 
-    order = [i.name() for i in oecd.dimensions()]
+    order = [i.did() for i in oecd.dimensions()]
     order = order[::-1]  # reverse list
-    order = oecd._from_aidx_to_adim(order)
     table = oecd.to_table(order=order)
     table[:5]
 

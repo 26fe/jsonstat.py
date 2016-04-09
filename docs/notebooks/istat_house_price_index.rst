@@ -42,7 +42,7 @@ datasets
 
 .. code:: python
 
-    HTML(istat.areas_as_html())
+    istat.areas()
 
 
 
@@ -58,7 +58,7 @@ Following code list all datasets contained into area ``Prices``.
 .. code:: python
 
     istat_area_prices = istat.area('Prices')
-    HTML(istat_area_prices.datasets_as_html())
+    istat_area_prices.datasets()
 
 
 
@@ -74,14 +74,14 @@ List all dimension for dataset ``DCSP_IPAB`` (House price index)
 .. code:: python
 
     istat_dataset_dcsp_ipab = istat_area_prices.dataset('DCSP_IPAB')
-    HTML(istat_dataset_dcsp_ipab.info_dimensions_as_html())
+    istat_dataset_dcsp_ipab
 
 
 
 
 .. raw:: html
 
-    <table><tr><th>nr</th><th>name</th><th>nr. values</th><th>values (first 3 values)</th></tr><tr><td>0</td><td>Territory</td><td>1</td><td>1:'Italy'</td></td></tr><tr><td>1</td><td>Index type</td><td>3</td><td>18:'house price index (base 2010=100) - quarterly data', 19:'house price index (base 2010=100) - annual average', 20:'house price index (base 2010=100) - weights' ...</td></td></tr><tr><td>2</td><td>Measure</td><td>5</td><td>8:'annual average rate of change', 4:'index number', 22:'not applicable' ...</td></td></tr><tr><td>3</td><td>Purchases of dwellings</td><td>3</td><td>4:'H1 - all items', 5:'H11 - new dwellings', 6:'H12 - existing dwellings' ...</td></td></tr><tr><td>4</td><td>Time and frequency</td><td>29</td><td>2112:'Q1-2011', 2178:'Q3-2014', 2116:'Q2-2011' ...</td></td></tr></table>
+    DCSP_IPAB(5):House price index </br><table><tr><th>nr</th><th>name</th><th>nr. values</th><th>values (first 3 values)</th></tr><tr><td>0</td><td>Territory</td><td>1</td><td>1:'Italy'</td></td></tr><tr><td>1</td><td>Index type</td><td>3</td><td>18:'house price index (base 2010=100) - quarterly data', 19:'house price index (base 2010=100) - annual average', 20:'house price index (base 2010=100) - weights' ...</td></td></tr><tr><td>2</td><td>Measure</td><td>5</td><td>8:'annual average rate of change', 4:'index number', 22:'not applicable' ...</td></td></tr><tr><td>3</td><td>Purchases of dwellings</td><td>3</td><td>4:'H1 - all items', 5:'H11 - new dwellings', 6:'H12 - existing dwellings' ...</td></td></tr><tr><td>4</td><td>Time and frequency</td><td>29</td><td>2112:'Q1-2011', 2178:'Q3-2014', 2116:'Q2-2011' ...</td></td></tr></table>
 
 
 
@@ -101,10 +101,9 @@ specifying dimensions we are interested.
 
 
 
-.. parsed-literal::
+.. raw:: html
 
-    JsonstatCollection contains the following JsonStatDataSet:
-    0: dataset 'IDMISURA1*IDTYPPURCH*IDTIME'
+    JsonstatCollection contains the following JsonStatDataSet:</br><table><tr><td>pos</td><td>dataset</td></tr><tr><td>0</td><td>'IDMISURA1*IDTYPPURCH*IDTIME'</td></tr></table>
 
 
 
@@ -133,10 +132,9 @@ string of number. Below is the mapping from the number and dimensions:
 
 
 
-.. parsed-literal::
+.. raw:: html
 
-    JsonstatCollection contains the following JsonStatDataSet:
-    0: dataset 'IDMISURA1*IDTYPPURCH*IDTIME'
+    JsonstatCollection contains the following JsonStatDataSet:</br><table><tr><td>pos</td><td>dataset</td></tr><tr><td>0</td><td>'IDMISURA1*IDTYPPURCH*IDTIME'</td></tr></table>
 
 
 
@@ -157,15 +155,9 @@ collection
 
 
 
-.. parsed-literal::
+.. raw:: html
 
-    name:   'IDMISURA1*IDTYPPURCH*IDTIME'
-    label:  'House price index  by Measure, Purchases of dwellings and Time and frequency - Italy - house price index (base 2010=100) - quarterly data'
-    size: 207
-    3 dimensions:
-      0: dim id: 'IDMISURA1' label: 'Measure' size: '3' role: 'None'
-      1: dim id: 'IDTYPPURCH' label: 'Purchases of dwellings' size: '3' role: 'None'
-      2: dim id: 'IDTIME' label: 'Time and frequency' size: '23' role: 'None'
+    name:   'IDMISURA1*IDTYPPURCH*IDTIME'</br>label:  'House price index  by Measure, Purchases of dwellings and Time and frequency - Italy - house price index (base 2010=100) - quarterly data'</br>size: 207</br><table><tr><td>pos</td><td>id</td><td>label</td><td>size</td><td>role</td></tr><tr><td>0</td><td>IDMISURA1</td><td>Measure</td><td>3</td><td></td></tr><tr><td>1</td><td>IDTYPPURCH</td><td>Purchases of dwellings</td><td>3</td><td></td></tr><tr><td>2</td><td>IDTIME</td><td>Time and frequency</td><td>23</td><td></td></tr></table>
 
 
 
@@ -178,13 +170,9 @@ Print info about the dimensions to get an idea about the data
 
 
 
-.. parsed-literal::
+.. raw:: html
 
-    index
-      pos idx      label   
-        0 '4'      'index number'
-        1 '6'      'percentage changes on the previous period'
-        2 '7'      'percentage changes on the same period of the previous year'
+    <table><tr><td>pos</td><td>idx</td><td>label</td></tr><tr><td>0</td><td>'4'</td><td>'index number'</td></tr><tr><td>1</td><td>'6'</td><td>'percentage changes on the previous period'</td></tr><tr><td>2</td><td>'7'</td><td>'percentage changes on the same period of the previous year'</td></tr></table>
 
 
 
@@ -195,13 +183,9 @@ Print info about the dimensions to get an idea about the data
 
 
 
-.. parsed-literal::
+.. raw:: html
 
-    index
-      pos idx      label   
-        0 '4'      'H1 - all items'
-        1 '5'      'H11 - new dwellings'
-        2 '6'      'H12 - existing dwellings'
+    <table><tr><td>pos</td><td>idx</td><td>label</td></tr><tr><td>0</td><td>'4'</td><td>'H1 - all items'</td></tr><tr><td>1</td><td>'5'</td><td>'H11 - new dwellings'</td></tr><tr><td>2</td><td>'6'</td><td>'H12 - existing dwellings'</td></tr></table>
 
 
 
@@ -212,33 +196,9 @@ Print info about the dimensions to get an idea about the data
 
 
 
-.. parsed-literal::
+.. raw:: html
 
-    index
-      pos idx      label   
-        0 '2093'   'Q1-2010'
-        1 '2097'   'Q2-2010'
-        2 '2102'   'Q3-2010'
-        3 '2106'   'Q4-2010'
-        4 '2112'   'Q1-2011'
-        5 '2116'   'Q2-2011'
-        6 '2121'   'Q3-2011'
-        7 '2125'   'Q4-2011'
-        8 '2131'   'Q1-2012'
-        9 '2135'   'Q2-2012'
-       10 '2140'   'Q3-2012'
-       11 '2144'   'Q4-2012'
-       12 '2150'   'Q1-2013'
-       13 '2154'   'Q2-2013'
-       14 '2159'   'Q3-2013'
-       15 '2163'   'Q4-2013'
-       16 '2169'   'Q1-2014'
-       17 '2173'   'Q2-2014'
-       18 '2178'   'Q3-2014'
-       19 '2182'   'Q4-2014'
-       20 '2188'   'Q1-2015'
-       21 '2192'   'Q2-2015'
-       22 '2197'   'Q3-2015'
+    <table><tr><td>pos</td><td>idx</td><td>label</td></tr><tr><td>0</td><td>'2093'</td><td>'Q1-2010'</td></tr><tr><td>1</td><td>'2097'</td><td>'Q2-2010'</td></tr><tr><td>2</td><td>'2102'</td><td>'Q3-2010'</td></tr><tr><td>3</td><td>'2106'</td><td>'Q4-2010'</td></tr><td>...</td><td>...</td><td>...</td></table>
 
 
 
