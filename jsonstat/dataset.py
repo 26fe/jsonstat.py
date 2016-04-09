@@ -171,13 +171,12 @@ class JsonStatDataSet:
         """print some info about this dataset on stdout"""
         print(self)
 
+    def __len__(self):
+        """returns the size of the dataset"""
+        return len(self.__value)
     #
     # dimensions
     #
-
-    def __len__(self):
-        """returns the size of the dataset"""
-        return self.__dim_nr
 
     def dimensions(self):
         """returns list of JsonStatDimension"""
