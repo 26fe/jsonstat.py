@@ -124,11 +124,20 @@ def cache_dir(cached_dir='', time_to_live=None):
 
 
 def download(url, pathname=None):
-    """download a url into a file ``pathname``
+    """download a url and return the downloaded content``
 
-    :param url:
-    :param pathname: where to store the url
-    :return: the content of url
+    :param url: ex.: http://json-stat.org/samples/oecd-canada.json
+    :param pathname: If ``pathname`` is defined the contents of the url
+    will be stored into the file ``<cache_dir>/pathname``
+    If ``pathname`` is None the filename will be automatic generated.
+    If ``pathname`` is an absolute path cache_dir will be ignored.
+
+    :returns: the contents of url
+
+    To set dir where to store downloaded file
+    see :py:meth:`jsonstat.cache_dir`.
+    Cache expiration policy can be customized
+
     """
     global __downloader__
     if __downloader__ is None:
@@ -142,26 +151,26 @@ def download(url, pathname=None):
         return d.download(url, os.path.basename(pathname))
 
 
-# TODO: pathname could be None so don't save on disk
-def from_url(url, filename=None):
-    """download a url and return the content of the url.
+def from_url(url, pathname=None):
+    """download an url and return the downloaded content.
 
-    If ``pathname`` is defined the contents of the url
+    see :py:meth:`jsonstat.download` for how to use pathname parameter.
+
+    :param url: ex.: http://json-stat.org/samples/oecd-canada.json
+    :param pathname: If ``pathname`` is defined the contents of the url
     will be stored into the file ``<cache_dir>/pathname``
-    If ``filename`` is None the filename will be automatic generated.
+    If ``pathname`` is None the filename will be automatic generated.
+    If ``pathname`` is an absolute path cache_dir will be ignored.
+
+    :returns: the contents of url
 
     To set dir where to store downloaded file
     see :py:meth:`jsonstat.cache_dir`.
     Cache expiration policy can be customized
 
-    :param url:
-    :param filename: where to store the url
-    :returns: the contents of url
-
-
     example:
 
-    >>> import os, jsonstat
+    >>> import jsonstat
     >>> # cache_dir = os.path.normpath(os.path.join(jsonstat.__fixtures_dir, "json-stat.org"))
     >>> # download external content into the /tmp dir so next downloads can be faster
     >>> uri = 'http://json-stat.org/samples/oecd-canada.json'
@@ -178,7 +187,7 @@ def from_url(url, filename=None):
     +-----+----------+
 
     """
-    json_string = download(url, filename)
+    json_string = download(url, pathname)
     return from_string(json_string)
 
 

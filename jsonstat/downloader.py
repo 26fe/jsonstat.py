@@ -30,11 +30,6 @@ class Downloader:
         """
         self.__cache_dir = cache_dir
         self.__time_to_live = time_to_live
-        if not os.path.exists(cache_dir):
-            os.makedirs(cache_dir)
-        if not os.path.isdir(cache_dir):
-            msg = "cache_dir '{}' is not a directory".format(cache_dir)
-            raise JsonStatException(msg)
 
         self.__session = requests.session()
 
@@ -61,9 +56,9 @@ class Downloader:
             response = self.__session.get(url)
             response.raise_for_status()
             html = response.text
-            self.__write_page_from_cache(pathname, html)
+            self.__write_page_to_cache(pathname, html)
         else:
-            html = self.__read_cached_page(pathname)
+            html = self.__read_page_from_page(pathname)
         return html
 
     def __build_pathname(self, filename, url):
@@ -89,13 +84,20 @@ class Downloader:
         # print("last modified: %s" % time.ctime(mtime))
         return cur - mtime < self.__time_to_live
 
-    @staticmethod
-    def __write_page_from_cache(pathname, content):
+    def __write_page_to_cache(self, pathname, content):
         """write content to pathname
 
         :param pathname:
         :param content:
         """
+
+        # create cache directory only the fist time it is needed
+        if not os.path.exists(self.__cache_dir):
+            os.makedirs(self.__cache_dir)
+        if not os.path.isdir(self.__cache_dir):
+            msg = "cache_dir '{}' is not a directory".format(self.__cache_dir)
+            raise JsonStatException(msg)
+
         # note:
         # in python 3 file must be open without b (binary) option to write string
         # otherwise the following error will be generated
@@ -105,7 +107,7 @@ class Downloader:
         f.close()
 
     @staticmethod
-    def __read_cached_page(pathname):
+    def __read_page_from_page(pathname):
         """it reads content from pathname
 
         :param pathname:
