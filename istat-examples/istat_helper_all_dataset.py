@@ -13,8 +13,8 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import os
-# http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
 import sys
+
 # TODO: remove following hack
 # http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
 if sys.version_info < (3,):
@@ -25,9 +25,12 @@ if sys.version_info < (3,):
 JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
 try:
     from istat import IstatHelper
+    import jsonstat
 except ImportError:
     sys.path.append(JSONSTAT_HOME)
     from istat import IstatHelper
+    import jsonstat
+
 
 def list_dim(istat_helper, dataset):
     """
@@ -40,6 +43,7 @@ def list_dim(istat_helper, dataset):
         print(msg)
     else:
         print("cannot retrieve info for dataset: {}".format(dataset))
+
 
 def list_dataset_dim(istat_helper, area):
     """
@@ -63,11 +67,12 @@ def list_dataset_dim(istat_helper, area):
 if __name__ == "__main__":
     # cache_dir where to store downloaded data file
     MAIN_DIRECTORY = os.path.join(os.path.dirname(__file__), "..")
+
     # cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "istat-tests", "fixtures", "istat_cached"))
     cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tmp", "istat_cached"))
-    istat_helper = IstatHelper(cache_dir, lang=1)
+    downloader = jsonstat.Downloader(cache_dir)
+    istat_helper = IstatHelper(downloader, lang=1)
 
     json_data = istat_helper.area(show=False)
     for area in json_data:
         list_dataset_dim(istat_helper, area)
-

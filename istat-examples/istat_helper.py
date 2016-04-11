@@ -23,9 +23,11 @@ if sys.version_info < (3,):
 JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
 try:
     from istat import IstatHelper
+    import jsonstat
 except ImportError:
     sys.path.append(JSONSTAT_HOME)
     from istat import IstatHelper
+    import jsonstat
 
 
 def list_dim(istat_helper, dataset):
@@ -68,7 +70,8 @@ if __name__ == "__main__":
     # cache_dir where to store downloaded data file
     MAIN_DIRECTORY = os.path.join(os.path.dirname(__file__), "..")
     cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "istat-tests", "fixtures", "istat_cached"))
-    istat = IstatHelper(cache_dir,lang=1)
+    downloader = jsonstat.Downloader(cache_dir)
+    istat = IstatHelper(downloader,lang=1)
 
     # list_area_dataset_dim(istat_helper)
 

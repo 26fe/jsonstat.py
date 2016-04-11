@@ -22,20 +22,21 @@ if sys.version_info < (3,):
 # jsonstat
 JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
 try:
-    import istat as istat
+    import istat
+    import jsonstat
 except ImportError:
     sys.path.append(JSONSTAT_HOME)
-    import istat as istat
+    import istat
+    import jsonstat
 
 if __name__ == "__main__":
     # cache_dir where to store downloaded data file
     JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
     cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "istat-tests", "fixtures", "istat_cached"))
-    if not os.path.exists(cache_dir):
-        os.makedirs(cache_dir)
 
     # print all istat area
-    i = istat.IstatRoot(cache_dir, lang=1)
+    downloader = jsonstat.Downloader(cache_dir)
+    i = istat.IstatRoot(downloader, lang=1)
     for area in i.areas():
         print(area)
 
@@ -46,7 +47,7 @@ if __name__ == "__main__":
     for istat_dataset in area.datasets():
         # TODO: this not works print(istat_dataset)
         try:
-            print(u"{}({}):{}".format(istat_dataset.cod(), istat_dataset.nrdim(), istat_dataset.did()))
+            print(u"{}({}):{}".format(istat_dataset.cod, istat_dataset.nrdim(), istat_dataset.name))
         except istat.IstatException as e:
             # ignore exception
             # TODO: better diagnostic?
@@ -60,12 +61,8 @@ if __name__ == "__main__":
 
     # get istat dataset with specific dimension
     collection = istat_dataset.getvalues("1,18,0,0,0")
-
-    # from istat dataset to jsonstat collection
-    # collection = jsonstat.JsonStatCollection()
-    # collection.from_json(json_data)
-    collection.info()
+    print(collection)
 
     # print some info about jsonstat dataset
     jds = collection.dataset('IDMISURA1*IDTYPPURCH*IDTIME')
-    jds.info()
+    print(jds)
