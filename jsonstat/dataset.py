@@ -30,7 +30,7 @@ class JsonStatDataSet:
         >>> dataset = jsonstat.from_file(filename).dataset(0)
         >>> dataset.label
         'Unemployment rate in the OECD countries 2003-2014'
-        >>> dataset.info()
+        >>> print(dataset)
         name:   'Unemployment rate in the OECD countries 2003-2014'
         label:  'Unemployment rate in the OECD countries 2003-2014'
         size: 432
@@ -166,10 +166,6 @@ class JsonStatDataSet:
         lst = self.__dim_to_table()
         html += lst2html(lst)
         return html
-
-    def info(self):
-        """print some info about this dataset on stdout"""
-        print(self)
 
     def __len__(self):
         """returns the size of the dataset"""

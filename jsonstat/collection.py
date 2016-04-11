@@ -28,7 +28,7 @@ class JsonStatCollection:
     >>> collection = jsonstat.from_file(filename)
     >>> len(collection)
     2
-    >>> collection.info()
+    >>> collection
     JsonstatCollection contains the following JsonStatDataSet:
     +-----+-----------------------------------------------------+
     | pos | dataset                                             |
@@ -89,10 +89,6 @@ class JsonStatCollection:
         lst = self.__to_table()
         html += lst2html(lst)
         return html
-
-    def info(self):
-        """print some info about this collection"""
-        print(self)
 
     #
     # parsing methods

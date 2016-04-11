@@ -179,7 +179,7 @@ def from_url(url, pathname=None):
     >>> jsonstat.cache_dir("/tmp")
     '/tmp'
     >>> o = jsonstat.from_url(uri)
-    >>> o.info()
+    >>> print(o)
     JsonstatCollection contains the following JsonStatDataSet:
     +-----+----------+
     | pos | dataset  |

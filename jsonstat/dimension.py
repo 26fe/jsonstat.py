@@ -41,7 +41,7 @@ class JsonStatDimension:
     'population'
     >>> dim.category(1)
     JsonStatCategory(label='weight of age group in the population', index='PERCENT', pos=1)
-    >>> dim.info()
+    >>> print(dim)
     +-----+-----------+-----------------------------------------+
     | pos | idx       | label                                   |
     +-----+-----------+-----------------------------------------+
@@ -168,10 +168,6 @@ class JsonStatDimension:
             html += "<td>...</td>" * len(lst[0])
         html += "</table>"
         return html
-
-    def info(self):
-        """print some info on standard output about this dimension"""
-        print(self)
 
     #
     # queries
