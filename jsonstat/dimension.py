@@ -102,18 +102,22 @@ class JsonStatDimension:
     # queries
     #   dimension properties
 
+    @property
     def did(self):
         """id of this dimension"""
         return self.__did
 
+    @property
     def label(self):
         """label of this dimension"""
         return self.__label
 
+    @property
     def role(self):
         """role of this dimension (can be time, geo or metric)"""
         return self.__role
 
+    @property
     def pos(self):
         """position of this dimension with respect to the data set to which this dimension belongs"""
         return self.__pos

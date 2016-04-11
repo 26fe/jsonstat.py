@@ -9,6 +9,7 @@ from jsonstat.exceptions import JsonStatException
 from jsonstat.exceptions import JsonStatMalformedJson
 
 from jsonstat.dimension import JsonStatDimension
+from jsonstat.value import JsonStatValue
 from jsonstat.dataset import JsonStatDataSet
 from jsonstat.collection import JsonStatCollection
 

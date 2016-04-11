@@ -48,7 +48,7 @@ class TestDataSetToTable(unittest.TestCase):
         dataset = jsonstat.JsonStatDataSet()
         dataset.from_file(json_pathname)
 
-        order = [i.did() for i in dataset.dimensions()]
+        order = [i.did for i in dataset.dimensions()]
         order = order[::-1]  # reverse list
         order = dataset._from_aidx_to_adim(order)
         table = dataset.to_table(order=order)

@@ -17,6 +17,7 @@ import terminaltables
 from jsonstat.dataset import JsonStatDataSet
 from jsonstat.utility import lst2html
 
+
 class JsonStatCollection:
     """Represents a jsonstat collection.
 
@@ -88,7 +89,6 @@ class JsonStatCollection:
         lst = self.__to_table()
         html += lst2html(lst)
         return html
-
 
     def info(self):
         """print some info about this collection"""

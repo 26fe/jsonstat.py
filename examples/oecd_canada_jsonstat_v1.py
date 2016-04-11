@@ -43,7 +43,7 @@ def test(uri, cache_dir, json_filename):
     oecd.info()
 
     for d in oecd.dimensions():
-        print("\n*** info for dimensions '{}'".format(d.did()))
+        print("\n*** info for dimensions '{}'".format(d.did))
         d.info()
 
     print("\n*** value oecd(area:IT,year:2012): {}".format(oecd.data(area='IT', year='2012')))

@@ -79,10 +79,10 @@ class TestDimension(unittest.TestCase):
 
     def test_getters(self):
         dim = jsonstat.JsonStatDimension("test_dim", 10, 0, 'role')
-        self.assertEqual(dim.did(), "test_dim")
+        self.assertEqual(dim.did, "test_dim")
         self.assertEqual(len(dim), 10)
-        self.assertEqual(dim.pos(), 0)
-        self.assertEqual(dim.role(), "role")
+        self.assertEqual(dim.pos, 0)
+        self.assertEqual(dim.role, "role")
 
     def test_exception_not_valid(self):
         dim = jsonstat.JsonStatDimension("year", 10, 0, None)
@@ -115,7 +115,7 @@ class TestDimension(unittest.TestCase):
     def test_size_one(self):
         dim = jsonstat.JsonStatDimension("country", 1, 0, None)
         dim.from_string(self.json_str_size_one)
-        self.assertEqual(u'country', dim.label())
+        self.assertEqual(u'country', dim.label)
         self.assertEqual(1, len(dim))
 
     def test_exception_mismatch_index_and_label(self):
