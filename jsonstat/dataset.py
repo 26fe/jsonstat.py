@@ -30,7 +30,7 @@ class JsonStatDataSet:
         >>> import os, jsonstat  # doctest: +ELLIPSIS
         >>> filename = os.path.join(jsonstat.__fixtures_dir, "www.json-stat.org", "oecd-canada-col.json")
         >>> dataset = jsonstat.from_file(filename).dataset(0)
-        >>> dataset.label()
+        >>> dataset.label
         'Unemployment rate in the OECD countries 2003-2014'
         >>> dataset.info()
         name:   'Unemployment rate in the OECD countries 2003-2014'
@@ -115,10 +115,12 @@ class JsonStatDataSet:
         self.__value = None
         self.__status = None
 
+    @property
     def name(self):
         """Returns the name of the dataset"""
         return self.__name
 
+    @property
     def label(self):
         """Returns the label of the dataset"""
         return self.__label
@@ -709,7 +711,13 @@ class JsonStatDataSet:
             raise JsonStatMalformedJson(msg)
 
         pos2iid = json_data_dimension['id']
+
         self.__pos2size = json_data_dimension['size']
+        # https://github.com/26fe/jsonstat.py/issues/1
+        # cso.ie expose dimension sizes as strings instead of integers.
+        for i, e in enumerate(self.__pos2size):
+            self.__pos2size[i] = int(e)
+
         self.__dim_nr = len(pos2iid)
 
         # validate dimension
@@ -788,7 +796,13 @@ class JsonStatDataSet:
             raise JsonStatMalformedJson(msg)
 
         pos2iid = json_data['id']
+
         self.__pos2size = json_data['size']
+        # https://github.com/26fe/jsonstat.py/issues/1
+        # cso.ie expose dimension sizes as strings instead of integers.
+        for i, e in enumerate(self.__pos2size):
+            self.__pos2size[i] = int(e)
+
         self.__dim_nr = len(pos2iid)
 
         # validate len(ids) == len(sizes)

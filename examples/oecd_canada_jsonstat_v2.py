@@ -35,7 +35,7 @@ def test(uri, cache_dir):
     collection.info()
     oecd = collection.dataset(0)
 
-    print("\n*** dataset '{}' info".format(oecd.name()))
+    print("\n*** dataset '{}' info".format(oecd.name))
     oecd.info()
     for d in oecd.dimensions():
         print("\n*** info for dimensions '{}'".format(d.did()))

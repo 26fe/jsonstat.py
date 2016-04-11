@@ -39,7 +39,7 @@ def test(uri, cache_dir, json_filename):
     collection.info()
 
     oecd = collection.dataset('oecd')
-    print("\n*** dataset {} info".format(oecd.name()))
+    print("\n*** dataset {} info".format(oecd.name))
     oecd.info()
 
     for d in oecd.dimensions():

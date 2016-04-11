@@ -104,7 +104,7 @@ class TestIstat(unittest.TestCase):
         self.assertEqual(1, len(collection))
 
         dataset = collection.dataset(0)
-        self.assertEqual('IDMISURA1*IDTYPPURCH*IDTIME', dataset.name())
+        self.assertEqual('IDMISURA1*IDTYPPURCH*IDTIME', dataset.name)
 
         # same istat dataset with explicit dimension
         spec = {
@@ -116,7 +116,7 @@ class TestIstat(unittest.TestCase):
         }
         collection = istat_dataset.getvalues(spec)
         dataset = collection.dataset(0)
-        self.assertEqual('IDMISURA1*IDTYPPURCH*IDTIME', dataset.name())
+        self.assertEqual('IDMISURA1*IDTYPPURCH*IDTIME', dataset.name)
         self.assertEquals(207, len(dataset))
 
         # same istat dataset with explicit dimension
@@ -129,7 +129,7 @@ class TestIstat(unittest.TestCase):
         }
         collection = istat_dataset.getvalues(spec)
         dataset = collection.dataset(0)
-        self.assertEqual('IDMISURA1*IDTYPPURCH*IDTIME', dataset.name())
+        self.assertEqual('IDMISURA1*IDTYPPURCH*IDTIME', dataset.name)
         self.assertEquals(207, len(dataset))
 
 

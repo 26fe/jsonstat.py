@@ -68,7 +68,7 @@ class JsonStatCollection:
     def __to_table(self):
         lst = [["pos", "dataset"]]
         for i, dataset in enumerate(self.__pos2dataset):
-            row = [str(i), "'" + dataset.name() + "'"]
+            row = [str(i), "'" + dataset.name + "'"]
             lst.append(row)
         return lst
 
