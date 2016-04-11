@@ -7,7 +7,6 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 from functools import reduce
-from collections import namedtuple
 import json
 
 # packages
@@ -16,12 +15,11 @@ import pandas as pd
 import terminaltables
 
 # jsonstat
+from jsonstat.value import JsonStatValue
 from jsonstat.dimension import JsonStatDimension
 from jsonstat.exceptions import JsonStatException
 from jsonstat.exceptions import JsonStatMalformedJson
 from jsonstat.utility import lst2html
-
-JsonStatValue = namedtuple('JsonStatValue', ['idx', 'value', 'status'])
 
 
 class JsonStatDataSet:
@@ -176,6 +174,7 @@ class JsonStatDataSet:
     def __len__(self):
         """returns the size of the dataset"""
         return len(self.__value)
+
     #
     # dimensions
     #
@@ -196,14 +195,14 @@ class JsonStatDataSet:
             return self.__pos2dim[spec]
         if spec not in self.__did2dim:
             msg = "dataset '{}': unknown dimension '{}' know dimensions ids are: {}"
-            msg = msg.format(self.__name, spec, ", ".join([dim.did() for dim in self.__pos2dim]))
+            msg = msg.format(self.__name, spec, ", ".join([dim.did for dim in self.__pos2dim]))
             raise JsonStatException(msg)
         return self.__did2dim[spec]
 
     def __dim_to_table(self):
         lst = [["pos", "id", "label", "size", "role"]]
         for i, dim in enumerate(self.__pos2dim):
-            row = [str(i), dim.did(), dim.label(), str(len(dim)), dim.role()]
+            row = [str(i), dim.did, dim.label, str(len(dim)), dim.role]
             row = list(map(lambda x: "" if x is None else x, row))
             lst.append(row)
         return lst
@@ -374,7 +373,7 @@ class JsonStatDataSet:
                 msg = msg.format(self.__name, cat, allowed_categories)
                 raise JsonStatException(msg)
 
-            apos[dim.pos()] = dim.category(val).pos
+            apos[dim.pos] = dim.category(val).pos
         return apos
 
     def lint_as_idx(self, lst):
@@ -450,7 +449,7 @@ class JsonStatDataSet:
 
         :returns: list of number
         """
-        return [self.__did2dim[did].pos() for did in ldid]
+        return [self.__did2dim[did].pos for did in ldid]
 
     #
     # generators
@@ -470,15 +469,15 @@ class JsonStatDataSet:
                 msg = "length of the order vector is different from number of dimension {}".format(nr_dim)
                 raise JsonStatException(msg)
             if not isinstance(order[1], int):
-                order = [self.__did2dim[iid].pos() for iid in order]
+                order = [self.__did2dim[iid].pos for iid in order]
 
         vec_pos_blocked = nr_dim * [False]
         vec_pos = nr_dim * [0]
 
         for (cat, idx) in blocked_dims.items():
             d = self.dimension(cat)
-            vec_pos_blocked[d.pos()] = True
-            vec_pos[d.pos()] = d._idx2pos(idx)
+            vec_pos_blocked[d.pos] = True
+            vec_pos[d.pos] = d._idx2pos(idx)
 
         pos2size = self.__pos2size
 
@@ -541,9 +540,9 @@ class JsonStatDataSet:
 
         # header
         if content == "label":
-            header = [dim.label() for dim in self.__pos2dim]
+            header = [dim.label for dim in self.__pos2dim]
         else:
-            header = [dim.did() for dim in self.__pos2dim]
+            header = [dim.did for dim in self.__pos2dim]
 
         header.append(value_column)
 
@@ -866,8 +865,8 @@ class JsonStatDataSet:
             dimension.from_json(json_data_dimension[dname])
             self.__did2dim[dname] = dimension
             self.__pos2dim[dpos] = dimension
-            if dimension.label() is not None:
-                self.__lbl2dim[dimension.label()] = dimension
+            if dimension.label is not None:
+                self.__lbl2dim[dimension.label] = dimension
 
     def __compute_pos2mult(self):
         acc = 1
