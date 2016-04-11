@@ -13,7 +13,7 @@ import unittest
 import jsonstat
 
 
-class TestSsbNo(unittest.TestCase):
+class TestWWWSsbNo(unittest.TestCase):
     def setUp(self):
         self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures", "www.ssb.no")
 
