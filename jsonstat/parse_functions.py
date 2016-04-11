@@ -145,9 +145,11 @@ def download(url, pathname=None):
 
     if pathname is None:
         return __downloader__.download(url)
+    elif not os.path.isabs(pathname):
+        return __downloader__.download(url, pathname)
     else:
-        cache_dir = os.path.dirname(pathname)
-        d = Downloader(cache_dir)
+        tmp_cache_dir = os.path.dirname(pathname)
+        d = Downloader(tmp_cache_dir)
         return d.download(url, os.path.basename(pathname))
 
 

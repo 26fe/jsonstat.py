@@ -28,7 +28,7 @@ class Downloader:
         :param cache_dir: directory where to store downloaded files
         :param time_to_live: how many seconds to store file on disk, None is infinity, 0 for not to store
         """
-        self.__cache_dir = cache_dir
+        self.__cache_dir = os.path.abspath(cache_dir)
         self.__time_to_live = time_to_live
 
         self.__session = requests.session()
