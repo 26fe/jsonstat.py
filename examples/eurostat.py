@@ -17,16 +17,16 @@ except ImportError:
     import jsonstat
 
 
-def test(uri, cache_dir, filename):
-    pathname = os.path.join(cache_dir, filename)
+def test(uri, filename):
+    print("downloading data from '{}'".format(uri))
+
     # extract collection
-    collection = jsonstat.from_url(uri, pathname)
+    collection = jsonstat.from_url(uri, filename)
     print(collection)
 
     # extract dataset contained into collection
     ds = collection.dataset('nama_gdp_c')
     print(ds)
-    ds.info_dimensions()
 
     # show some values
     v = ds.data(geo="IT", time="2011")
@@ -36,15 +36,15 @@ def test(uri, cache_dir, filename):
 if __name__ == "__main__":
     # cache_dir directory where store json data downloaded from internet
     cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "www.ec.europa.eu_eurostat"))
-    if not os.path.exists(cache_dir):
-        os.makedirs(cache_dir)
+    jsonstat.cache_dir(cache_dir)
 
     base = 'http://ec.europa.eu/eurostat/wdds/rest/data/v1.1/json/en/'
     uri = base + 'nama_gdp_c?precision=1&geo=IT&unit=EUR_HAB&indic_na=B1GM'
     filename = "eurostat-name_gpd_c-geo_IT.json"
-    test(uri, cache_dir, filename)
+    test(uri, filename)
+
+    print("*" * 60)
 
     uri = base + 'nama_gdp_c?precision=1&unit=EUR_HAB&indic_na=B1GM'
     filename = "eurostat-name_gpd_c.json"
-    test(uri, cache_dir, filename)
-
+    test(uri, filename)

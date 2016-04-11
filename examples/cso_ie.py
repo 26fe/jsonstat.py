@@ -17,17 +17,15 @@ except ImportError:
     import jsonstat
 
 
-def test(uri, cache_dir, filename):
-    pathname = os.path.join(cache_dir, filename)
+def test(uri, filename):
     # extract collection
     print("downloading data from '{}'".format(uri))
-    collection = jsonstat.from_url(uri, pathname)
+    collection = jsonstat.from_url(uri, filename)
     print(collection)
 
     # extract dataset contained into collection
     ds = collection.dataset(0)
     print(ds)
-    ds.info_dimensions()
 
     # show some values
     v = ds.data(0)
@@ -38,14 +36,13 @@ def test(uri, cache_dir, filename):
 if __name__ == "__main__":
     # cache_dir directory where store json data downloaded from internet
     cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "www.cso.ie"))
-    if not os.path.exists(cache_dir):
-        os.makedirs(cache_dir)
+    jsonstat.cache_dir(cache_dir)
 
     base_uri = 'http://www.cso.ie/StatbankServices/StatbankServices.svc/jsonservice/responseinstance/'
     uri = base_uri + "NQQ25"
     filename = "cso_ie-NQQ25.json"
-    test(uri, cache_dir, filename)
+    test(uri, filename)
 
     uri = base_uri + 'CIA01'
     filename = "cso_ie-CIA01.json"
-    test(uri, cache_dir, filename)
+    test(uri, filename)

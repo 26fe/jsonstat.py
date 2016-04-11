@@ -24,19 +24,17 @@ except ImportError:
     import jsonstat
 
 
-def test(uri, cache_dir):
-    # main
-    pathname = os.path.join(cache_dir, "oecd-canada-col.json")
-    json_string = jsonstat.download(uri, pathname)
+def test(uri, filename):
+    json_string = jsonstat.download(uri, filename)
     collection = jsonstat.JsonStatCollection()
     collection.from_string(json_string)
 
     print("*** multiple datasets info")
-    collection.info()
+    print(collection)
     oecd = collection.dataset(0)
 
     print("\n*** dataset '{}' info".format(oecd.name))
-    oecd.info()
+    print(oecd)
     for d in oecd.dimensions():
         print("\n*** info for dimensions '{}'".format(d.did))
         d.info()
@@ -50,10 +48,9 @@ def test(uri, cache_dir):
 
 
 if __name__ == "__main__":
-    # conf
     uri = 'http://json-stat.org/samples/oecd-canada-col.json'
-    json_filename = "oecd-canada-col.json"
+    filename = "oecd-canada-col.json"
 
-    cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "www.json-stat.org"))
-    cache_dir = os.path.abspath(cache_dir)
-    test(uri, cache_dir)
+    cache_dir = os.path.join(JSONSTAT_HOME, "tests", "fixtures", "www.json-stat.org")
+    jsonstat.cache_dir(cache_dir)
+    test(uri, filename)
