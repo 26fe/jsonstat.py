@@ -11,11 +11,13 @@ import os
 import unittest
 
 import sys
+
 # TODO: remove following hack
 # http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
 if sys.version_info < (3,):
     reload(sys)
     sys.setdefaultencoding('utf8')
+
 
 class TestRunningExamples(unittest.TestCase):
     def setUp(self):
@@ -46,6 +48,7 @@ class TestRunningExamples(unittest.TestCase):
         status = p.returncode
         msg = "running '{}'\nSTDOUT:\n{}\nSTDERR:\n{}".format(example, output, err)
         self.assertEqual(0, status, msg)
+
 
 if __name__ == '__main__':
     unittest.main()

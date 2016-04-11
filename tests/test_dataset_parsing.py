@@ -61,6 +61,10 @@ class TestDataSet(unittest.TestCase):
         }
         '''
 
+    #
+    # test exceptions
+    #
+
     def test_exception_not_valid(self):
         dataset = jsonstat.JsonStatDataSet("canada")
         with self.assertRaises(jsonstat.JsonStatException):
@@ -99,19 +103,8 @@ class TestDataSet(unittest.TestCase):
         expected = "dataset 'canada': size 4 is different from calculate size 48 by dimension"
         self.assertEqual(expected, e.value)
 
-    def test_name(self):
-        dataset = jsonstat.JsonStatDataSet("canada")
-        self.assertEqual(dataset.name(), "canada")
-
-    def test_dimensions(self):
-        json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
-        dataset = jsonstat.JsonStatDataSet("canada")
-        dataset.from_file(json_pathname)
-
-        self.assertEqual(len(dataset.dimensions()), 3)
-
     def test_exception_no_existent_dimension(self):
-        json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
+        json_pathname = os.path.join(self.fixture_dir, "dataset", "dataset_unemployment_v1.json")
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(json_pathname)
 
@@ -122,22 +115,25 @@ class TestDataSet(unittest.TestCase):
         expected = "dataset 'canada': unknown dimension 'not existent dim' know dimensions ids are: serie, year, area"
         self.assertEqual(expected, e.value)
 
-    def test_info(self):
-        json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
+    #
+    # test
+    #
+
+    def test_name(self):
+        dataset = jsonstat.JsonStatDataSet("canada")
+        self.assertEqual(dataset.name, "canada")
+
+    def test_dimensions(self):
+        json_pathname = os.path.join(self.fixture_dir, "dataset", "dataset_unemployment_v1.json")
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(json_pathname)
 
-        # expected =(
-        #     "name:   'canada'\n"
-        #     "label:  'Unemployment rate in the OECD countries'\n"
-        #     "source: 'Unemployment rate in the OECD countries'\n"
-        #     "size: 12\n"
-        #     "3 dimensions:\n"
-        #     "  0: dim id: 'serie' label: 'serie' size: '1' role: 'None'\n"
-        #     "  1: dim id: 'year' label: '2012-2014' size: '3' role: 'time'\n"
-        #     "  2: dim id: 'area' label: 'OECD countries, EU15 and total' size: '4' role: 'geo'\n"
-        # )
+        self.assertEqual(len(dataset.dimensions()), 3)
 
+    def test_info(self):
+        json_pathname = os.path.join(self.fixture_dir, "dataset", "dataset_unemployment_v1.json")
+        dataset = jsonstat.JsonStatDataSet("canada")
+        dataset.from_file(json_pathname)
         expected = (
             "name:   'canada'\n"
             "label:  'Unemployment rate in the OECD countries'\n"
@@ -151,8 +147,7 @@ class TestDataSet(unittest.TestCase):
             "| 2   | area  | OECD countries, EU15 and total | 4    | geo  |\n"
             "+-----+-------+--------------------------------+------+------+"
         )
-        # self.maxDiff=None
-        # print(dataset)
+        self.maxDiff = None
         self.assertEqual(expected, dataset.__str__())
 
     #
@@ -163,7 +158,31 @@ class TestDataSet(unittest.TestCase):
     #
 
     def test_data_with_three_dimensions(self):
-        json_pathname = os.path.join(self.fixture_dir, "dataset", "json_three_dimensions.json")
+        json_pathname = os.path.join(self.fixture_dir, "dataset", "three_dim_v1.json")
+        dataset = jsonstat.JsonStatDataSet()
+        dataset.from_file(json_pathname)
+
+        data = dataset.data(one="one_1", two="two_1", three="three_1")
+        self.assertEqual(data.value, 111)
+        self.assertIsNone(data.status)
+
+        data = dataset.data(one="one_2", two="two_2", three="three_2")
+        self.assertEqual(data.value, 222)
+
+        # using a bit different file
+        json_pathname = os.path.join(self.fixture_dir, "dataset", "three_dim_size_as_string_v1.json")
+        dataset = jsonstat.JsonStatDataSet()
+        dataset.from_file(json_pathname)
+
+        data = dataset.data(one="one_1", two="two_1", three="three_1")
+        self.assertEqual(data.value, 111)
+        self.assertIsNone(data.status)
+
+        data = dataset.data(one="one_2", two="two_2", three="three_2")
+        self.assertEqual(data.value, 222)
+
+        # using a bit different file
+        json_pathname = os.path.join(self.fixture_dir, "dataset", "three_dim_size_as_string_v2.json")
         dataset = jsonstat.JsonStatDataSet()
         dataset.from_file(json_pathname)
 
@@ -175,7 +194,7 @@ class TestDataSet(unittest.TestCase):
         self.assertEqual(data.value, 222)
 
     def test_data_with_unemployment(self):
-        json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
+        json_pathname = os.path.join(self.fixture_dir, "dataset", "dataset_unemployment_v1.json")
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(json_pathname)
 
@@ -253,7 +272,7 @@ class TestDataSet(unittest.TestCase):
     #
 
     def test_all_pos(self):
-        json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
+        json_pathname = os.path.join(self.fixture_dir, "dataset", "dataset_unemployment_v1.json")
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(json_pathname)
 
@@ -268,7 +287,7 @@ class TestDataSet(unittest.TestCase):
         self.assertEqual(result, expected)
 
     def test_all_pos_reorder(self):
-        json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
+        json_pathname = os.path.join(self.fixture_dir, "dataset", "dataset_unemployment_v1.json")
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(json_pathname)
 
@@ -284,7 +303,7 @@ class TestDataSet(unittest.TestCase):
         self.assertEqual(result, expected)
 
     def test_all_pos_with_block(self):
-        json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
+        json_pathname = os.path.join(self.fixture_dir, "dataset", "dataset_unemployment_v1.json")
         dataset = jsonstat.JsonStatDataSet("canada")
         dataset.from_file(json_pathname)
 
@@ -301,7 +320,7 @@ class TestDataSet(unittest.TestCase):
         dataset.generate_all_vec(year='2014')
 
     def test_all_pos_with_three_dim(self):
-        json_pathname = os.path.join(self.fixture_dir, "dataset", "json_three_dimensions.json")
+        json_pathname = os.path.join(self.fixture_dir, "dataset", "three_dim_v1.json")
         dataset = jsonstat.JsonStatDataSet()
         dataset.from_file(json_pathname)
 

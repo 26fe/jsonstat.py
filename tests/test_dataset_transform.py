@@ -25,7 +25,7 @@ class TestDataSetToTable(unittest.TestCase):
     # to_table
     #
     def test_to_table(self):
-        json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
+        json_pathname = os.path.join(self.fixture_dir, "dataset", "dataset_unemployment_v1.json")
         dataset = jsonstat.JsonStatDataSet()
         dataset.from_file(json_pathname)
 
@@ -44,7 +44,7 @@ class TestDataSetToTable(unittest.TestCase):
         self.assertEqual(second_row_expected, table[2])
 
     def test_to_table_inverted_order(self):
-        json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
+        json_pathname = os.path.join(self.fixture_dir, "dataset", "dataset_unemployment_v1.json")
         dataset = jsonstat.JsonStatDataSet()
         dataset.from_file(json_pathname)
 
@@ -138,11 +138,13 @@ class TestDataSetToTable(unittest.TestCase):
 
                 t = list(map(transform_row, table[i]))
                 self.assertEqual(t, row, msg)
+
     #
     # to_data_frame
     #
+
     def test_to_dataframe(self):
-        json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
+        json_pathname = os.path.join(self.fixture_dir, "dataset", "dataset_unemployment_v1.json")
         dataset = jsonstat.JsonStatDataSet()
         dataset.from_file(json_pathname)
         df = dataset.to_table(content='id', blocked_dims={"area":"IT"}, rtype=pd.DataFrame)
@@ -161,7 +163,7 @@ class TestDataSetToTable(unittest.TestCase):
         pdt.assert_frame_equal(expected, df)
 
     def test_to_data_frame_year_IT(self):
-        json_pathname = os.path.join(self.fixture_dir, "dataset", "json_dataset_unemployment.json")
+        json_pathname = os.path.join(self.fixture_dir, "dataset", "dataset_unemployment_v1.json")
         dataset = jsonstat.JsonStatDataSet()
         dataset.from_file(json_pathname)
         df = dataset.to_data_frame("year", content="id", blocked_dims={'area':"IT"})
