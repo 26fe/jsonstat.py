@@ -13,4 +13,4 @@ from istat.istat_root import IstatRoot
 
 import istat.options
 
-from istat.istat_functions import (cache_dir, lang, areas, areas_as_html, area, dataset)
+from istat.istat_functions import (cache_dir, lang, areas, area, dataset)

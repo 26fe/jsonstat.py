@@ -53,9 +53,9 @@ class IstatHelper:
         print(html)
 
     def area(self, show=True):
-        """
-        returns all the 'area' of istat.
-        It perform the api calls http://apistat.istat.it/?q=getarea&lang=1
+        """returns all the 'area' of istat.
+
+        It perform api call to http://apistat.istat.it/?q=getarea&lang=1
         # q=getarea
         # La funzione restituisce le aree tematiche di I.Stat supporta i seguenti parametri:
         #

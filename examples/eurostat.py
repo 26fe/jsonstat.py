@@ -6,15 +6,9 @@
 # stdlib
 from __future__ import print_function
 import os
-import sys
 
 # jsonstat
-JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
-try:
-    import jsonstat
-except ImportError:
-    sys.path.append(JSONSTAT_HOME)
-    import jsonstat
+import jsonstat
 
 
 def test(uri, filename):
@@ -35,6 +29,7 @@ def test(uri, filename):
 
 if __name__ == "__main__":
     # cache_dir directory where store json data downloaded from internet
+    JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
     cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "www.ec.europa.eu_eurostat"))
     jsonstat.cache_dir(cache_dir)
 

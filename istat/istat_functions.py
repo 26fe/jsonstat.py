@@ -13,7 +13,7 @@ from istat.istat_root import IstatRoot
 __istat__ = None
 
 
-def cache_dir(cache_dir='', time_to_live=None):
+def cache_dir(cache_dir=None, time_to_live=None):
     """Manage the directory ``cached_dir`` where to store downloaded files
 
     without parameter get the directory
@@ -23,7 +23,7 @@ def cache_dir(cache_dir='', time_to_live=None):
     """
     global __istat__
 
-    if cache_dir == '':
+    if cache_dir is None:
         if __istat__ is None:
             __istat__ = IstatRoot()
         return __istat__.cache_dir()
@@ -49,13 +49,6 @@ def areas():
         downloader = jsonstat.Downloader(cache_dir="./istat_cached", time_to_live=None)
         __istat__ = IstatRoot(downloader)
     return __istat__.areas()
-
-
-def areas_as_html():
-    global __istat__
-    if __istat__ is None:
-        __istat__ = IstatRoot()
-    return __istat__.areas_as_html()
 
 
 def area(spec):

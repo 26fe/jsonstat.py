@@ -11,28 +11,24 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import os
-# http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
 import sys
-# TODO: remove following hack
-# http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
+
+# python 2.7.11 raise the following error
+#    UnicodeEncodeError: 'ascii' codec can't encode character u'\x96' in position 17: ordinal not in range(128)
+# to prevent it the following three lines are added:
+# See: http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
 if sys.version_info < (3,):
     reload(sys)
     sys.setdefaultencoding('utf8')
 
-# jsonstat
-JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
-try:
-    from istat import IstatHelper
-    import jsonstat
-except ImportError:
-    sys.path.append(JSONSTAT_HOME)
-    from istat import IstatHelper
-    import jsonstat
+from istat import IstatHelper
+import jsonstat
 
 
 def list_dim(istat_helper, dataset):
     """
     print some information about dimension
+    :type istat_helper: IstatHelper
     :param dataset:
     """
     json_data = istat_helper.dim(dataset['Cod'], show=False)
@@ -42,10 +38,11 @@ def list_dim(istat_helper, dataset):
     else:
         print("cannot retrieve info for dataset: {}".format(dataset))
 
+
 def list_dataset_dim(istat_helper, area):
-    """
-    retrieve some information about dataset
+    """retrieve some information about dataset
     ex di area: {'Desc': 'Censimento popolazione e abitazioni 2011', 'Id': '3', 'Cod': 'CEN'}
+    :type istat_helper: IstatHelper
     :param area:
     :return:
     """
@@ -55,23 +52,29 @@ def list_dataset_dim(istat_helper, area):
         msg = u"area: {} '{}' nr. dataset {}".format(area['Id'], area['Desc'], len(json_data))
         print(msg)
         for dataset in json_data:
-            list_dim(dataset)
+            list_dim(dataset, istat_helper)
     else:
         print("--------------")
         print("cannot retrieve info for area {}".format(area))
 
+
 def list_area_dataset_dim(istat_helper):
+    """
+    :type istat_helper: IstatHelper
+    :param istat_helper:
+    :return:
+    """
     json_data = istat_helper.area(show=False)
     for area in json_data:
-        list_dataset_dim(area)
+        list_dataset_dim(istat_helper, area)
 
 
 if __name__ == "__main__":
     # cache_dir where to store downloaded data file
-    MAIN_DIRECTORY = os.path.join(os.path.dirname(__file__), "..")
+    JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
     cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "istat-tests", "fixtures", "istat_cached"))
     downloader = jsonstat.Downloader(cache_dir)
-    istat = IstatHelper(downloader,lang=1)
+    istat = IstatHelper(downloader, lang=1)
 
     # list_area_dataset_dim(istat_helper)
 
@@ -120,9 +123,7 @@ if __name__ == "__main__":
     # ...
 
     print("*** retrieve jsondata for dataset 'DCCV_TAXDISOCCUDE' using dimension '1,6,9,0,0'")
-    istat.datajson('DCCV_TAXDISOCCUDE',"1,6,9,0,0")
+    istat.datajson('DCCV_TAXDISOCCUDE', "1,6,9,0,0")
 
     print("*** retrieve data in istat format for dataset 'DCCV_TAXDISOCCUDE' using dimension '1,6,9,0,0'")
-    istat.table('DCCV_TAXDISOCCUDE',"1,6,9,0,0")
-
-
+    istat.table('DCCV_TAXDISOCCUDE', "1,6,9,0,0")

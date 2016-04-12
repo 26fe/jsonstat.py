@@ -9,19 +9,17 @@ import os
 
 # http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
 import sys
-# TODO: remove following hack
-# http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
+
+# python 2.7.11 raise the following error
+#    UnicodeEncodeError: 'ascii' codec can't encode character u'\x96' in position 17: ordinal not in range(128)
+# to prevent it the following three lines are added:
+# See: http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
 if sys.version_info < (3,):
     reload(sys)
     sys.setdefaultencoding('utf8')
 
 # jsonstat
-JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
-try:
-    import jsonstat
-except ImportError:
-    sys.path.append(JSONSTAT_HOME)
-    import jsonstat
+import jsonstat
 
 
 def test(uri, filename):
@@ -51,6 +49,7 @@ if __name__ == "__main__":
     uri = 'http://json-stat.org/samples/oecd-canada-col.json'
     filename = "oecd-canada-col.json"
 
+    JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
     cache_dir = os.path.join(JSONSTAT_HOME, "tests", "fixtures", "www.json-stat.org")
     jsonstat.cache_dir(cache_dir)
     test(uri, filename)

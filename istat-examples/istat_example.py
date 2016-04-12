@@ -13,45 +13,33 @@ from __future__ import unicode_literals
 import os
 import sys
 
-# TODO: remove following hack
-# http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
+# python 2.7.11 raise the following error
+#    UnicodeEncodeError: 'ascii' codec can't encode character u'\x96' in position 17: ordinal not in range(128)
+# to prevent it the following three lines are added:
+# See: http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
 if sys.version_info < (3,):
     reload(sys)
     sys.setdefaultencoding('utf8')
 
 # jsonstat
-JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
-try:
-    import istat
-    import jsonstat
-except ImportError:
-    sys.path.append(JSONSTAT_HOME)
-    import istat
-    import jsonstat
+import istat
 
 if __name__ == "__main__":
     # cache_dir where to store downloaded data file
     JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
     cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "istat-tests", "fixtures", "istat_cached"))
+    istat.cache_dir(cache_dir)
 
     # print all istat area
-    downloader = jsonstat.Downloader(cache_dir)
-    i = istat.IstatRoot(downloader, lang=1)
-    for area in i.areas():
+    for area in istat.areas():
         print(area)
 
     # print istat dataset contained into area 'Prices'
     area_name = 'Prices'
     print("--- list dataset in area {}".format(area_name))
-    area = i.area(area_name)
+    area = istat.area(area_name)
     for istat_dataset in area.datasets():
-        # TODO: this not works print(istat_dataset)
-        try:
-            print(u"{}({}):{}".format(istat_dataset.cod, istat_dataset.nrdim(), istat_dataset.name))
-        except istat.IstatException as e:
-            # ignore exception
-            # TODO: better diagnostic?
-            print(e)
+        print(istat_dataset)
 
     # print some info about istat dataset 'DCSP_IPAB'
     dataset_name = 'DCSP_IPAB'
