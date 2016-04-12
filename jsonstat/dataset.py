@@ -364,8 +364,8 @@ class JsonStatDataSet:
                 dim = self.__lbl2dim[cat]
             # key is not id or label so raise error
             else:
-                allowed_categories = ", ".join([dim.iid() for dim in self.__pos2dim])
-                msg = "dataset '{}': category '{}' don't exists allowed category are: {}"
+                allowed_categories = ", ".join(["'{}'".format(dim.did) for dim in self.__pos2dim])
+                msg = "dataset '{}': category '{}' don't exists allowed categories are: {}"
                 msg = msg.format(self.__name, cat, allowed_categories)
                 raise JsonStatException(msg)
 
