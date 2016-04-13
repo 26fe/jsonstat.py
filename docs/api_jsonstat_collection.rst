@@ -7,7 +7,6 @@ JsonStatCollection
 
     .. automethod:: JsonStatCollection.__len__
     .. automethod:: JsonStatCollection.dataset
-    .. automethod:: JsonStatCollection.info
 
 parsing
 ^^^^^^^

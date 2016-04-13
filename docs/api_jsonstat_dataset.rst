@@ -7,7 +7,7 @@ JsonStatDataSet
 
     .. automethod:: JsonStatDataSet.__init__
     .. automethod:: JsonStatDataSet.name
-    .. automethod:: JsonStatDataSet.info
+    .. automethod:: JsonStatDataSet.label
     .. automethod:: JsonStatDataSet.__len__
 
 dimensions

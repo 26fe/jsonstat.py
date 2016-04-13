@@ -19,11 +19,16 @@ JSON-stat is used by several institutions to publish statistical data.
 An incomplete list is:
 
 - `Eurostat <http://ec.europa.eu/eurostat/>`_ that provide statistical information about the European Union (EU)
+
 - `Italian National Institute of Statistics Istat <http://www.istat.it/en/>`_
+
 - `Central Statistics Office of Ireland <cso.ie>`_
+
 - `United Nations Economic Commission for Europe (UNECE) <http://www.unece.org/>`_
-(`statistical data <http://w3.unece.org/pxweb/en/>`_
+  statistical data are `here <http://w3.unece.org/pxweb/en/>`_
+
 - `Statistics Norway <http://www.ssb.no/en>`_
+
 - others...
 
 **jsonstat.py** library tries to mimic as much is possible in python
@@ -33,7 +38,6 @@ using jupyter (ipython) notebooks.
 
 For a fast overview of the feature you can start from this example notebook
 `oecd-canada-jsonstat_v1.html <http://jsonstatpy.readthedocs.org/en/latest/notebooks/oecd-canada-jsonstat_v1.html>`_
-
 You can also check out some of the jupyter example notebook from the
 `example directory on github <https://github.com/26fe/jsonstat.py/tree/master/examples-notebooks>`_
 or from the `documentation <http://jsonstatpy.readthedocs.org/en/latest>`_

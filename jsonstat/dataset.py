@@ -115,12 +115,18 @@ class JsonStatDataSet:
 
     @property
     def name(self):
-        """Returns the name of the dataset"""
+        """
+        :getter: returns the name of the dataset
+        :type: string
+        """
         return self.__name
 
     @property
     def label(self):
-        """Returns the label of the dataset"""
+        """
+        :getter: returns the label of the dataset
+        :type: string
+        """
         return self.__label
 
     def __str__(self):

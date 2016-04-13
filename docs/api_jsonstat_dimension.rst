@@ -12,7 +12,6 @@ JsonStatDimension
     .. automethod:: JsonStatDimension.role
     .. automethod:: JsonStatDimension.pos
     .. automethod:: JsonStatDimension.__len__
-    .. automethod:: JsonStatDimension.info
 
 querying methods
 ^^^^^^^^^^^^^^^^
