@@ -45,7 +45,7 @@ def from_string(json_string):
     try:
         json_data = json.loads(json_string, object_pairs_hook=OrderedDict)
     except json.decoder.JSONDecodeError:
-        JsonStatException("invalid json")
+        raise JsonStatException("invalid json")
     return from_json(json_data)
 
 
