@@ -16,10 +16,15 @@ jsonstat.py
 maintained and promoted by `Xavier Badosa <https://xavierbadosa.com/>`_.
 The JSON-stat format is a JSON format for publishing dataset.
 JSON-stat is used by several institutions to publish statistical data.
-For example it is used by `Eurostat <http://ec.europa.eu/eurostat/>`_
-that provide statistical information about the European Union (EU)
-and `Istat <http://www.istat.it/en/>`_,
-the  Italian National Institute of Statistics).
+An incomplete list is:
+
+- `Eurostat <http://ec.europa.eu/eurostat/>`_ that provide statistical information about the European Union (EU)
+- `Italian National Institute of Statistics Istat <http://www.istat.it/en/>`_
+- `Central Statistics Office of Ireland <cso.ie>`_
+- `United Nations Economic Commission for Europe (UNECE) <http://www.unece.org/>`_
+(`statistical data <http://w3.unece.org/pxweb/en/>`_
+- `Statistics Norway <http://www.ssb.no/en>`_
+- others...
 
 **jsonstat.py** library tries to mimic as much is possible in python
 the `json-stat Javascript Toolkit <https://json-stat.com/>`_.
