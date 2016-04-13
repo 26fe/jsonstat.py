@@ -22,37 +22,50 @@ except ImportError:
 
 
 @click.group()
-# this function name will go into the setup.py,
-# if you rename it check setup.py
+@click.version_option(version=jsonstat.__version__)
 def cli():
+    # this function name will go into the setup.py,
+    # if you rename it check setup.py
     pass
 
 
 @cli.command()
 @click.option('--cache_dir', default='./data', help='where to store downloaded files')
-@click.argument('urls', nargs=-1)
-def info(cache_dir, urls):
-    if len(urls) == 0:
-        urls = ['http://json-stat.org/samples/oecd-canada-col.json']
+@click.argument('args', nargs=-1)
+def info(cache_dir, args):
+    if len(args) == 0:
+        args = ['http://json-stat.org/samples/oecd-canada-col.json']
 
-    url = urls[0]
-
-    # cache_dir = os.path.abspath(os.path.join(JSONSTAT_HOME, "tmp"))
-    # print("cache_dir is '{}'".format(cache_dir))
     d = jsonstat.cache_dir(cache_dir)
-    print("downloaded file(s) are stored into '{}'".format(d))
+    print("downloaded file(s) are stored into '{}'\n".format(d))
+    for arg in args:
 
-    print("download '{}'".format(url))
-    collection = jsonstat.from_url(url)
-    print(collection)
+        if arg.startswith("http"):
+            print("download '{}'".format(arg))
+            o = jsonstat.from_url(arg)
+        else:
+            print("reading '{}'".format(arg))
+            o = jsonstat.from_file(arg)
+
+        print(o)
+        if isinstance(o, jsonstat.JsonStatCollection):
+            print("\nfirst dataset:\n")
+            print(o.dataset(0))
 
 
 @cli.command()
-@click.argument('file', nargs=1) #help="file containing jsonstat to validate")
-def validate(file):
-    click.echo('Validate')
-    contents = open(file).read()
-    jsonstat.validate(contents)
+@click.argument('args', nargs=-1)  # help="file containing jsonstat to validate")
+def validate(args):
+    for arg in args:
+        if arg.startswith("http"):
+            print("download '{}'".format(arg))
+            contents = jsonstat.download(arg)
+        else:
+            print("reading '{}'".format(arg))
+            contents = open(arg).read()
+        click.echo("validate '{}'".format(arg))
+        jsonstat.validate(contents)
+
 
 if __name__ == "__main__":
     cli()
