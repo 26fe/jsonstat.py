@@ -32,6 +32,7 @@ class TestCli(unittest.TestCase):
 
         expected = [
             u"downloaded file(s) are stored into '{}'\n".format(cache_dir),
+            u"\n",
             u"download 'http://json-stat.org/samples/oecd-canada-col.json'\n",
             u"JsonstatCollection contains the following JsonStatDataSet:\n",
             u"+-----+-----------------------------------------------------+\n",
@@ -39,7 +40,20 @@ class TestCli(unittest.TestCase):
             u"+-----+-----------------------------------------------------+\n",
             u"| 0   | 'Unemployment rate in the OECD countries 2003-2014' |\n",
             u"| 1   | 'Population by sex and age group. Canada. 2012'     |\n",
-            u"+-----+-----------------------------------------------------+\n"
+            u"+-----+-----------------------------------------------------+\n",
+            u"\n",
+            u"first dataset:\n",
+            u"\n",
+            u"name:   'Unemployment rate in the OECD countries 2003-2014'\n",
+            u"label:  'Unemployment rate in the OECD countries 2003-2014'\n",
+            u"size: 432\n",
+            u"+-----+---------+--------------------------------+------+--------+\n",
+            u"| pos | id      | label                          | size | role   |\n",
+            u"+-----+---------+--------------------------------+------+--------+\n",
+            u"| 0   | concept | indicator                      | 1    | metric |\n",
+            u"| 1   | area    | OECD countries, EU15 and total | 36   | geo    |\n",
+            u"| 2   | year    | 2003-2014                      | 12   | time   |\n",
+            u"+-----+---------+--------------------------------+------+--------+\n"
         ]
         expected = ''.join(expected)
         self.maxDiff = None
