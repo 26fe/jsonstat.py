@@ -29,6 +29,9 @@ An incomplete list is:
 
 - `Statistics Norway <http://www.ssb.no/en>`_
 
+- `UK Office for national statistics <https://www.ons.gov.uk/>`_
+  see `here <https://blog.ons.digital/2014/08/04/introducing-the-new-improved-ons-api/>`_
+
 - others...
 
 **jsonstat.py** library tries to mimic as much is possible in python
