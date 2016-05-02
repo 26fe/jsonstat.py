@@ -1,14 +1,14 @@
 {
 	"version" : "2.0",
 	"class" : "collection",
-	"href" : "http://json-stat.org/samples/oecd-canada-col.json",
+	"href" : "https://json-stat.org/samples/oecd-canada-col.json",
 	"label" : "OECD-Canada Sample Collection",
 	"updated" : "2015-12-24",
 	"link" : {
 		"item" : [
 			{
 				"class" : "dataset",
-				"href" : "http://json-stat.org/samples/oecd.json",
+				"href" : "https://json-stat.org/samples/oecd.json",
 				"label" : "Unemployment rate in the OECD countries 2003-2014",
 				"note" : [ "Most of the data in this dataset are taken from the individual contributions of national correspondents appointed by the OECD Secretariat with the approval of the authorities of Member countries. Consequently, these data have not necessarily been harmonised at international level." ],
 				"source" : "Economic Outlook No 92 - December 2012 - OECD Annual Projections",
@@ -180,7 +180,7 @@
 			},
 			{
 				"class" : "dataset",
-				"href" : "http://json-stat.org/samples/canada.json",
+				"href" : "https://json-stat.org/samples/canada.json",
 				"label" : "Population by sex and age group. Canada. 2012",
 				"source" : "Statistics Canada, CANSIM, table 051-0001",
 				"updated" : "2012-09-27",
