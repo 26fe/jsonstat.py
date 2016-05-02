@@ -196,8 +196,9 @@ def from_url(url, pathname=None):
 def validate(spec):
     try:
         import jsonschema
+        import strict_rfc3339  # validate date-time format in jsonschema
     except ImportError:
-        print("to validate install jsonschema")
+        print("to validate install jsonschema and strict_rfc3339")
         return
 
     from jsonstat.schema import JsonStatSchema
@@ -208,9 +209,11 @@ def validate(spec):
         json_data = spec
     if "version" not in json_data:
         raise JsonStatException("cannot validate jsonstat version < 2.0")
-    schema = JsonStatSchema()
-    try:
-        jsonschema.validate(json_data, schema.all)
-    except jsonschema.exceptions.SchemaError as e:
-        return False
-    return True
+    # schema = JsonStatSchema()
+    jsonstat_schema_url = "https://json-stat.org/format/schema/2.0/"
+    contents = download(jsonstat_schema_url)
+    schema = json.loads(contents)
+    validator = jsonschema.Draft4Validator(schema, format_checker=jsonschema.FormatChecker())
+    # validator.validate(json_data)
+    errors = sorted(validator.iter_errors(json_data), key=lambda e: e.path)
+    return len(errors) == 0

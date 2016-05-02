@@ -10,19 +10,42 @@ import json
 
 class JsonStatSchema:
     def __init__(self):
-        filename = os.path.join(os.path.dirname(__file__), "jsonschema_jsonstat.json")
+        filename = os.path.join(os.path.dirname(__file__), "schemas", "jsonstat.json")
         jsonschema_jsonstat = open(filename).read()
-
         self.__all = json.loads(jsonschema_jsonstat)
 
-        self.__dimension = self.__all.copy()
-        self.__dimension["$ref"] = "#/definitions/dimension"
+        filename = os.path.join(os.path.dirname(__file__), "schemas", "collection.json")
+        jsonschema_jsonstat = open(filename).read()
+        self.__collection = json.loads(jsonschema_jsonstat)
 
-        self.__dataset = self.__all.copy()
-        self.__dataset["$ref"] = "#/definitions/dataset"
+        filename = os.path.join(os.path.dirname(__file__), "schemas", "dataset.json")
+        jsonschema_jsonstat = open(filename).read()
+        self.__dataset = json.loads(jsonschema_jsonstat)
 
-        self.__collection = self.__all.copy()
-        self.__collection["$ref"] = "#/definitions/collection"
+        filename = os.path.join(os.path.dirname(__file__), "schemas", "dimension.json")
+        jsonschema_jsonstat = open(filename).read()
+        self.__dimension = json.loads(jsonschema_jsonstat)
+
+        # self.__dimension = self.__all.copy()
+        # self.__dimension["oneOf"] = [{
+        #     "$ref": "#/definitions/dimension",
+        #     "additionalProperties": False,
+        #     "required": ["version", "class", "category"]
+        # }]
+        #
+        # self.__dataset = self.__all.copy()
+        # self.__dataset["oneOf"] = [{
+        #     "$ref": "#/definitions/dataset",
+        #     "additionalProperties": False,
+        #     "required": ["version", "class", "value", "id", "size", "dimension"]
+        # }]
+        #
+        # self.__collection = self.__all.copy()
+        # self.__collection["oneOf"] = [{
+        #     "$ref": "#/definitions/collection",
+        #     "additionalProperties": False,
+        #     "required": ["version", "class", "link"]
+        # }]
 
     @property
     def dimension(self):
