@@ -11,7 +11,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
-exec (open('jsonstat/version.py').read())
+exec(open('jsonstat/version.py').read())
 
 
 # cannot be able to import only version
@@ -97,7 +97,12 @@ setup(
     ],
 
     package_data={
-        'jsonstat': ['jsonschema_jsonstat.json'],
+        'jsonstat': [
+            'schema/collection.json',
+            'schema/dataset.json',
+            'schema/dimension.json',
+            'schema/jsonstat.json',
+        ],
     },
 
     data_files=[('', ['requirements.txt'])],
