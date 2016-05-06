@@ -168,7 +168,7 @@ Any help will be greatly appreciated, just follow those steps:
 
 5) Push to the branch (``git push origin my-new-feature``)
 
-6) Create new Pull Request. Click on the large “pull request” button on your repository.
+6) Create new Pull Request. Click on the large "pull request" button on your repository.
    Wait for your code to be reviewed, and, if you followed all theses steps, merged into the main repository.
 
 License
