@@ -197,7 +197,8 @@ class JsonStatDataSet:
             return self.__pos2dim[spec]
         if spec not in self.__did2dim:
             msg = "dataset '{}': unknown dimension '{}' know dimensions ids are: {}"
-            msg = msg.format(self.__name, spec, ", ".join([dim.did for dim in self.__pos2dim]))
+            msg = msg.format(self.__name, spec, ", ".join(
+                [dim.did for dim in self.__pos2dim]))
             raise JsonStatException(msg)
         return self.__did2dim[spec]
 
@@ -370,7 +371,8 @@ class JsonStatDataSet:
                 dim = self.__lbl2dim[cat]
             # key is not id or label so raise error
             else:
-                allowed_categories = ", ".join(["'{}'".format(dim.did) for dim in self.__pos2dim])
+                allowed_categories = ", ".join(
+                    ["'{}'".format(dim.did) for dim in self.__pos2dim])
                 msg = "dataset '{}': category '{}' don't exists allowed categories are: {}"
                 msg = msg.format(self.__name, cat, allowed_categories)
                 raise JsonStatException(msg)
@@ -468,7 +470,8 @@ class JsonStatDataSet:
         nr_dim = len(self.__pos2dim)
         if order is not None:
             if len(order) != nr_dim:
-                msg = "length of the order vector is different from number of dimension {}".format(nr_dim)
+                msg = "length of the order vector is different from number of dimension {}".format(
+                    nr_dim)
                 raise JsonStatException(msg)
             if not isinstance(order[1], int):
                 order = [self.__did2dim[iid].pos for iid in order]
@@ -526,7 +529,12 @@ class JsonStatDataSet:
     # transforming function
     #
 
-    def to_table(self, content="label", order=None, rtype=list, blocked_dims={}, value_column="Value",
+    def to_table(self,
+                 content="label",
+                 order=None,
+                 rtype=list,
+                 blocked_dims={},
+                 value_column="Value",
                  without_one_dimensions=False):
         """Transforms a dataset into a table (a list of row)
 
@@ -553,9 +561,11 @@ class JsonStatDataSet:
         for apos in self.all_pos(order=order, blocked_dims=blocked_dims):
             value = self.__value_from_vec_pos(apos)
             if content == "label":
-                row = self._lint_to_llbl(apos, without_one_dimension=without_one_dimensions)
+                row = self._lint_to_llbl(
+                    apos, without_one_dimension=without_one_dimensions)
             else:
-                row = self.lint_as_lcat(apos, without_one_dimension=without_one_dimensions)
+                row = self.lint_as_lcat(
+                    apos, without_one_dimension=without_one_dimensions)
             row.append(value)
             table.append(row)
 
@@ -566,7 +576,12 @@ class JsonStatDataSet:
 
         return ret
 
-    def to_data_frame(self, index, content="label", order=None, blocked_dims={}, value_column="Value"):
+    def to_data_frame(self,
+                      index=None,
+                      content="label",
+                      order=None,
+                      blocked_dims={},
+                      value_column="Value"):
         """Transform dataset to pandas data frame
 
         extract_bidimensional("year", "country")
@@ -585,12 +600,16 @@ class JsonStatDataSet:
         :returns:
         """
 
-        df = self.to_table(content=content, order=order, rtype=pd.DataFrame,
-                           blocked_dims=blocked_dims, value_column=value_column)
+        df = self.to_table(content=content,
+                           order=order,
+                           rtype=pd.DataFrame,
+                           blocked_dims=blocked_dims,
+                           value_column=value_column)
         # TODO: avoid creating a new dataframe (?)
         # df.index = df[index]
         # del df[index]
-        df = df.set_index([index])
+        if index:
+            df = df.set_index([index])
         return df
 
     #
@@ -680,7 +699,8 @@ class JsonStatDataSet:
         if 'status' in json_data:
             self.__status = json_data['status']
             if isinstance(self.__status, list):
-                if len(self.__status) != 1 and len(self.__status) != len(self.__value):
+                if len(self.__status) != 1 and len(self.__status) != len(
+                        self.__value):
                     msg = "dataset '{}': incorrect size of status fields"
                     raise JsonStatMalformedJson(msg)
             if isinstance(self.__status, dict):
@@ -704,11 +724,13 @@ class JsonStatDataSet:
         json_data_dimension = json_data['dimension']
 
         if 'id' not in json_data_dimension:
-            msg = "dataset '{}': missing 'dimension.id' key".format(self.__name)
+            msg = "dataset '{}': missing 'dimension.id' key".format(
+                self.__name)
             raise JsonStatMalformedJson(msg)
 
         if 'size' not in json_data_dimension:
-            msg = "dataset '{}': missing 'dimension.size' key".format(self.__name)
+            msg = "dataset '{}': missing 'dimension.size' key".format(
+                self.__name)
             raise JsonStatMalformedJson(msg)
 
         pos2iid = json_data_dimension['id']
@@ -723,7 +745,8 @@ class JsonStatDataSet:
 
         # validate dimension
         if len(pos2iid) != len(self.__pos2size):
-            msg = "dataset '{}': dataset_id is different of dataset_size".format(self.__name)
+            msg = "dataset '{}': dataset_id is different of dataset_size".format(
+                self.__name)
             raise JsonStatMalformedJson(msg)
 
         json_data_roles = None
@@ -808,7 +831,8 @@ class JsonStatDataSet:
 
         # validate len(ids) == len(sizes)
         if len(pos2iid) != len(self.__pos2size):
-            msg = "dataset '{}': dataset_id is different of dataset_size".format(self.__name)
+            msg = "dataset '{}': dataset_id is different of dataset_size".format(
+                self.__name)
             raise JsonStatMalformedJson(msg)
 
         # https://json-stat.org/format/#status
@@ -816,7 +840,8 @@ class JsonStatDataSet:
         if 'status' in json_data:
             self.__status = json_data['status']
             if isinstance(self.__status, list):
-                if len(self.__status) != 1 and len(self.__status) != len(self.__value):
+                if len(self.__status) != 1 and len(self.__status) != len(
+                        self.__value):
                     msg = "dataset '{}': incorrect size of status fields"
                     raise JsonStatMalformedJson(msg)
             if isinstance(self.__status, dict):
@@ -835,7 +860,8 @@ class JsonStatDataSet:
         self.__compute_pos2mult()
         self.__valid = True
 
-    def __parse_dimensions(self, json_data_dimension, json_data_roles, pos2iid):
+    def __parse_dimensions(self, json_data_dimension, json_data_roles,
+                           pos2iid):
         """Parse dimension in json stat
 
         it used for format v1 and v2
@@ -860,7 +886,8 @@ class JsonStatDataSet:
             dsize = self.__pos2size[dpos]
 
             if dname not in json_data_dimension:
-                msg = "dataset '{}': malformed json: missing key {} in dimension".format(self.__name, dname)
+                msg = "dataset '{}': malformed json: missing key {} in dimension".format(
+                    self.__name, dname)
                 raise JsonStatException(msg)
 
             dimension = JsonStatDimension(dname, dsize, dpos, roles.get(dname))
