@@ -9,10 +9,10 @@ def parse_requirements(requirement_filename):
     new_lines = []
     with open(requirement_filename) as f:
         for line in f:
-            # for line in open(file_name, 'r').read().split('\n'):
 
             line = line.strip()
-            # comments or empty lines
+
+            # skip comments or empty lines
             if re.match(r'(\s*#)|(\s*$)', line):
                 new_lines.append(line)
                 continue
