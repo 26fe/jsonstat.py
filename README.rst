@@ -70,7 +70,7 @@ Installation
 
 Pip will install all required dependencies. For installation:
 
-    pip install jsonstat
+    pip install jsonstat.py
 
 *****
 Usage
@@ -113,7 +113,7 @@ There is a simple command line interface, so you can experiment to parse jsonsta
 code example::
 
     url = 'http://json-stat.org/samples/oecd-canada.json'
-    collection = jsonstat.from_url(json_string)
+    collection = jsonstat.from_url(url)
 
     # print list of dataset contained into the collection
     print(collection)
