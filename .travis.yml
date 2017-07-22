@@ -10,4 +10,4 @@ install:
   - pip install -r requirements_for_test.txt
 
 # command to run tests
-script: python -m unittest discover
+script: python -m unittest discover tests
