@@ -1,6 +1,6 @@
 # https://www.python.org/dev/peps/pep-0440/#version-specifiers
-click~=6.6
-numpy~=1.11
-pandas~=0.18
-requests~=2.11
-terminaltables~=3.0
+click ~= 6.7
+numpy ~= 1.13
+pandas ~= 0.20
+requests ~=2.18
+terminaltables ~= 3.1

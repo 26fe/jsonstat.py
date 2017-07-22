@@ -31,13 +31,17 @@ exec(open('jsonstat/version.py').read())
 def parse_requirements(file_name):
     requirements = []
     for line in open(file_name, 'r').read().split('\n'):
-        if re.match(r'(\s*#)|(\s*$)', line):
+        if re.match(r'\s*#', line): # comment
+            continue
+        if re.match(r'\s*$', line): # empty line
+            continue
+        elif re.match(r'\s*-f\s+', line): # line starting with -f (find-links)
+            continue
+        elif re.match(r'\s*-r\s+', line): # line starting with -r (include requirements)
             continue
         if re.match(r'\s*-e\s+', line):
             # TODO support version numbers
             requirements.append(re.sub(r'\s*-e\s+.*#egg=(.*)$', r'\1', line))
-        elif re.match(r'\s*-f\s+', line):
-            pass
         else:
             requirements.append(line)
 

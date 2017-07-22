@@ -65,3 +65,5 @@ target/
 /.project
 /.pydevproject
 /.ipynb_checkpoints/
+/venv/
+*.iml
