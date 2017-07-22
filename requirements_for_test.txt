@@ -1,4 +1,4 @@
--r requirements
+-r requirements.txt
 # ipython 5.x must be used for python < 3.3
 # ipython~=5; python_version < '3.3'
 # ipython~=6; python_version >= '3.3'
