@@ -24,7 +24,7 @@ class JsonStatCollection:
     It contains one or more datasets.
 
     >>> import os, jsonstat  # doctest: +ELLIPSIS
-    >>> filename = os.path.join(jsonstat.__fixtures_dir, "www.json-stat.org", "oecd-canada-col.json")
+    >>> filename = os.path.join(jsonstat._examples_dir, "www.json-stat.org", "oecd-canada-col.json")
     >>> collection = jsonstat.from_file(filename)
     >>> len(collection)
     2

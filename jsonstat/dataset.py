@@ -26,7 +26,7 @@ class JsonStatDataSet:
     """Represents a JsonStat dataset
 
         >>> import os, jsonstat  # doctest: +ELLIPSIS
-        >>> filename = os.path.join(jsonstat.__fixtures_dir, "www.json-stat.org", "oecd-canada-col.json")
+        >>> filename = os.path.join(jsonstat._examples_dir, "www.json-stat.org", "oecd-canada-col.json")
         >>> dataset = jsonstat.from_file(filename).dataset(0)
         >>> dataset.label
         'Unemployment rate in the OECD countries 2003-2014'
@@ -247,7 +247,7 @@ class JsonStatDataSet:
         ex.:{country:"AU", "year":"2014"}
 
         >>> import os, jsonstat  # doctest: +ELLIPSIS
-        >>> filename = os.path.join(jsonstat.__fixtures_dir, "www.json-stat.org", "oecd-canada-col.json")
+        >>> filename = os.path.join(jsonstat._examples_dir, "www.json-stat.org", "oecd-canada-col.json")
         >>> dataset = jsonstat.from_file(filename).dataset(0)
         >>> dataset.data(0)
         JsonStatValue(idx=0, value=5.943826289, status=None)

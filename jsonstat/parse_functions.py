@@ -26,7 +26,7 @@ def from_file(filename):
     example
 
     >>> import os, jsonstat
-    >>> filename = os.path.join(jsonstat.__fixtures_dir, "www.json-stat.org", "oecd-canada-col.json")
+    >>> filename = os.path.join(jsonstat._examples_dir, "www.json-stat.org", "oecd-canada-col.json")
     >>> o = jsonstat.from_file(filename)
     >>> type(o)
     <class 'jsonstat.collection.JsonStatCollection'>

@@ -15,8 +15,6 @@ import jsonstat
 
 
 class TestParseFunctions(unittest.TestCase):
-    def setUp(self):
-        self.fixture_jsonstat_org_dir = os.path.join(os.path.dirname(__file__), "fixtures", "www.json-stat.org")
 
     def test_parse_collection(self):
         json_string_v1_one_dataset = """
@@ -58,7 +56,7 @@ class TestParseFunctions(unittest.TestCase):
         self.assertIsInstance(ret, jsonstat.JsonStatCollection)
 
     def test_parse_dataset(self):
-        f = os.path.join(self.fixture_jsonstat_org_dir, "canada.json")
+        f = os.path.join(jsonstat._examples_dir, "www.json-stat.org", "canada.json")
         dataset = jsonstat.from_file(f)
         self.assertIsNotNone(dataset)
         self.assertIsInstance(dataset, jsonstat.JsonStatDataSet)
@@ -84,8 +82,9 @@ class TestParseFunctions(unittest.TestCase):
         self.assertIsInstance(ret, jsonstat.JsonStatDimension)
 
     def test_parsing_json_stat_org_files(self):
-        for f in os.listdir(self.fixture_jsonstat_org_dir):
-            jsonstat_file = join(self.fixture_jsonstat_org_dir, f)
+        example_jsonstat_org_dir = os.path.join(jsonstat._examples_dir, "www.json-stat.org")
+        for f in os.listdir(example_jsonstat_org_dir):
+            jsonstat_file = join(example_jsonstat_org_dir, f)
             if isfile(jsonstat_file) and jsonstat_file.endswith(".json"):
                 # print("parsing {}".format(jsonstat_file))
                 ret = jsonstat.from_file(jsonstat_file)
