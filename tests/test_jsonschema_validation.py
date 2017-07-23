@@ -331,10 +331,10 @@ class TestJsonSchemaValidation(unittest.TestCase):
         self.assertTrue(jsonstat.validate(jsonstat_collection))
 
     def test_validate(self):
-        fixture_jsonstat_org_dir = os.path.join(self.fixture_dir, "www.json-stat.org")
+        examples_jsonstat_org_dir = os.path.join(jsonstat._examples_dir, "www.json-stat.org")
 
-        for filename in os.listdir(fixture_jsonstat_org_dir):
-            jsonstat_file = os.path.join(fixture_jsonstat_org_dir, filename)
+        for filename in os.listdir(examples_jsonstat_org_dir):
+            jsonstat_file = os.path.join(examples_jsonstat_org_dir, filename)
             if os.path.isfile(jsonstat_file) and jsonstat_file.endswith(".json"):
                 # print("validating {}".format(jsonstat_file))
                 with open(jsonstat_file) as f:
