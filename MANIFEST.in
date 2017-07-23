@@ -2,5 +2,6 @@ include LICENSE
 include README.rst
 include requirements.txt
 include requirements_for_test.txt
+
 recursive-include jsonstat/schemas *.json
 recursive-include jsonstat/examples *.json

@@ -8,7 +8,8 @@ from setuptools import setup
 # version = version_file.read().strip()
 
 def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    with open(os.path.join(os.path.dirname(__file__), fname)) as f:
+        return f.read()
 
 
 exec(open('jsonstat/version.py').read())
@@ -24,29 +25,30 @@ exec(open('jsonstat/version.py').read())
 # https://github.com/cburgmer/pdfserver/blob/master/setup.py
 def parse_requirements(fname):
     requirements = []
-    for line in open(os.path.join(os.path.dirname(__file__), fname)):
-        if re.match(r'\s*#', line):  # comment
-            continue
-        if re.match(r'\s*$', line):  # empty line
-            continue
-        elif re.match(r'\s*-f\s+', line):  # line starting with -f (find-links)
-            continue
-        elif re.match(r'\s*-r\s+', line):  # line starting with -r (include requirements)
-            continue
-        if re.match(r'\s*-e\s+', line):
-            # TODO support version numbers
-            requirements.append(re.sub(r'\s*-e\s+.*#egg=(.*)$', r'\1', line))
-        else:
-            requirements.append(line)
-
+    with open(os.path.join(os.path.dirname(__file__), fname)) as f:
+        for line in f:
+            if re.match(r'\s*#', line):  # comment
+                continue
+            if re.match(r'\s*$', line):  # empty line
+                continue
+            elif re.match(r'\s*-f\s+', line):  # line starting with -f (find-links)
+                continue
+            elif re.match(r'\s*-r\s+', line):  # line starting with -r (include requirements)
+                continue
+            if re.match(r'\s*-e\s+', line):
+                # TODO support version numbers
+                requirements.append(re.sub(r'\s*-e\s+.*#egg=(.*)$', r'\1', line))
+            else:
+                requirements.append(line)
     return requirements
 
 
 def parse_dependency_links(fname):
     dependency_links = []
-    for line in open(os.path.join(os.path.dirname(__file__), fname)):
-        if re.match(r'\s*-[ef]\s+', line):
-            dependency_links.append(re.sub(r'\s*-[ef]\s+', '', line))
+    with open(os.path.join(os.path.dirname(__file__), fname)) as f:
+        for line in f:
+            if re.match(r'\s*-[ef]\s+', line):
+                dependency_links.append(re.sub(r'\s*-[ef]\s+', '', line))
 
     return dependency_links
 
@@ -79,6 +81,7 @@ setup(
 
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
 
     version=__version__,

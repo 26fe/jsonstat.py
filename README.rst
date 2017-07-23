@@ -1,6 +1,5 @@
-###########
 jsonstat.py
-###########
+===========
 
 .. image:: https://travis-ci.org/26fe/jsonstat.py.svg?branch=master
     :target: https://travis-ci.org/26fe/jsonstat.py
@@ -64,20 +63,18 @@ where you can open a `ticket <https://github.com/26fe/jsonstat.py/issues>`_, if 
 
 You can find the generated documentation at `readthedocs <http://jsonstatpy.readthedocs.org/en/latest/>`_.
 
-************
 Installation
-************
+------------
 
 Pip will install all required dependencies. For installation:
 
     pip install jsonstat.py
 
-*****
 Usage
-*****
+-----
 
 Simple Usage
-************
+~~~~~~~~~~~~
 
 There is a simple command line interface, so you can experiment to parse jsonstat file without write code::
 
@@ -139,7 +136,7 @@ For jupyter (ipython) notebooks see
 `examples-notebooks directory <https://github.com/26fe/jsonstat.py/tree/master/examples-notebooks>`_.
 
 Support
-=======
+-------
 
 This is an open source project, maintained in my spare time.
 Maybe a particular features or functions that you would like are missing.
@@ -154,7 +151,7 @@ If you are unable to make a file publicly available then contact me at gf@26fe.c
 You can find support also on the `google group <https://groups.google.com/forum/#!forum/json-stat>`_.
 
 How to Contribute Code
-======================
+----------------------
 
 Any help will be greatly appreciated, just follow those steps:
 
@@ -175,7 +172,7 @@ Any help will be greatly appreciated, just follow those steps:
    Wait for your code to be reviewed, and, if you followed all theses steps, merged into the main repository.
 
 License
-=======
+-------
 
 **jsonstat.py** is provided under the LGPL license.
 See LICENSE file.
