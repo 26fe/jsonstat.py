@@ -11,20 +11,20 @@ import json
 class JsonStatSchema:
     def __init__(self):
         filename = os.path.join(os.path.dirname(__file__), "schemas", "jsonstat.json")
-        jsonschema_jsonstat = open(filename).read()
-        self.__all = json.loads(jsonschema_jsonstat)
+        with open(filename) as f:
+            self.__all = json.loads(f.read())
 
         filename = os.path.join(os.path.dirname(__file__), "schemas", "collection.json")
-        jsonschema_jsonstat = open(filename).read()
-        self.__collection = json.loads(jsonschema_jsonstat)
+        with open(filename) as f:
+            self.__collection = json.loads(f.read())
 
         filename = os.path.join(os.path.dirname(__file__), "schemas", "dataset.json")
-        jsonschema_jsonstat = open(filename).read()
-        self.__dataset = json.loads(jsonschema_jsonstat)
+        with open(filename) as f:
+            self.__dataset = json.loads(f.read())
 
         filename = os.path.join(os.path.dirname(__file__), "schemas", "dimension.json")
-        jsonschema_jsonstat = open(filename).read()
-        self.__dimension = json.loads(jsonschema_jsonstat)
+        with open(filename) as f:
+            self.__dimension = json.loads(f.read())
 
         # self.__dimension = self.__all.copy()
         # self.__dimension["oneOf"] = [{
