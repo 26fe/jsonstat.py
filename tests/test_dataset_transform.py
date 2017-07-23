@@ -91,7 +91,7 @@ class TestDataSetToTable(unittest.TestCase):
 
     def test_to_table_oecd_canada(self):
         """test convert dataset to table"""
-        json_pathname = os.path.join(self.fixture_dir, "www.json-stat.org", "oecd-canada.json")
+        json_pathname = os.path.join(jsonstat._examples_dir, "www.json-stat.org", "oecd-canada.json")
         collection = jsonstat.JsonStatCollection()
         collection.from_file(json_pathname)
         oecd = collection.dataset('oecd')
