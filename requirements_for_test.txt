@@ -8,3 +8,4 @@ jsonschema ~= 2.6
 strict-rfc3339 ~= 0.7
 runipy ~= 0.1
 sure ~= 1.4
+pytest

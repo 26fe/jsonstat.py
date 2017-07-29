@@ -11,4 +11,7 @@ install:
   - pip install -e .
 
 # command to run tests
-script: python -m unittest discover tests
+script:
+  - python -m unittest discover tests
+  - python -m pytest tests_pytest
+
