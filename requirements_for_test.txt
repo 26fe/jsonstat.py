@@ -9,3 +9,4 @@ strict-rfc3339 ~= 0.7
 runipy ~= 0.1
 sure ~= 1.4
 pytest
+requests_mock
