@@ -17,14 +17,15 @@ import jsonstat.downloader
 import jsonstat
 
 
-# @httpretty.activate
 def test_downloader(tmpdir):
+    # tmpdir is a LocalPath type in 3.6
+    # it must be converted it in str for < 3.6
     uri = 'http://json-stat.org/samples/oecd-canada.json'
     body = 'This is a test'
 
     with requests_mock.mock() as m:
         m.get(uri, text=body)
-        d = jsonstat.Downloader(cache_dir=tmpdir)
+        d = jsonstat.Downloader(cache_dir=str(tmpdir))
         response = d.download(uri)
 
     assert body == response
