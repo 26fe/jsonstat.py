@@ -193,6 +193,9 @@ def from_url(url, pathname=None):
     return from_string(json_string)
 
 
+__json_schema__ = None
+
+
 def validate(spec):
     try:
         import jsonschema
@@ -213,10 +216,12 @@ def validate(spec):
     jsonstat_schema_url = "https://json-stat.org/format/schema/2.0/"
 
     # TODO: caching jsonschema (now it download everytime)
-    downloader = Downloader(cache_dir=None)
-    contents = downloader.download(jsonstat_schema_url)
+    global __json_schema__
+    if __json_schema__ is None:
+        downloader = Downloader(cache_dir=None)
+        __json_schema__ = downloader.download(jsonstat_schema_url)
 
-    schema = json.loads(contents)
+    schema = json.loads(__json_schema__)
     validator = jsonschema.Draft4Validator(schema, format_checker=jsonschema.FormatChecker())
     # validator.validate(json_data)
     errors = sorted(validator.iter_errors(json_data), key=lambda e: e.path)

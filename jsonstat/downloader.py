@@ -25,10 +25,14 @@ class Downloader:
     def __init__(self, cache_dir="./data", time_to_live=None):
         """initialize downloader
 
-        :param cache_dir: directory where to store downloaded files
+        :param cache_dir: directory where to store downloaded files, if cache_dir is None files are not stored
         :param time_to_live: how many seconds to store file on disk, None is infinity, 0 for not to store
         """
-        self.__cache_dir = os.path.abspath(cache_dir)
+
+        if cache_dir is not None:
+            self.__cache_dir = os.path.abspath(cache_dir)
+        else:
+            self.__cache_dir = None
         self.__time_to_live = time_to_live
 
         self.__session = requests.session()
@@ -62,6 +66,8 @@ class Downloader:
         return html
 
     def __build_pathname(self, filename, url):
+        if self.__cache_dir is None:
+            return None
         if filename is None:
             filename = hashlib.md5(url.encode('utf-8')).hexdigest()
         pathname = os.path.join(self.__cache_dir, filename)
@@ -73,6 +79,10 @@ class Downloader:
         :param pathname:
         :returns: True if the file can be retrieved from the disk (cache)
         """
+
+        if pathname is None:
+            return False
+
         if not os.path.exists(pathname):
             return False
 
@@ -90,6 +100,8 @@ class Downloader:
         :param pathname:
         :param content:
         """
+        if pathname is None:
+            return
 
         # create cache directory only the fist time it is needed
         if not os.path.exists(self.__cache_dir):
@@ -102,9 +114,8 @@ class Downloader:
         # in python 3 file must be open without b (binary) option to write string
         # otherwise the following error will be generated
         # TypeError: a bytes-like object is required, not 'str'
-        f = open(pathname, 'w')
-        f.write(content)
-        f.close()
+        with open(pathname, 'w') as f:
+            f.write(content)
 
     @staticmethod
     def __read_page_from_page(pathname):
