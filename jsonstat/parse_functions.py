@@ -211,7 +211,11 @@ def validate(spec):
         raise JsonStatException("cannot validate jsonstat version < 2.0")
     # schema = JsonStatSchema()
     jsonstat_schema_url = "https://json-stat.org/format/schema/2.0/"
-    contents = download(jsonstat_schema_url)
+
+    # TODO: caching jsonschema (now it download everytime)
+    downloader = Downloader(cache_dir=None)
+    contents = downloader.download(jsonstat_schema_url)
+
     schema = json.loads(contents)
     validator = jsonschema.Draft4Validator(schema, format_checker=jsonschema.FormatChecker())
     # validator.validate(json_data)
