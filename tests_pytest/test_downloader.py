@@ -29,3 +29,15 @@ def test_downloader(tmpdir):
         response = d.download(uri)
 
     assert body == response
+
+
+def test_downloader_with_no_cache_dir():
+    uri = 'http://json-stat.org/samples/oecd-canada.json'
+    body = 'This is a test'
+
+    with requests_mock.mock() as m:
+        m.get(uri, text=body)
+        d = jsonstat.Downloader(cache_dir=None)
+        response = d.download(uri)
+
+    assert body == response
