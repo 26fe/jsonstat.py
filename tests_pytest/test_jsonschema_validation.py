@@ -12,7 +12,6 @@ import json
 # packages
 import pytest
 import jsonschema
-import strict_rfc3339
 
 # jsonstat
 import jsonstat
@@ -338,6 +337,7 @@ def test_collection_complete():
             "item": [jsonstat_dataset]
         }
     }
+
     assert validate(jsonstat_collection, [schema.collection])
     assert jsonstat.validate(jsonstat_collection)
 
