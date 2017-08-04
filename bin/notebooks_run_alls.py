@@ -20,9 +20,10 @@ def run_all_notebooks(dir):
             if status != 0:
                 print("ERROR!")
 
-JSONSTAT_HOME = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-dirs = ["examples-notebooks", "istat-notebooks"]
-for d in dirs:
-    dd = os.path.join(JSONSTAT_HOME, d)
-    run_all_notebooks(dd)
+if __name__ == "__main__":
+    JSONSTAT_HOME = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    dirs = ["examples-notebooks", "istat-notebooks"]
+    for d in dirs:
+        dd = os.path.join(JSONSTAT_HOME, d)
+        run_all_notebooks(dd)
 

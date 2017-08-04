@@ -28,19 +28,19 @@ def convert_notebook_to_rst(dir):
                 print("ERROR!")
                 print(err)
 
+if __name__ == "__main__":
+    JSONSTAT_HOME = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-JSONSTAT_HOME = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    docs_notebooks = os.path.join(JSONSTAT_HOME, "docs", "notebooks")
 
-docs_notebooks = os.path.join(JSONSTAT_HOME, "docs", "notebooks")
+    print("remove output directory")
+    shutil.rmtree(docs_notebooks)
 
-print("remove output directory")
-shutil.rmtree(docs_notebooks)
+    if not os.path.exists(docs_notebooks):
+        os.mkdir(docs_notebooks)
 
-if not os.path.exists(docs_notebooks):
-    os.mkdir(docs_notebooks)
-
-os.chdir(docs_notebooks)
-dirs = ["examples-notebooks", "istat-notebooks"]
-for d in dirs:
-    dd = os.path.join(JSONSTAT_HOME, d)
-    convert_notebook_to_rst(dd)
+    os.chdir(docs_notebooks)
+    dirs = ["examples-notebooks", "istat-notebooks"]
+    for d in dirs:
+        dd = os.path.join(JSONSTAT_HOME, d)
+        convert_notebook_to_rst(dd)
