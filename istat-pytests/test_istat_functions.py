@@ -10,23 +10,21 @@ from __future__ import unicode_literals
 import os
 import unittest
 
+# external modules
+import pytest
+
 # jsonstat/istat
-import jsonstat
 import istat
 
 
-class TestIstat(unittest.TestCase):
+fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures", "istat")
 
-    def setUp(self):
-        self.fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures", "istat")
 
-    def test_cache_dir(self):
-        istat.cache_dir('/tmp')
-        cd = istat.cache_dir()
-        self.assertEqual(cd, '/tmp')
+def test_cache_dir(tmpdir):
+    istat.cache_dir(tmpdir)
+    cd = istat.cache_dir()
+    assert cd == tmpdir
 
-    def test_options(self):
-        self.assertEqual(3, istat.options.display.max_rows)
 
-if __name__ == '__main__':
-    unittest.main()
+def test_options():
+    assert 3 == istat.options.display.max_rows
