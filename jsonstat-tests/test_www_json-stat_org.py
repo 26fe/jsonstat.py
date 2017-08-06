@@ -15,7 +15,7 @@ import pytest
 # jsonstat
 import jsonstat
 
-fixture_jsonstat_org_dir = os.path.join(os.path.dirname(__file__),  "fixtures", "www.json-stat.org")
+fixture_jsonstat_org_dir = os.path.join(jsonstat._examples_dir, "www.json-stat.org")
 
 
 def test_parsing_json_stat_org_files():
