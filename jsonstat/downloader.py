@@ -62,7 +62,7 @@ class Downloader:
             html = response.text
             self.__write_page_to_cache(pathname, html)
         else:
-            html = self.__read_page_from_page(pathname)
+            html = self.__read_page_from_file(pathname)
         return html
 
     def __build_pathname(self, filename, url):
@@ -118,13 +118,12 @@ class Downloader:
             f.write(content)
 
     @staticmethod
-    def __read_page_from_page(pathname):
+    def __read_page_from_file(pathname):
         """it reads content from pathname
 
         :param pathname:
         """
-        f = open(pathname, 'r')
-        content = f.read()
-        f.close()
+        with open(pathname, 'r') as f:
+            content = f.read()
         return content
 

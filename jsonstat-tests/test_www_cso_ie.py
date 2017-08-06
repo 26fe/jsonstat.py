@@ -14,7 +14,7 @@ import pytest
 # jsonstat
 import jsonstat
 
-fixture_dir = os.path.join(os.path.dirname(__file__), "..", "tests", "fixtures", "www.cso.ie")
+fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures", "www.cso.ie")
 
 
 def test_parsing_NQQ25():

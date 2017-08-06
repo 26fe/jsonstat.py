@@ -106,7 +106,7 @@ __downloader__ = None
 
 
 def cache_dir(cached_dir='', time_to_live=None):
-    """Manage the directory ``cached_dir`` where to store downloaded files
+    """Manage the directory ``cached_dir`` where downloaded files are stored
 
     without parameter return the ``cached_dir`` directory
     with a parameters set the directory

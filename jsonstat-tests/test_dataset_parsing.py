@@ -14,7 +14,7 @@ import pytest
 # jsonstat
 import jsonstat
 
-fixture_dir = os.path.join(os.path.dirname(__file__), "..", "tests", "fixtures")
+fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures")
 
 
 @pytest.fixture(scope='module')
