@@ -56,7 +56,6 @@ if __name__ == "__main__":
     filename = "oecd-canada.json"
 
     # store downloaded data file in cache_dir
-    JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
-    cache_dir = os.path.join(JSONSTAT_HOME, "tests", "fixtures", "www.json-stat.org")
+    cache_dir = os.path.join(jsonstat._examples_dir, "www.json-stat.org")
     jsonstat.cache_dir(cache_dir)
     test(uri, filename)
