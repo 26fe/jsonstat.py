@@ -12,6 +12,5 @@ install:
 
 # command to run tests
 script:
-  - python -m unittest discover tests
-  - python -m pytest tests_pytest
+  - python -m pytest --doctest-modules
 

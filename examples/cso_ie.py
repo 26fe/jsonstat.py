@@ -30,7 +30,7 @@ def test(uri, filename):
 if __name__ == "__main__":
     # cache_dir directory where store json data downloaded from internet
     JSONSTAT_HOME = os.path.join(os.path.dirname(__file__), "..")
-    cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "tests", "fixtures", "www.cso.ie"))
+    cache_dir = os.path.normpath(os.path.join(JSONSTAT_HOME, "jsonstat-tests", "fixtures", "www.cso.ie"))
     jsonstat.cache_dir(cache_dir)
 
     base_uri = 'http://www.cso.ie/StatbankServices/StatbankServices.svc/jsonservice/responseinstance/'
