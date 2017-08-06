@@ -21,9 +21,9 @@ fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures", "istat")
 
 
 def test_cache_dir(tmpdir):
-    istat.cache_dir(tmpdir)
+    istat.cache_dir(str(tmpdir))
     cd = istat.cache_dir()
-    assert cd == tmpdir
+    assert cd == str(tmpdir)
 
 
 def test_options():
