@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # This file is part of https://github.com/26fe/jsonstat.py
-# Copyright (C) 2016-2017 gf <gf@26fe.com>
+# Copyright (C) 2016-2021 gf <gf@26fe.com>
 # See LICENSE file
 
 import os
@@ -20,10 +20,10 @@ def run_all_notebooks(dir):
             if status != 0:
                 print("ERROR!")
 
+
 if __name__ == "__main__":
     JSONSTAT_HOME = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     dirs = ["examples-notebooks", "istat-notebooks"]
     for d in dirs:
         dd = os.path.join(JSONSTAT_HOME, d)
         run_all_notebooks(dd)
-

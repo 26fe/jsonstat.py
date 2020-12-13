@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 # This file is part of https://github.com/26fe/jsonstat.py
-# Copyright (C) 2016-2017 gf <gf@26fe.com>
+# Copyright (C) 2016-2021 gf <gf@26fe.com>
 # See LICENSE file
 
 # stdlib
-from __future__ import print_function
 import os
 
 # external packages
@@ -18,7 +17,7 @@ fixture_dir = os.path.join(os.path.dirname(__file__), "fixtures")
 
 
 def test_cli():
-    # TODO: download from a local webserver, eliminate network dipendence
+    # TODO: download from a local webserver, eliminate network dependence
 
     cache_dir = os.path.abspath(os.path.join(fixture_dir, 'cli'))
     args = ['info', '--cache_dir', cache_dir]

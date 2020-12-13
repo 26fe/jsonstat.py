@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # This file is part of https://github.com/26fe/jsonstat.py
-# Copyright (C) 2016-2017 gf <gf@26fe.com>
+# Copyright (C) 2016-2021 gf <gf@26fe.com>
 # See LICENSE file
 
 """
@@ -9,19 +9,8 @@ using JsonStatHelper class
 """
 
 #  stdlib
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import os
 import sys
-
-# python 2.7.11 raise the following error
-#    UnicodeEncodeError: 'ascii' codec can't encode character u'\x96' in position 17: ordinal not in range(128)
-# to prevent it the following three lines are added:
-# See: http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
-if sys.version_info < (3,):
-    reload(sys)
-    sys.setdefaultencoding('utf8')
 
 # jsonstat
 from istat import IstatHelper

@@ -36,7 +36,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'jsonstat.py'
-copyright = u'2016-2017, 26fe'
+copyright = u'2016-2021, 26fe'
 author = u'26fe'
 
 # The version info for the project you're documenting, acts as replacement for

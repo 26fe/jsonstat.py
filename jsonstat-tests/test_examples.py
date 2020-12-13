@@ -1,21 +1,13 @@
 # -*- coding: utf-8 -*-
 # This file is part of https://github.com/26fe/jsonstat.py
-# Copyright (C) 2016-2017 gf <gf@26fe.com>
+# Copyright (C) 2016-2021 gf <gf@26fe.com>
 # See LICENSE file
 
 # stdlib
-from __future__ import print_function
-from __future__ import unicode_literals
 import subprocess
 import os
 
 import sys
-
-# TODO: remove following hack
-# http://stackoverflow.com/questions/21129020/how-to-fix-unicodedecodeerror-ascii-codec-cant-decode-byte
-if sys.version_info < (3,):
-    reload(sys)
-    sys.setdefaultencoding('utf8')
 
 # external libraries
 import pytest
