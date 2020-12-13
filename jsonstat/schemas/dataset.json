@@ -2,7 +2,7 @@
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"title": "JSON-stat 2.0 Dataset Schema",
 	"id": "https://json-stat.org/format/schema/2.0/dataset.json",
-	"description": "This is version 1.01 of the JSON-stat 2.0 Dataset Schema (2016-05-01)",
+	"description": "This is version 1.04 of the JSON-stat 2.0 Dataset Schema (2018-09-05 10:55)",
 
 	"definitions": {
 		"strarray": {
@@ -20,7 +20,7 @@
 		"updated": {
 			"oneOf": [
 				{ "type": "string", "format": "date-time" },
-				{ "type": "string", "format": "date" }
+				{ "type": "string", "pattern": "^((19|20)\\d\\d)\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$" }
 			]
 		},
 		"href": {
@@ -59,6 +59,7 @@
 				},
 				"label": {
 					"type": "object",
+          "minProperties": 1,
 					"additionalProperties": {
 						"type": "string"
 					}
@@ -123,7 +124,6 @@
 								"type": "string"
 							},
 							"class": { "type": "string", "enum": ["dataset", "collection", "dimension"] },
-							"version": { "$ref": "#/definitions/version" },
 							"href": { "$ref": "#/definitions/href" },
 							"label": { "$ref": "#/definitions/label" },
 							"note": { "$ref": "#/definitions/note" },
@@ -158,16 +158,10 @@
 								"additionalProperties": {
 									"type": "object",
 									"properties": {
-										"class": { "type": "string", "enum": ["dimension"] },
-
-										"version": { "$ref": "#/definitions/version" },
 										"href": { "$ref": "#/definitions/href" },
 										"label": { "$ref": "#/definitions/label" },
 										"note": { "$ref": "#/definitions/note" },
 										"link": { "$ref": "#/definitions/link" },
-										"updated": { "$ref": "#/definitions/updated" },
-										"source": { "$ref": "#/definitions/source" },
-										"error": { "$ref": "#/definitions/error" },
 										"extension": { "$ref": "#/definitions/extension" },
 
 										"category": { "$ref": "#/definitions/category" }
@@ -210,7 +204,7 @@
 									{
 										"type": "array",
 										"items": {
-											"type": "string"
+											"type": ["string", "null"]
 										}
 									},
 									{
@@ -231,7 +225,6 @@
 	},
 
 	"type": "object",
-
 	"properties": {
 		"class": { "type": "string", "enum": ["dataset"] },
 
@@ -244,7 +237,7 @@
 		"source": { "$ref": "#/definitions/source" },
 		"error": { "$ref": "#/definitions/error" },
 		"extension": { "$ref": "#/definitions/extension" },
-		
+
 		"id": { "$ref": "#/definitions/strarray" },
 
 		"size": {
@@ -269,16 +262,10 @@
 			"additionalProperties": {
 				"type": "object",
 				"properties": {
-					"class": { "type": "string", "enum": ["dimension"] },
-
-					"version": { "$ref": "#/definitions/version" },
 					"href": { "$ref": "#/definitions/href" },
 					"label": { "$ref": "#/definitions/label" },
 					"note": { "$ref": "#/definitions/note" },
 					"link": { "$ref": "#/definitions/link" },
-					"updated": { "$ref": "#/definitions/updated" },
-					"source": { "$ref": "#/definitions/source" },
-					"error": { "$ref": "#/definitions/error" },
 					"extension": { "$ref": "#/definitions/extension" },
 
 					"category": { "$ref": "#/definitions/category" }
@@ -321,7 +308,7 @@
 				{
 					"type": "array",
 					"items": {
-						"type": "string"
+						"type": ["string", "null"]
 					}
 				},
 				{
@@ -333,7 +320,6 @@
 			]
 		}
 	},
-
 	"additionalProperties": false,
 	"required": [ "version", "class", "value", "id", "size", "dimension" ]
 }
