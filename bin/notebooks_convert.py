@@ -5,8 +5,8 @@
 
 # stdlib
 import os
-from subprocess import Popen, PIPE
 import shutil
+from subprocess import Popen, PIPE
 
 
 def convert_notebook_to_rst(dir):
@@ -27,6 +27,7 @@ def convert_notebook_to_rst(dir):
             if status != 0:
                 print("ERROR!")
                 print(err)
+
 
 if __name__ == "__main__":
     JSONSTAT_HOME = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
