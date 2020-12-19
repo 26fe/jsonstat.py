@@ -164,7 +164,7 @@ setup(
 
     # packages= setup.find_packages(exclude=['examples', 'docs', 'tests*', 'tmp']),
     packages=[
-        'jsonstat', 'jsonstat.cli', 'istat'
+        'jsonstat', 'jsonstat.cli',
     ],
 
     include_package_data=True,
