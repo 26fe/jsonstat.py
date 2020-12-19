@@ -22,8 +22,6 @@ An incomplete list is:
 
 - `Eurostat <http://ec.europa.eu/eurostat/>`_ that provide statistical information about the European Union (EU)
 
-- `Italian National Institute of Statistics Istat <http://www.istat.it/en/>`_
-
 - `Central Statistics Office of Ireland <cso.ie>`_
 
 - `United Nations Economic Commission for Europe (UNECE) <http://www.unece.org/>`_
@@ -46,9 +44,6 @@ For a fast overview of the feature you can start from this example notebook
 You can also check out some of the jupyter example notebook from the
 `example directory on github <https://github.com/26fe/jsonstat.py/tree/master/examples-notebooks>`_
 or from the `documentation <http://jsonstatpy.readthedocs.org/en/latest>`_
-
-As bonus **jsonstat.py** contains an useful classes to explore dataset
-published by `Istat <http://www.istat.it/en/>`_.
 
 You can find useful another python library
 `pyjstat <https://pypi.python.org/pypi/pyjstat>`_
