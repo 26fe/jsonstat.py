@@ -15,16 +15,13 @@ import jsonschema
 import jsonstat
 from jsonstat.schema import JsonStatSchema
 
-
 fixture_dir = os.path.join(os.path.dirname(__file__), "..", "tests", "fixtures")
 schema = JsonStatSchema()
 
 
 def validate(json_data, schemas):
     for s in schemas:
-        # jsonschema.validate(json_data, s,  format_checker=jsonschema.FormatChecker())
-        validator = jsonschema.Draft4Validator(s, format_checker=jsonschema.FormatChecker())
-        # validator.validate(json_data)
+        validator = jsonschema.Draft7Validator(s, format_checker=jsonschema.FormatChecker())
         errors = sorted(validator.iter_errors(json_data), key=lambda e: e.path)
         if len(errors) != 0:
             print(errors)
@@ -138,8 +135,6 @@ def test_dimension4():
 
 
 def test_dataset1():
-    # "required": ["version", "class", "value", "id", "size", "dimension"]
-
     jsonstat_data = {
         "version": "2.0",
         "class": "dataset",
@@ -160,7 +155,6 @@ def test_dataset1():
         "value": []
     }
     schemas = [schema.dataset]
-    # schema = [self.__schema.all]
     assert validate(jsonstat_data, schemas)
 
 
@@ -305,7 +299,7 @@ def test_dataset9():
         "dimension": {}
     }
     schemas = [schema.dataset, schema.all]
-    assert  validate(jsonstat_data, schemas)
+    assert validate(jsonstat_data, schemas)
 
 
 def test_collection_complete():
@@ -322,8 +316,10 @@ def test_collection_complete():
             }
     }
 
-    jsonstat_dataset = {"label": "boh",
-                        "dimension": {"sex": jsonstat_dimension_sex}}
+    jsonstat_dataset = {
+        "label": "boh",
+        "dimension": {"sex": jsonstat_dimension_sex}
+    }
 
     jsonstat_collection = {
         "version": "2.0",
@@ -347,6 +343,7 @@ def test_validate():
         jsonstat_file = os.path.join(examples_jsonstat_org_dir, filename)
         if os.path.isfile(jsonstat_file) and jsonstat_file.endswith(".json"):
             # print("validating {}".format(jsonstat_file))
+            print(f"*** validating {filename}")
             with open(jsonstat_file) as f:
                 json_string = f.read()
                 try:

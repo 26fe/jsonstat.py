@@ -213,14 +213,14 @@ def validate(spec):
     # schema = JsonStatSchema()
     jsonstat_schema_url = "https://json-stat.org/format/schema/2.0/"
 
-    # TODO: caching jsonschema (now it download everytime)
+    # TODO: caching jsonschema (now it is downloaded everytime)
     global __json_schema__
     if __json_schema__ is None:
         downloader = Downloader(cache_dir=None)
         __json_schema__ = downloader.download(jsonstat_schema_url)
 
     schema = json.loads(__json_schema__)
-    validator = jsonschema.Draft4Validator(schema, format_checker=jsonschema.FormatChecker())
+    validator = jsonschema.Draft7Validator(schema, format_checker=jsonschema.FormatChecker())
     # validator.validate(json_data)
     errors = sorted(validator.iter_errors(json_data), key=lambda e: e.path)
     return len(errors) == 0
