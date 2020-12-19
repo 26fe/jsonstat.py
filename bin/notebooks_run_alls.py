@@ -23,7 +23,7 @@ def run_all_notebooks(dir):
 
 if __name__ == "__main__":
     JSONSTAT_HOME = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    dirs = ["examples-notebooks", "istat-notebooks"]
+    dirs = ["examples-notebooks"]
     for d in dirs:
         dd = os.path.join(JSONSTAT_HOME, d)
         run_all_notebooks(dd)

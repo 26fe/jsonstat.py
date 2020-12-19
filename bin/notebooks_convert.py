@@ -41,7 +41,7 @@ if __name__ == "__main__":
         os.mkdir(docs_notebooks)
 
     os.chdir(docs_notebooks)
-    dirs = ["examples-notebooks", "istat-notebooks"]
+    dirs = ["examples-notebooks"]
     for d in dirs:
         dd = os.path.join(JSONSTAT_HOME, d)
         convert_notebook_to_rst(dd)

@@ -1,3 +1,9 @@
+0.2.0
+=====
+- removed istat api
+- removed support for python 2.7
+
+
 0.1.15
 ------
 - moving from unittest to py.test
